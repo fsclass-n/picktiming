@@ -1,6 +1,6 @@
 # PickTiming 문서 모음 — 프로젝트 파악 → 배포까지
 
-이 폴더는 픽타이밍 프로젝트 전체를 이해하고, **GitHub를 통해 Render와 AWS EC2에 각각 독립된 풀스택으로 배포**하기 위한 단계별 문서입니다.
+이 폴더는 픽타이밍 프로젝트 전체를 이해하고, **GitHub를 통해 Render(프런트엔드·백엔드 분리)와 AWS EC2(단독 풀스택)에 각각 배포**하기 위한 단계별 문서입니다.
 번호 순서대로 읽고 진행하면 됩니다.
 
 문서 개정 기준: `279a4ce`, 2026-11-05. 현재 구조는 아래 운영 문서,
@@ -21,7 +21,8 @@
 |---|---|---|---|
 | Netlify | https://picktiming.netlify.app | **프런트엔드 전용 — 데모 모드** | 새 UI 배포 확인 |
 | 로컬 PC | http://localhost:8000 | FastAPI가 빌드한 React + API 제공 | 운영 DB 사용 시 데이터 변경 주의 |
-| Render | https://picktiming.onrender.com | **단독 풀스택**: React + FastAPI, 같은 도메인 (Docker, 무료 플랜) | 새 UI·헬스·공개 추천 API 확인 |
+| Render 프런트엔드 | https://picktiming-web.onrender.com | **Static Site**: React 빌드 결과, `VITE_API_URL`로 백엔드 호출 | 분리 전환 진행(07 문서) |
+| Render 백엔드 | https://picktiming.onrender.com | **Web Service**: FastAPI API·AI·수집 수신 (Docker, 무료 플랜). 화면 경로는 Static Site로 이동 | 기존 주소 유지 |
 | AWS EC2 | http://picktiming.duckdns.org | **단독 풀스택 구성**: nginx + FastAPI + RPA | 실제 운영 확인 전 |
 | TiDB Cloud | (TiDB 접속 주소) | **유일한 DB — 로컬·Render·EC2가 같은 DB를 공유** | DB 생성 완료 |
 | MySQL 8 | GitHub Actions CI | MySQL 호환성 자동 테스트 전용 | CI에 이미 구성됨 |
@@ -32,11 +33,14 @@
 ```
  사용자 ──▶ Netlify  (frontend only, 데모 모드 — API 호출 없음)
 
- 사용자 ──▶ Render  https://picktiming.onrender.com          사용자 ──▶ EC2  http://picktiming.duckdns.org
-            ┌──────────────────────────────┐                           ┌───────────────────────────────────┐
-            │ FastAPI = API + 프런트엔드    │                           │ nginx(프런트) ─▶ api ◀─ rpa(매시) │
-            └──────────────┬───────────────┘                           └─────────────────┬─────────────────┘
-                 ▲         │                                                             │
+ 사용자 ──▶ Render Static Site  https://picktiming-web.onrender.com      사용자 ──▶ EC2  http://picktiming.duckdns.org
+                     │ VITE_API_URL (CORS 허용)                             ┌───────────────────────────────────┐
+                     ▼                                                       │ nginx(프런트) ─▶ api ◀─ rpa(매시) │
+            Render Web Service  https://picktiming.onrender.com             └─────────────────┬─────────────────┘
+            ┌──────────────────────────────┐                                                  │
+            │ FastAPI = API 전용            │                                                  │
+            └──────────────┬───────────────┘                                                  │
+                 ▲         │                                                                  │
  GitHub Actions  │         └───────────────▶  TiDB Cloud (운영 DB 하나를 공유)  ◀──────────┘
  collect-render  │                            같은 시간대 같은 판매처 가격은 한 번만 저장
  (매시 07분 수집) ─┘
@@ -64,7 +68,7 @@
 | 번호 | 문서 | 할 일 |
 |---|---|---|
 | 06 | [DB 준비: TiDB 공용 · `.env` 작성](06-database.md) | TiDB 접속 문자열, 로컬 `.env`, 시드 데이터 |
-| 07 | [Render 배포 (단독 풀스택)](07-deploy-render.md) | 서비스 설정·환경 변수·CI 후 자동 배포·확인 |
+| 07 | [Render 배포 (프런트엔드·백엔드 분리)](07-deploy-render.md) | Static Site·Web Service 설정, 무중단 전환 순서, 확인·되돌리기 |
 | 08 | [EC2 배포 (단독 풀스택, DuckDNS)](08-deploy-ec2.md) | 인스턴스·고정 IP·DuckDNS·Docker·`.env`·시드 |
 | 09 | [Netlify (데모 모드 유지)](09-netlify-connect.md) | React 빌드·저장소 연결·게시 상태 확인 |
 | 10 | [GitHub Actions 등록 (자동 배포 + Render 수집)](10-github-actions-setup.md) | Secrets·Variables 등록, 첫 실행 확인 |
@@ -76,7 +80,7 @@
 2. **로컬 포함 모든 환경이 같은 TiDB**를 씁니다. 로컬에서 바꾼 데이터가 곧 운영 데이터입니다.
    `python -m app.seed --reset`, `TEST_DATABASE_URL=<TiDB>` 테스트는 **운영 데이터를 모두 지웁니다**(일반 `pytest`는 임시 SQLite라 안전).
 3. **`.env` 하나를 세 환경에서 공용**으로 씁니다([`.env.example`](../../.env.example)). 로컬 작성 → EC2로 `scp` → Render에 "Add from .env"로 붙여 넣기.
-   값을 바꾸면 세 곳 모두 다시 반영합니다. `FRONTEND_DIR`, `RPA_TARGET_API`는 `.env`에 넣지 않습니다.
+   값을 바꾸면 세 곳 모두 다시 반영합니다. `FRONTEND_DIR`, `RPA_TARGET_API`, Render 전용 `FRONTEND_URL`·`VITE_API_URL`은 `.env`에 넣지 않습니다.
 4. Render 무료 플랜은 **셸(Shell) 접속이 안 됩니다**. 시드 데이터는 로컬 PC에서 TiDB로 넣습니다(06 문서).
 5. GitHub Actions가 EC2에 SSH로 접속하므로 **보안 그룹 22번 포트를 GitHub 러너가 접근할 수 있게** 열어야 합니다(10 참고).
 6. 공개 저장소의 예약 워크플로는 **저장소에 60일간 활동이 없으면 GitHub가 자동으로 멈춥니다**. 멈추면 Actions 화면에서 다시 켭니다.

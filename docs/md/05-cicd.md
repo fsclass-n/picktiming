@@ -19,8 +19,8 @@
 | Backend (lint · pytest on SQLite) | `ruff check backend`, `pytest` |
 | Backend (pytest on MySQL 8) | MySQL 8.0 서비스 컨테이너에서 같은 테스트 (TiDB 호환성 사전 확인) |
 | RPA (lint · pytest) | `ruff check rpa`, `pytest` |
-| Frontend | `npm ci`·React 프로덕션 빌드, SPA 진입점·데모 설정 확인 |
-| Docker build | api·rpa 이미지 빌드·`/health` 확인, **Render 풀스택 이미지 빌드 후 `/`(화면)와 `/js/config.js`(같은 도메인 설정) 확인**, `docker compose config` 검증 |
+| Frontend | `npm ci`·React 프로덕션 빌드, SPA 진입점·데모 설정 확인, **`VITE_API_URL` 주입·끝 `/` 정리·잘못된 주소 빌드 실패** 확인 |
+| Docker build | api·rpa 이미지 빌드·`/health` 확인, **Render 백엔드 구성(API 이미지 + `FRONTEND_URL`) 화면 경로 302·API 404·CORS 사전 요청 확인**, 롤백용 통합 이미지의 `/`·`/js/config.js` 확인, `docker compose config` 검증 |
 
 ## 3. 배포 대상 판별 (`detect-changes.sh`)
 

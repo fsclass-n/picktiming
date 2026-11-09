@@ -8,7 +8,8 @@ Claude는 이 저장소에서 작업을 시작하기 전에 이 문서를 먼저
 RPA가 쇼핑몰·공공 가격을 1시간마다 수집 → FastAPI 백엔드가 저장·분석(scikit-learn) → Gemini가 "지금 사도 되는가"를 설명 → 정적 프런트엔드가 보여준다.
 Final-Project 3조 팀 저장소이며 `main`에 push하면 **실제 운영 환경(Netlify · Render · AWS EC2)에 자동 배포**된다.
 
-운영 구성: **Netlify = 프런트엔드 데모 모드(API 연결 없음)**, **Render·EC2 = 각각 독립된 풀스택**(서로 호출하지 않음),
+운영 구성: **Netlify = 프런트엔드 데모 모드(API 연결 없음)**, **Render = Static Site(`picktiming-web`) + API Web Service(`picktiming`, 기존 주소) 분리**,
+**EC2 = nginx 같은 도메인 풀스택**(Render와 EC2는 서로 호출하지 않음),
 **DB = TiDB 하나를 로컬·Render·EC2가 공유**(MySQL 8은 CI 호환성 테스트 전용), **설정 = `.env` 하나**(로컬 작성 → EC2 `scp` → Render "Add from .env").
 Render 배포는 Auto-Deploy "After CI Checks Pass", EC2 배포는 `deploy.yml`. Render 가격 수집은 GitHub Actions(`collect-render.yml`), EC2는 rpa 컨테이너.
 
@@ -16,11 +17,11 @@ Render 배포는 Auto-Deploy "After CI Checks Pass", EC2 배포는 `deploy.yml`.
 
 | 경로 | 내용 | 배포 대상 (main push 시) |
 |---|---|---|
-| `frontend/` | React 19 · Vite 8 · Tailwind CSS v4, `src/App.jsx` 중심 고객 UI | Netlify, Render(풀스택 이미지), EC2(nginx 이미지) |
+| `frontend/` | React 19 · Vite 8 · Tailwind CSS v4, `src/App.jsx` 중심 고객 UI | Netlify, Render(Static Site, `VITE_API_URL`), EC2(nginx 이미지) |
 | `netlify.toml` | Netlify 설정 (base=frontend) | Netlify |
-| `backend/` | Python 3.11 · FastAPI · SQLAlchemy, `backend/Dockerfile`(EC2·CI용 API) | Render, EC2(api) |
-| `Dockerfile`(루트) | React를 빌드하고 API와 함께 제공하는 Render 풀스택 이미지 | Render |
-| `render.yaml`, `.dockerignore`(루트) | Render Blueprint, Render 빌드 컨텍스트(저장소 루트) 필터 | Render |
+| `backend/` | Python 3.11 · FastAPI · SQLAlchemy, `backend/Dockerfile`(Render 백엔드·EC2·CI 공용 API 이미지) | Render(Web Service), EC2(api) |
+| `Dockerfile`(루트) | 전환·롤백용 이전 통합 이미지(React + API). 분리 배포가 안정되면 삭제 | Render(되돌릴 때만) |
+| `render.yaml`, `.dockerignore`(루트) | Render Blueprint(Static Site + Web Service), Docker 빌드 컨텍스트(저장소 루트) 필터 | Render |
 | `rpa/` | 가격 수집기(Requests · BeautifulSoup), Docker | EC2(rpa) |
 | `docker-compose.yml` | EC2 전체 스택(web + api + rpa, DB는 TiDB) | EC2 전체 재빌드 |
 | `deploy/` | nginx.conf, EC2 설정 스크립트 | EC2(nginx 재시작) |
@@ -63,7 +64,9 @@ CHANGED_FILES="backend/app/main.py" EVENT=push bash .github/scripts/detect-chang
    세 환경(로컬·EC2·Render)에서 같은 값으로 동작하게 만든다(환경별로 달라야 하는 값은 코드 기본값으로 처리).
    Gemini 키는 서버(backend)에만 둔다. 브라우저 코드에서 Gemini를 직접 호출하지 않는다.
 5. **`frontend/public/js/config.js`**: Vite가 빌드 결과에 복사한다. 커밋되는 버전은 `API_BASE_URL: ""`(데모 모드)를 유지한다.
-   Render(FastAPI)와 EC2(nginx)는 `/js/config.js`를 같은 도메인 설정(`"/"`)으로 바꿔 응답한다.
+   EC2(nginx)·로컬 풀스택(FastAPI)은 `/js/config.js`를 같은 도메인 설정(`"/"`)으로 바꿔 응답한다.
+   Render Static Site는 빌드 시 `VITE_API_URL`(백엔드 주소)을 주입하고, 백엔드는 `FRONTEND_URL`로 CORS·소셜 로그인 복귀를 맞춘다.
+   두 값은 Render 전용이라 `.env`에 넣지 않는다(docs/md/07-deploy-render.md).
    Netlify에 `API_BASE_URL`을 등록하지 않는다(데모 모드 유지 결정).
 6. **프런트엔드 빌드 체계 유지**: 사용자가 요청한 React(Vite) + Tailwind CSS v4를 사용한다. `npm ci && npm run build`로 검증한다.
    고객 UI와 상호작용은 `frontend/src/App.jsx`, 디자인 토큰은 `src/index.css`에 있다. 관리자 페이지는 필요 시 지연 로드한다.

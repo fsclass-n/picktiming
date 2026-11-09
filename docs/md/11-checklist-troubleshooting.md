@@ -15,12 +15,13 @@ PPT는 170초 대본+10초 전환 여유이며 실제 리허설 시간을 측정
 - [ ] 로컬에서 `python -m app.seed` 1회, 데모·관리자 비밀번호 보관
 - [ ] `frontend/`에서 `npm ci && npm run build`, 로컬 `uvicorn app.main:app --reload` → http://localhost:8000 화면·로그인 동작
 
-### Render — 단독 풀스택 (07)
-- [ ] 서비스 이름 `picktiming`, Docker, Singapore, Free, Health Check `/health`
-- [ ] Dockerfile Path `./Dockerfile`, Build Context `.`
-- [ ] Environment → **Add from .env**로 로컬 `.env` 붙여 넣기 (`FRONTEND_DIR`은 넣지 않음)
-- [ ] Auto-Deploy **After CI Checks Pass**, Build Filters Included Paths `backend/**`, `frontend/**`, `Dockerfile`, `requirements.txt`, `render.yaml`, `.dockerignore`
-- [ ] `/health` → `"status":"ok"`, `/` → 홈 화면, `/js/config.js` → `API_BASE_URL: "/"`
+### Render — 프런트엔드·백엔드 분리 (07)
+- [ ] Static Site `picktiming-web`: Root Directory `frontend`, Build `npm install && npm run build`, Publish `dist`, Rewrite `/*` → `/index.html`
+- [ ] Static Site Environment `VITE_API_URL=https://picktiming.onrender.com`, `NODE_VERSION=22`, 실제 발급 주소 확인
+- [ ] Web Service `picktiming`: Docker, Singapore, Free, Health Check `/health`, Dockerfile Path **`./backend/Dockerfile`**, Build Context `.`
+- [ ] Web Service Environment → **Add from .env** + Render 전용 `FRONTEND_URL`(Static Site 실제 주소), `ALLOWED_ORIGINS`에 Static Site 주소 (`FRONTEND_DIR`은 넣지 않음)
+- [ ] 두 서비스 Auto-Deploy **After CI Checks Pass**, Build Filter: Static Site `frontend/**` / Web Service `backend/**`, `requirements.txt`, `render.yaml`, `.dockerignore`
+- [ ] Static Site 화면 로그인·검색, 데모 배너 없음 / 백엔드 `/health` ok, `/` → Static Site로 302
 
 ### EC2 — 단독 풀스택 (08)
 - [ ] Elastic IP 연결, DuckDNS가 Elastic IP를 가리킴
@@ -65,7 +66,11 @@ PPT는 170초 대본+10초 전환 여유이며 실제 리허설 시간을 측정
 | Collect (Render) 실패: `401 INVALID_RPA_KEY` | Actions 로그 | Secret `RENDER_RPA_API_KEY` ≠ Render `RPA_API_KEY` |
 | 수집 결과 `inserted: 0, duplicate: N` | — | 같은 시간대에 다른 수집기(EC2/Actions)가 먼저 저장함. 정상 |
 | Render에서 push 후 자동 배포가 안 됨 | Render Events, GitHub 커밋의 검사 결과 | Auto-Deploy = After CI Checks Pass인지, 실패한 검사가 없는지, 바뀐 경로가 Build Filter에 포함되는지 |
-| Render 화면이 사라지고 JSON만 나옴(설정 붙여 넣은 뒤) | Render Environment | `FRONTEND_DIR`이 들어가 있으면 삭제(Dockerfile 값 사용) |
+| Static Site에서 "API 서버에 연결할 수 없습니다" | 개발자 도구 Console·Network | `CORS` 오류면 백엔드 `FRONTEND_URL`·`ALLOWED_ORIGINS`가 Static Site **실제 주소**와 같은지 확인. 백엔드가 잠들어 있으면 1분 뒤 재시도 |
+| Static Site에 데모 배너가 보임 | Static Site Environment | `VITE_API_URL` 누락 → 추가 후 **다시 배포**(빌드 시 들어가는 값) |
+| Static Site에서 새로고침하면 404 | Static Site Redirects/Rewrites | `/*` → `/index.html` **Rewrite** 규칙 추가 |
+| 백엔드 주소 `/`가 JSON 안내만 응답 | 백엔드 Environment | `FRONTEND_URL` 누락 → 추가하면 화면 경로가 Static Site로 이동 |
+| 소셜 로그인 후 백엔드 주소의 404로 이동 | 백엔드 Environment | `FRONTEND_URL` 누락. 콜백(Redirect URI)은 기존 백엔드 주소 그대로 |
 | rpa 로그: `Connection refused ... localhost:8000` | `docker compose logs rpa` | EC2 `.env`에서 `RPA_TARGET_API` 줄 삭제(compose 기본값 `http://api:8000` 사용) |
 | rpa 로그: `401 ... INVALID_RPA_KEY` | `docker compose logs rpa` | `.env`를 바꾼 뒤 컨테이너를 다시 만들지 않음 → `docker compose up -d` |
 | EC2 빌드 중 멈춤·`Killed` | `free -h`, `dmesg` | 메모리 부족 → 스왑 2 GB(08 문서 4단계) 또는 t3.small |

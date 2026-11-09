@@ -1,8 +1,8 @@
-# Render 단독 풀스택 이미지: FastAPI + React 빌드 결과를 같은 도메인으로 제공
-# 저장소 루트의 Dockerfile = Render 기본값이라 대시보드의 Dockerfile Path를 비워 두거나 ./Dockerfile로 두면 된다.
-# 빌드 컨텍스트는 저장소 루트(.)이며, 루트 .dockerignore가 필요한 파일만 남긴다.
+# [전환·롤백용] 이전 Render 통합 이미지: FastAPI + React 빌드 결과를 같은 도메인으로 제공
+# Render는 이제 분리 배포한다(render.yaml): 백엔드 = backend/Dockerfile(API 전용), 프런트엔드 = Static Site.
+# 이 파일은 대시보드 Dockerfile Path를 ./backend/Dockerfile로 바꾸기 전까지의 전환 기간과, 문제 시 되돌리기(Dockerfile Path → ./Dockerfile)에만 쓴다.
+# 분리 배포가 안정되면 삭제해도 된다(CI의 '이전 통합 이미지' 단계와 함께). 빌드 컨텍스트는 저장소 루트(.).
 #   docker build -t picktiming-render .
-# EC2·CI용 API 이미지는 backend/Dockerfile(같은 저장소 루트 컨텍스트)을 사용한다.
 # 1단계: React 빌드
 FROM node:22-alpine AS web
 WORKDIR /src

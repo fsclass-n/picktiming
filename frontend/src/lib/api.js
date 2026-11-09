@@ -1,7 +1,8 @@
 import { handleMock } from './mock.js';
 
-const BASE = (window.APP_CONFIG?.API_BASE_URL || '').trim();
-/** API_BASE_URL이 없으면 데모 모드: 같은 REST 계약을 브라우저 목업으로 처리 */
+// API 주소: 서버가 응답한 /js/config.js(EC2·로컬 풀스택 = "/") → 빌드 시 주입한 VITE_API_URL(Render Static Site) 순서로 사용
+const BASE = (window.APP_CONFIG?.API_BASE_URL || import.meta.env.VITE_API_URL || '').trim();
+/** 둘 다 없으면 데모 모드(Netlify): 같은 REST 계약을 브라우저 목업으로 처리 */
 export const DEMO = BASE === '';
 const API_ROOT = `${BASE.replace(/\/+$/, '')}/api/v1`;
 const TOKEN_KEY = 'pt_token';

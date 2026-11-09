@@ -1,7 +1,9 @@
 from datetime import datetime
 from functools import lru_cache
+from urllib.parse import urlsplit
 from zoneinfo import ZoneInfo
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 INSECURE_DEFAULTS = {"change-me", "change-me-rpa", ""}
@@ -39,10 +41,35 @@ class Settings(BaseSettings):
     tz: str = "Asia/Seoul"
     # 프런트엔드 정적 파일 폴더. 비우면 저장소의 frontend/를 찾아 있으면(로컬) 서빙, 없으면(EC2 api 컨테이너) API만 제공
     frontend_dir: str | None = None
+    # 분리 배포한 프런트엔드 주소(Render Static Site, 예: https://picktiming-web.onrender.com). 환경마다 다르므로 .env가 아닌 Render에만 등록한다.
+    # 값이 있으면 CORS 허용 목록에 자동 추가, 소셜 로그인 후 이 주소로 복귀, API 전용 서버의 화면 경로(/, /login 등)를 이 주소로 보낸다.
+    frontend_url: str = ""
+
+    @field_validator("frontend_url")
+    @classmethod
+    def _check_frontend_url(cls, value: str) -> str:
+        value = value.strip()
+        if value:
+            parts = urlsplit(value)
+            if parts.scheme not in ("http", "https") or not parts.netloc:
+                raise ValueError("FRONTEND_URL은 https://로 시작하는 전체 주소여야 합니다.")
+        return value
+
+    @property
+    def frontend_origin(self) -> str:
+        parts = urlsplit(self.frontend_url)
+        return f"{parts.scheme}://{parts.netloc}" if self.frontend_url else ""
+
+    def frontend_link(self, path: str) -> str:
+        """화면 경로(/login 등)를 프런트엔드 주소 기준으로 바꾼다. FRONTEND_URL이 없으면(같은 도메인) 경로 그대로"""
+        return f"{self.frontend_url.rstrip('/')}{path}" if self.frontend_url else path
 
     @property
     def origins(self) -> list[str]:
-        return [o.strip() for o in self.allowed_origins.split(",") if o.strip()]
+        origins = [o.strip().rstrip("/") for o in self.allowed_origins.split(",") if o.strip()]
+        if self.frontend_origin and "*" not in origins and self.frontend_origin not in origins:
+            origins.append(self.frontend_origin)
+        return origins
 
     @property
     def admin_email_set(self) -> set[str]:

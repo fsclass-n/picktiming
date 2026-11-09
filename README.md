@@ -62,7 +62,7 @@ flowchart LR
 |---|---|---|
 | GitHub Pages | 단일 HTML 포트폴리오 | 별도 프레임워크 빌드 없이 프로젝트 소개 |
 | Netlify | React 데모 · API·DB 연결 없음 | 운영 데이터 변경 없이 기능 체험 |
-| Render | React 정적 파일 + FastAPI 풀스택 | 같은 도메인에서 화면과 API 제공 |
+| Render | Static Site(React 빌드) + Web Service(FastAPI API) 분리 | 화면은 CDN, API는 `VITE_API_URL`·CORS로 연결 |
 | AWS EC2 | nginx + FastAPI + RPA의 Docker Compose 구성 | 수집 스케줄러를 별도 컨테이너로 실행 |
 | TiDB Cloud | 공용 운영 DB | 두 풀스택 환경의 가격·회원·관심 상품 저장 |
 

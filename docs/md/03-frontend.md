@@ -70,21 +70,25 @@ npm run preview -- --host 127.0.0.1 --port 4173
 
 ## 4. API 주소와 인증
 
-`index.html`이 `/js/config.js`를 먼저 불러옵니다.
+`index.html`이 `/js/config.js`를 먼저 불러오고, [`src/lib/api.js`](../../frontend/src/lib/api.js)가 아래 순서로 API 주소를 정합니다.
 
-| `window.APP_CONFIG.API_BASE_URL` | 동작 | 환경 |
-|---|---|---|
-| `""` | 브라우저의 `src/lib/mock.js`로 응답 | Netlify, preview, `VITE_DEMO=1` |
-| `/` | 같은 도메인의 `/api/v1/…` 호출 | Render, EC2, 기본 Vite 개발 서버 |
-| 다른 서버 주소 | 지정한 API 호출(CORS 필요) | 별도 연동 시 |
+| 순서 | 값 | 동작 | 환경 |
+|---|---|---|---|
+| ① | `window.APP_CONFIG.API_BASE_URL = "/"` | 같은 도메인의 `/api/v1/…` 호출 | EC2(nginx), 로컬 풀스택(FastAPI), 기본 Vite 개발 서버 |
+| ② | 빌드 시 `VITE_API_URL` | 그 주소의 `/api/v1/…` 호출(백엔드 CORS 허용 필요) | **Render Static Site** (`https://picktiming.onrender.com`) |
+| ③ | 둘 다 없음 | 브라우저의 `src/lib/mock.js`로 응답 | Netlify, preview, `VITE_DEMO=1` |
 
-커밋되는 `public/js/config.js`는 항상 데모 모드입니다.
-Render는 FastAPI, EC2는 nginx가 같은 URL에 운영 설정을 응답합니다.
+- `VITE_API_URL`은 [`vite.config.js`](../../frontend/vite.config.js)가 검증합니다. `https://` 없는 값·쿼리·해시가 있으면 **빌드를 실패**시키고, 끝의 `/`는 지웁니다.
+  `VITE_DEMO=1`이면 `VITE_API_URL`을 무시합니다. 개발 서버에서 배포된 백엔드를 쓰려면 `VITE_API_URL=https://… npm run dev`.
+- 빌드 시 코드에 들어가는 값이므로 Render에서 바꾸면 Static Site를 **다시 배포**해야 반영됩니다.
+
+커밋되는 `public/js/config.js`는 항상 `""`(데모 모드)입니다. EC2는 nginx가 같은 URL에 `"/"`를 응답합니다.
 운영 빌드에 DB 접속 주소나 Gemini 키를 넣지 않습니다.
 
 기존 JWT 로그인은 `pt_token`, `pt_user`를 로컬 저장소에 보관하고 Bearer 헤더로 전송합니다.
 401 응답 시 로그인 상태를 지웁니다. 권한 검증은 서버에서도 수행합니다.
 소셜 로그인 완료 후 URL의 토큰을 지우고, 같은 사이트 경로만 복귀 대상으로 허용합니다.
+Render 분리 배포에서는 백엔드가 `FRONTEND_URL`(Static Site)의 `/oauth/callback`으로 돌려보냅니다.
 
 ## 5. 접근성·오류 처리
 

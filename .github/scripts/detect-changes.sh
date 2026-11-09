@@ -41,7 +41,7 @@ rp=$(bool has '^(rpa/|requirements\.txt$)')
 compose=$(bool has '^docker-compose\.yml$')
 dep=$(bool has '^deploy/')
 ntl=$(bool has '^(frontend/|netlify\.toml$)')
-# Render는 프런트엔드까지 함께 서빙하는 단독 풀스택 이미지(저장소 루트 Dockerfile, 컨텍스트 = 저장소 루트)
+# Render: frontend/ → Static Site, backend/·requirements.txt → Web Service(backend/Dockerfile). 루트 Dockerfile은 전환·롤백용 통합 이미지
 rnd=$(bool has '^(backend/|frontend/|Dockerfile$|render\.yaml$|\.dockerignore$|requirements\.txt$)')
 all=$([ "$files" = "__all__" ] || [ "$compose" = true ] && echo true || echo false)
 

@@ -1,13 +1,20 @@
-# Render Blueprint: 단독 풀스택(FastAPI + 프런트엔드 정적 파일, Docker). DB는 TiDB Cloud(MySQL 호환)를 DATABASE_URL로 연결한다.
-# 프런트엔드와 API가 같은 도메인(https://picktiming.onrender.com)이며, 가격 수집은 GitHub Actions(collect-render.yml)가 매시 실행한다.
+# Render Blueprint: 프런트엔드(Static Site)와 백엔드(Web Service) 분리 배포. DB는 TiDB Cloud(MySQL 호환)를 DATABASE_URL로 연결한다.
+#
+#   picktiming      (Web Service, Docker)  https://picktiming.onrender.com      FastAPI API·AI·수집 수신. 화면 경로는 FRONTEND_URL로 리다이렉트
+#   picktiming-web  (Static Site)          https://picktiming-web.onrender.com  React 빌드 결과(dist). VITE_API_URL로 위 API를 호출
+#
+# 기존 주소(picktiming.onrender.com)는 백엔드가 유지한다 → GitHub Actions 수집(RENDER_URL)·OAuth 콜백 주소 변경 없음.
+# Static Site 이름이 이미 사용 중이면 Render가 다른 주소(예: picktiming-web-xxxx.onrender.com)를 줄 수 있다.
+#   그때는 실제 주소로 백엔드 FRONTEND_URL·ALLOWED_ORIGINS를 바꾼다(docs/md/07-deploy-render.md).
 # 배포: main에 커밋하면 GitHub Actions의 CI가 모두 통과한 뒤 Render가 자동 배포한다(After CI Checks Pass).
-#       아래 경로가 바뀐 커밋만 배포하며, 이 경우 Deploy Hook(RENDER_DEPLOY_HOOK_URL)은 등록하지 않는다(중복 배포 방지).
-# 환경 변수 값은 로컬·EC2와 같은 .env를 대시보드 Environment → "Add from .env"로 붙여 넣는다.
+# 백엔드 비밀값은 로컬·EC2와 같은 .env를 대시보드 Environment → "Add from .env"로 붙여 넣는다.
+# FRONTEND_URL·VITE_API_URL은 Render 전용 값이라 .env에 넣지 않는다(EC2는 nginx 같은 도메인 구성).
 services:
+  # ---------------------------------------------------------------- 백엔드: API 전용(backend/Dockerfile)
   - type: web
     name: picktiming
     runtime: docker
-    dockerfilePath: ./Dockerfile
+    dockerfilePath: ./backend/Dockerfile
     dockerContext: .
     region: singapore
     plan: free
@@ -16,11 +23,9 @@ services:
     buildFilter:
       paths:
         - backend/**
-        - frontend/**
-        - Dockerfile
+        - requirements.txt
         - render.yaml
         - .dockerignore
-        - requirements.txt
     envVars:
       - key: APP_ENV
         value: production
@@ -38,13 +43,15 @@ services:
         value: gemini-2.5-flash
       - key: AI_DAILY_LIMIT
         value: "20"
-      - key: ALLOWED_ORIGINS       # .env와 같은 값(세 환경 주소)
-        value: https://picktiming.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173
+      - key: FRONTEND_URL          # Static Site 주소: CORS 자동 허용, 소셜 로그인 복귀, 화면 경로 리다이렉트
+        value: https://picktiming-web.onrender.com
+      - key: ALLOWED_ORIGINS       # .env와 같은 값(FRONTEND_URL은 자동 추가되므로 빠져 있어도 동작)
+        value: https://picktiming-web.onrender.com,https://picktiming.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173
       - key: ADMIN_EMAILS
         sync: false
       - key: DEMO_LOGIN_ENABLED    # 로그인 화면의 테스트 계정 버튼
         value: "true"
-      # 소셜 로그인(선택) — 값은 대시보드에서 입력. 비어 있으면 해당 버튼만 비활성
+      # 소셜 로그인(선택) — 값은 대시보드에서 입력. 비어 있으면 해당 버튼만 비활성. 콜백은 백엔드 주소(기존과 동일)
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET
@@ -57,3 +64,43 @@ services:
         sync: false
       - key: KAKAO_CLIENT_SECRET
         sync: false
+
+  # ---------------------------------------------------------------- 프런트엔드: 정적 파일(frontend/dist)
+  - type: web
+    name: picktiming-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist          # rootDir(frontend) 기준
+    autoDeployTrigger: checksPass
+    buildFilter:
+      paths:
+        - frontend/**
+    envVars:
+      - key: VITE_API_URL            # 빌드 시 코드에 들어감. 바꾸면 다시 배포해야 반영된다
+        value: https://picktiming.onrender.com
+      - key: NODE_VERSION
+        value: "22"
+    routes:
+      - type: rewrite                # React Router(SPA): 실제 파일이 없는 경로는 index.html
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=()
+      - path: /js/config.js
+        name: Cache-Control
+        value: no-cache
+      - path: /assets/*              # Vite가 파일명에 해시를 붙이므로 장기 캐시 가능
+        name: Cache-Control
+        value: public, max-age=31536000, immutable

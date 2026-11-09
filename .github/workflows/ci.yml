@@ -86,6 +86,13 @@ jobs:
       - run: npm run build
       - name: "빌드 결과 확인 (데모 모드 config.js, SPA 진입점)"
         run: "test -f dist/index.html && grep -q API_BASE_URL dist/js/config.js"
+      - name: "Render Static Site 빌드 확인 (VITE_API_URL 주입·정규화, 잘못된 주소 거부)"
+        run: |
+          VITE_API_URL="https://picktiming.onrender.com/" npm run build
+          grep -rq "https://picktiming.onrender.com" dist/assets
+          if grep -rq "https://picktiming.onrender.com/[\`\"']" dist/assets; then echo "끝의 / 가 정리되지 않았습니다"; exit 1; fi
+          grep -q 'API_BASE_URL: ""' dist/js/config.js
+          if VITE_API_URL="picktiming.onrender.com" npm run build; then echo "잘못된 VITE_API_URL이 통과했습니다"; exit 1; fi
 
   docker:
     name: Docker build
@@ -100,7 +107,19 @@ jobs:
           docker run -d --name api -p 8000:8000 -e DATABASE_URL=sqlite:////app/data/ci.db picktiming-api:ci
           for i in $(seq 1 30); do curl -fsS http://localhost:8000/health && exit 0; sleep 2; done
           docker logs api; exit 1
-      - name: Render 풀스택 이미지 빌드·확인 (API + 프런트엔드 같은 도메인)
+      - name: Render 백엔드 구성 확인 (API 전용 + FRONTEND_URL 리다이렉트·CORS)
+        run: |
+          WEB=https://picktiming-web.onrender.com
+          docker run -d --name split -p 8002:8000 -e DATABASE_URL=sqlite:////app/data/ci.db \
+            -e FRONTEND_URL=$WEB -e ALLOWED_ORIGINS=http://localhost:5173 picktiming-api:ci
+          for i in $(seq 1 30); do curl -fsS http://localhost:8002/health && break; sleep 2; done
+          curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' http://localhost:8002/product/1 | grep -qx "302 $WEB/product/1" \
+            && curl -sS -o /dev/null -w '%{http_code}' http://localhost:8002/api/v1/no-such-endpoint | grep -qx 404 \
+            && curl -fsS -X OPTIONS -H "Origin: $WEB" -H "Access-Control-Request-Method: POST" \
+                 -H "Access-Control-Request-Headers: authorization,content-type" -D - -o /dev/null \
+                 http://localhost:8002/api/v1/auth/login | grep -qi "access-control-allow-origin: $WEB" \
+            || { docker logs split; exit 1; }
+      - name: 이전 통합 이미지(저장소 루트 Dockerfile, 롤백용) 빌드·확인
         run: |
           docker build -t picktiming-render:ci .
           docker run -d --name render -p 8001:10000 -e PORT=10000 -e DATABASE_URL=sqlite:////app/data/ci.db picktiming-render:ci

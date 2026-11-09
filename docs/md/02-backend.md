@@ -4,10 +4,10 @@
 
 | 이미지 | Dockerfile | 빌드 컨텍스트 | 내용 | 사용처 |
 |---|---|---|---|---|
-| API | [`backend/Dockerfile`](../../backend/Dockerfile) | 저장소 루트 `.` | API만 (프런트엔드는 nginx가 담당) | EC2, CI |
-| 풀스택 | [`Dockerfile(저장소 루트)`](../../Dockerfile) | 저장소 루트 `.` | API + React 빌드 결과 (`FRONTEND_DIR=/app/frontend`) | Render |
+| API | [`backend/Dockerfile`](../../backend/Dockerfile) | 저장소 루트 `.` | API만 (화면은 Render Static Site 또는 EC2 nginx가 담당) | **Render 백엔드**, EC2, CI |
+| 통합(전환·롤백용) | [`Dockerfile(저장소 루트)`](../../Dockerfile) | 저장소 루트 `.` | API + React 빌드 결과 (`FRONTEND_DIR=/app/frontend`) | Render 되돌릴 때만 |
 
-Render는 루트 [`Dockerfile`](../../Dockerfile)에서 React를 빌드하고 FastAPI와 함께 제공합니다.
+Render는 화면(Static Site)과 API(Web Service)를 분리해 배포합니다(07 문서). 백엔드는 `backend/Dockerfile`을 사용합니다.
 Python 의존성은 루트 [`requirements.txt`](../../requirements.txt) 하나로 관리합니다.
 
 ## 1. 시작 과정
@@ -16,9 +16,14 @@ Python 의존성은 루트 [`requirements.txt`](../../requirements.txt) 하나�
 
 1. 환경 변수 읽기 → `APP_ENV=production`인데 `JWT_SECRET`·`RPA_API_KEY`가 비어 있거나 기본값이면 **기동 거부**
 2. `init_db()` → 테이블이 없으면 생성 (`create_all`, 별도 마이그레이션 도구 없음)
-3. CORS 설정(`ALLOWED_ORIGINS`), 라우터 6개를 `/api/v1` 아래에 등록
+3. CORS 설정(`ALLOWED_ORIGINS` + `FRONTEND_URL` 출처 자동 추가, 메서드 `GET POST PATCH DELETE OPTIONS`·헤더 `Authorization`, `Content-Type`만 허용, 쿠키 미사용), 라우터 6개를 `/api/v1` 아래에 등록
 4. `GET /health` → DB에 `SELECT 1`을 실행하고 `status`, `env`, `gemini`를 응답합니다. `gemini`는 키 설정 여부이며 실제 생성 성공을 의미하지 않습니다.
-5. 프런트엔드 폴더가 있으면 함께 서빙 — `FRONTEND_DIR`(Render: `/app/frontend`), 비어 있으면 저장소의 `frontend/dist/`(로컬 빌드 결과)를 찾습니다.
+5. 화면 제공 방식(`create_app`)은 환경에 따라 하나만 선택됩니다.
+   - **화면 폴더 있음**(로컬 `frontend/dist`, 통합 이미지): 아래처럼 같은 도메인에서 화면 제공
+   - **`FRONTEND_URL` 있음**(Render 백엔드): API 전용. `/api/*`·`/docs`·`/health` 외의 GET 화면 경로를 Static Site의 같은 경로로 302 이동, 소셜 로그인도 이 주소로 복귀
+   - **둘 다 없음**(EC2 api 컨테이너): `/`에서 API 안내 JSON만 응답(화면은 nginx)
+
+   화면 폴더는 `FRONTEND_DIR`, 비어 있으면 저장소의 `frontend/dist/`(로컬 빌드 결과)를 찾습니다.
    API 경로(`/api/v1`, `/health`, `/docs`, `/openapi.json`)가 먼저 처리되고 나머지는 정적 파일입니다.
    - `/js/config.js` → `API_BASE_URL: "/"`(같은 도메인)를 동적으로 응답 (저장소의 데모용 config.js 대신)
    - React 경로는 SPA `index.html`로 연결하고, 없는 정적 파일은 404 처리합니다.
@@ -41,11 +46,12 @@ Docker 실행 명령은 `uvicorn app.main:app --port ${PORT:-8000}` 입니다. R
 | `DB_SSL_CA` | (없음) | `/etc/ssl/certs/ca-certificates.crt` | 값이 있으면 TLS. 파일이 없는 Windows 로컬은 certifi 사용 |
 | `JWT_SECRET` | change-me | 생성한 무작위 값 | 로그인 토큰 서명 키 |
 | `RPA_API_KEY` | change-me-rpa | 생성한 무작위 값 | RPA 전용 API 인증 키. GitHub Secret `RENDER_RPA_API_KEY`에도 같은 값 |
-| `ALLOWED_ORIGINS` | * | `https://picktiming.onrender.com,http://picktiming.duckdns.org,http://localhost:8000` | CORS 허용 출처. 세 환경 모두 같은 도메인 호출이라 공용 값 |
+| `ALLOWED_ORIGINS` | * | `https://picktiming-web.onrender.com,https://picktiming.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173` | CORS 허용 출처. 세 환경 공용 값 |
+| `FRONTEND_URL` | (없음) | **Render 백엔드에만** `https://picktiming-web.onrender.com` | 분리 배포 화면 주소. CORS 자동 허용·소셜 로그인 복귀·화면 경로 리다이렉트. `.env`·EC2에는 넣지 않음 |
 | `ADMIN_EMAILS` | (없음) | 선택 | 이 이메일로 가입하면 관리자 |
 | `GEMINI_API_KEY` | (없음) | 선택 | 비우면 규칙 기반 템플릿 문장으로 동작 |
 | `GEMINI_MODEL`, `AI_DAILY_LIMIT`, `JWT_EXPIRE_MINUTES`, `TZ` | gemini-2.5-flash, 20, 60, Asia/Seoul | 넣지 않음 | 기본값 사용 |
-| `FRONTEND_DIR` | (없음 → 저장소 `frontend/` 자동 탐색) | **넣지 않음** | Render는 `Dockerfile`에 `/app/frontend`로 설정됨. Render 환경 변수에 넣으면 이 값을 덮어씀 |
+| `FRONTEND_DIR` | (없음 → 저장소 `frontend/` 자동 탐색) | **넣지 않음** | 통합 이미지(루트 `Dockerfile`)만 `/app/frontend`로 설정. Render 백엔드(`backend/Dockerfile`)에는 화면 폴더가 없음 |
 
 ## 3. DB 테이블 12개
 

@@ -103,10 +103,10 @@ def oauth_callback(provider: str, request: Request, code: str = "", state: str =
         next_path = oauth.read_state(s, state, provider)
         profile = oauth.fetch_profile(s, provider, code, state, _redirect_uri(request, provider))
     except (jwt.PyJWTError, ValueError, KeyError) as exc:
-        return RedirectResponse(f"/login?oauth_error={quote(str(exc)[:120])}", status_code=302)
+        return RedirectResponse(s.frontend_link(f"/login?oauth_error={quote(str(exc)[:120])}"), status_code=302)
     except Exception:  # 제공자 서버 오류 등
         log.exception("oauth %s failed", provider)
-        return RedirectResponse(f"/login?oauth_error={quote('소셜 로그인 처리 중 오류가 발생했습니다.')}", status_code=302)
+        return RedirectResponse(s.frontend_link(f"/login?oauth_error={quote('소셜 로그인 처리 중 오류가 발생했습니다.')}"), status_code=302)
 
     email = profile["email"].lower()
     user = db.execute(select(User).where(User.email == email)).scalar_one_or_none()
@@ -117,5 +117,5 @@ def oauth_callback(provider: str, request: Request, code: str = "", state: str =
         db.add(user)
         db.commit()
     token = create_token(user)
-    # 토큰은 URL 조각(#)으로 전달해 서버 로그·Referer에 남지 않게 한다
-    return RedirectResponse(f"/oauth/callback#token={token}&next={quote(next_path)}", status_code=302)
+    # 토큰은 URL 조각(#)으로 전달해 서버 로그·Referer에 남지 않게 한다. 분리 배포면 FRONTEND_URL(화면 도메인)로 돌아간다
+    return RedirectResponse(s.frontend_link(f"/oauth/callback#token={token}&next={quote(next_path)}"), status_code=302)

@@ -11,11 +11,11 @@ Render에서 화면과 API를 **서로 다른 서비스**로 배포합니다. �
 브라우저 ──▶ timepick (CDN 정적 파일)
    │           빌드 시 VITE_API_URL=https://timepick-api.onrender.com 주입
    └──────▶ timepick-api /api/v1/*  (CORS: FRONTEND_URL 출처 허용, Authorization 헤더 토큰)
-                 └──▶ TiDB Cloud — 데이터베이스 이름은 picktiming (서비스 이름과 별개, 바꾸지 않음)
+                 └──▶ TiDB Cloud — 데이터베이스 이름 timepick (2026-11-09 picktiming에서 변경)
 GitHub Actions collect-render ──▶ timepick-api /api/v1/rpa/* (X-RPA-KEY, Variable RENDER_URL)
 ```
 
-- **서비스·도메인 이름과 DB 이름은 별개**입니다. `DATABASE_URL`의 경로는 계속 `/picktiming`이어야 합니다(`/timepick`이면 `Unknown database` 오류, 0절).
+- `DATABASE_URL`의 경로는 실제 DB 이름 **`/timepick`** 이어야 합니다. 다르면 `Unknown database`(1049)로 서버가 시작하지 않습니다(0절).
 - 화면 경로(`/product/3` 등)로 백엔드 주소에 들어오면 **같은 경로의 Static Site 주소로 302 이동**합니다. `/api/*`, `/docs`, `/health`는 이동하지 않습니다.
 - EC2(nginx 같은 도메인)와 Netlify(데모 모드)는 영향이 없습니다.
 
@@ -26,7 +26,7 @@ Render의 `onrender.com` 주소는 **서비스를 만들 때의 이름**으로 �
 
 | 순서 | 할 일 | 확인 |
 |---|---|---|
-| 1 | `timepick-api` Environment의 **`DATABASE_URL` 경로를 `/picktiming`** 으로(로컬 `.env`도 같이) → Save, rebuild, and deploy | `https://timepick-api.onrender.com/health` → `"status":"ok"` |
+| 1 | TiDB DB 이름 변경(06 문서 8절) 후 `timepick-api`·로컬 `.env`·EC2 `.env`의 **`DATABASE_URL` 경로를 `/timepick`** 으로 → Save, rebuild, and deploy | `https://timepick-api.onrender.com/health` → `"status":"ok"` |
 | 2 | `timepick-api`에 `FRONTEND_URL=https://timepick.onrender.com`, `ALLOWED_ORIGINS`(아래 3-1) | 로그에 `Unknown database` 없음 |
 | 3 | `timepick` Static Site: `VITE_API_URL=https://timepick-api.onrender.com` → **Manual Deploy**(빌드 시 들어가는 값), Rewrite `/*` → `/index.html` | 화면 로그인·검색, `/product/1` 새로고침 시 404 아님 |
 | 4 | GitHub → Settings → Variables → **`RENDER_URL` = `https://timepick-api.onrender.com`** | Actions → Collect (Render) 수동 실행 성공 |
@@ -36,11 +36,11 @@ Render의 `onrender.com` 주소는 **서비스를 만들 때의 이름**으로 �
 
 ### `Unknown database 'timepick'` (1049)
 
-- **원인**: `DATABASE_URL=mysql+pymysql://…:4000/timepick?…`처럼 DB 이름 부분까지 `timepick`으로 바뀌었습니다. TiDB에는 `picktiming` 데이터베이스만 있고(테이블 12개, 운영 데이터), `timepick`은 없습니다.
-  `.env`에서 `picktiming`을 `timepick`으로 일괄 바꾸면 DB 이름, `ADMIN_EMAILS`, `S3_PREFIX`, `ALLOWED_ORIGINS`의 EC2 주소(`picktiming.duckdns.org`)까지 함께 바뀌니 주의합니다.
-- **해결**: 경로만 `/picktiming`으로 되돌립니다. 데이터를 옮길 필요가 없습니다.
+- **원인**: `DATABASE_URL` 경로의 DB 이름이 TiDB에 실제로 있는 DB 이름과 다릅니다. 2026-11-09에는 TiDB에 `picktiming`만 있는데 경로가 `/timepick`이라 발생했고,
+  이후 DB 이름을 `timepick`으로 옮겨(06 문서 8절) 해결했습니다. 이제는 반대로 `/picktiming`을 쓰는 곳(예전 서비스·EC2 `.env`)에서 같은 오류가 납니다.
+  `.env`에서 `picktiming`을 `timepick`으로 일괄 바꾸면 `ADMIN_EMAILS`, `S3_PREFIX`, `ALLOWED_ORIGINS`의 EC2 주소(`picktiming.duckdns.org`)까지 바뀌니 주의합니다.
+- **해결**: TiDB Cloud SQL Editor에서 `SHOW DATABASES;`로 실제 이름을 확인하고 모든 환경의 `DATABASE_URL` 경로를 그 이름으로 맞춥니다.
 - 백엔드는 이 오류를 원인과 고칠 값을 담은 한 줄 메시지로 기동 로그에 남깁니다([`database.py`](../../backend/app/database.py)의 `describe_db_error`, 비밀번호는 출력하지 않음).
-- DB 이름 자체를 `timepick`으로 바꾸고 싶다면 TiDB는 DB 이름 변경을 지원하지 않아 새 DB를 만들고 테이블을 `RENAME TABLE`로 옮겨야 합니다(06 문서). 로컬·EC2·Render를 동시에 바꿔야 하므로 권하지 않습니다.
 
 ## 1. 코드에서 바뀐 점
 
@@ -108,7 +108,7 @@ Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/picktim
 
 | Key | Value | 역할 |
 |---|---|---|
-| `DATABASE_URL` | `mysql+pymysql://<USER>:<PASSWORD>@<HOST>:4000/`**`picktiming`**`?charset=utf8mb4` | **DB 이름은 picktiming**(서비스 이름 timepick과 무관) |
+| `DATABASE_URL` | `mysql+pymysql://<USER>:<PASSWORD>@<HOST>:4000/`**`timepick`**`?charset=utf8mb4` | **DB 이름 timepick** |
 
 | Key | Value | 역할 |
 |---|---|---|

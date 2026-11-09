@@ -36,11 +36,11 @@
 ## 3. `.env`에 넣기 (로컬·EC2·Render 공용)
 
 ```dotenv
-DATABASE_URL=mysql+pymysql://<USER>:<PASSWORD>@<HOST>:4000/picktiming?charset=utf8mb4
+DATABASE_URL=mysql+pymysql://<USER>:<PASSWORD>@<HOST>:4000/timepick?charset=utf8mb4
 DB_SSL_CA=/etc/ssl/certs/ca-certificates.crt
 ```
 
-- 예: `mysql+pymysql://abcd1234.root:p%40ss@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/picktiming?charset=utf8mb4`
+- 예: `mysql+pymysql://abcd1234.root:p%40ss@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/timepick?charset=utf8mb4`
 - 비밀번호에 `@ : / ? # %` 같은 특수문자가 있으면 **URL 인코딩**합니다(`@` → `%40`):
   `python -c "import urllib.parse;print(urllib.parse.quote('비밀번호', safe=''))"`
 - Connect With를 `SQLAlchemy`로 고르면 완성된 주소를 보여 주지만, 끝의 `?ssl_ca=...` 부분은 지우고 `?charset=utf8mb4`로 바꿉니다
@@ -106,3 +106,10 @@ RENAME TABLE buytiming.rpa_job_logs TO picktiming.rpa_job_logs;
 - 이어서 `DATABASE_URL` 끝의 DB 이름을 `picktiming`으로 바꾼다: 로컬 `.env` → Render Environment → EC2 `.env`.
   Render가 이전 주소로 다시 시작하면 서버 시작 시 `buytiming`에 빈 테이블을 새로 만들 수 있으니 Render 값을 바로 바꾼다.
 - 빈 `buytiming`은 위 확인 후에만 `DROP DATABASE buytiming;`으로 지운다(되돌릴 수 없음).
+
+## 8. DB 이름 변경 기록 (picktiming → timepick, 2026-11-09)
+
+서비스 주소를 `timepick`(Static Site)·`timepick-api`(Web Service)로 바꾸면서 DB 이름도 같은 방식(7절 SQL의 `buytiming`→`picktiming`, `picktiming`→`timepick`)으로 옮겼다.
+
+- 확인: `timepick`에 테이블 12개, `users` 3·`products` 25·`price_history` 5,417건(변경 전과 동일), `picktiming`은 없음(접속 시 1049).
+- `DATABASE_URL` 경로를 `/timepick`으로: 로컬 `.env`, Render `timepick-api`, EC2 `.env`. 예전 Render 서비스(`picktiming`)는 경로가 `/picktiming`이라 더 이상 시작하지 않으므로 Suspend한다.

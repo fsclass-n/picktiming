@@ -3,7 +3,7 @@
 #   timepick-api    (Web Service, Docker)  https://timepick-api.onrender.com  FastAPI API·AI·수집 수신. 화면 경로는 FRONTEND_URL로 리다이렉트
 #   timepick        (Static Site)          https://timepick.onrender.com      React 빌드 결과(dist). VITE_API_URL로 위 API를 호출
 #
-# 서비스 이름(timepick)과 DB 이름은 별개다. DATABASE_URL의 DB 이름은 계속 picktiming(운영 데이터 위치)이다.
+# 운영 DB 이름은 timepick(2026-11-09 picktiming에서 변경). DATABASE_URL 경로가 다르면 Unknown database(1049)로 기동 실패.
 # 주소를 바꾸면 GitHub Variable RENDER_URL, 소셜 로그인 콜백(Redirect URI)도 새 백엔드 주소로 바꾼다(docs/md/07-deploy-render.md).
 # 이름이 이미 사용 중이면 Render가 다른 주소(예: timepick-xxxx.onrender.com)를 준다 → 실제 주소로 FRONTEND_URL·VITE_API_URL·ALLOWED_ORIGINS를 맞춘다.
 # 배포: main에 커밋하면 GitHub Actions의 CI가 모두 통과한 뒤 Render가 자동 배포한다(After CI Checks Pass).
@@ -29,7 +29,7 @@ services:
     envVars:
       - key: APP_ENV
         value: production
-      - key: DATABASE_URL          # 예: mysql+pymysql://USER:PASSWORD@HOST:4000/picktiming?charset=utf8mb4
+      - key: DATABASE_URL          # 예: mysql+pymysql://USER:PASSWORD@HOST:4000/timepick?charset=utf8mb4
         sync: false
       - key: DB_SSL_CA             # TiDB Cloud TLS
         value: /etc/ssl/certs/ca-certificates.crt

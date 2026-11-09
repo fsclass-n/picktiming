@@ -58,6 +58,9 @@ def init_db() -> None:
     Base.metadata.create_all(engine)
 
 
+PRODUCTION_DB = "timepick"  # 운영 TiDB 데이터베이스 이름(2026-11-09 picktiming → timepick, RENAME TABLE로 이전)
+
+
 def describe_db_error(exc: OperationalError, database_url: str) -> str:
     """DB 연결 실패를 원인별 안내 문구로 바꾼다(Render 로그용). 접속 주소의 사용자·비밀번호는 넣지 않는다"""
     code = (getattr(exc.orig, "args", None) or [None])[0]
@@ -65,8 +68,8 @@ def describe_db_error(exc: OperationalError, database_url: str) -> str:
     where = f"{url.host}:{url.port}" if url.host else "(호스트 없음)"
     if code == 1049:
         return (f"DATABASE_URL의 데이터베이스 '{url.database}'가 {where}에 없습니다. "
-                "운영 데이터는 TiDB의 'picktiming' 데이터베이스에 있으므로 DATABASE_URL 경로를 /picktiming 으로 지정하세요. "
-                "서비스·도메인 이름(예: timepick)을 바꿔도 DB 이름은 바꾸지 않습니다.")
+                f"운영 데이터는 TiDB의 '{PRODUCTION_DB}' 데이터베이스에 있으므로 DATABASE_URL 경로를 /{PRODUCTION_DB} 로 지정하세요. "
+                "TiDB Cloud SQL Editor에서 SHOW DATABASES; 로 실제 이름을 확인할 수 있습니다.")
     if code == 1045:
         return f"DB 사용자 이름 또는 비밀번호가 올바르지 않습니다({where}). TiDB Connect 화면의 값과 DATABASE_URL을 비교하세요(특수문자는 URL 인코딩)."
     if code in (2003, 2005, 2006, 2013):

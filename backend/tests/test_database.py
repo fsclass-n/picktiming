@@ -4,7 +4,7 @@ import ssl
 from app.config import Settings
 from app.database import connect_args
 
-TIDB = "mysql+pymysql://u.root:p@gateway01.example.prod.aws.tidbcloud.com:4000/picktiming?charset=utf8mb4"
+TIDB = "mysql+pymysql://u.root:p@gateway01.example.prod.aws.tidbcloud.com:4000/timepick?charset=utf8mb4"
 
 
 def test_sqlite_has_no_tls():

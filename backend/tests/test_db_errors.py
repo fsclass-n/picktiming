@@ -5,7 +5,7 @@ from sqlalchemy.exc import OperationalError
 
 from app.database import describe_db_error
 
-URL = "mysql+pymysql://abc.root:S3cret!Pass@gateway01.ap-northeast-1.prod.aws.tidbcloud.com:4000/timepick?charset=utf8mb4"
+URL = "mysql+pymysql://abc.root:S3cret!Pass@gateway01.ap-northeast-1.prod.aws.tidbcloud.com:4000/picktiming?charset=utf8mb4"
 
 
 def _err(code: int, msg: str) -> OperationalError:
@@ -13,8 +13,8 @@ def _err(code: int, msg: str) -> OperationalError:
 
 
 def test_unknown_database_names_the_database_and_fix():
-    text = describe_db_error(_err(1049, "Unknown database 'timepick'"), URL)
-    assert "'timepick'" in text and "DATABASE_URL" in text and "picktiming" in text
+    text = describe_db_error(_err(1049, "Unknown database 'picktiming'"), URL)
+    assert "'picktiming'" in text and "DATABASE_URL" in text and "/timepick" in text
     assert "S3cret" not in text and "abc.root" not in text
 
 
@@ -32,10 +32,10 @@ def test_startup_turns_db_error_into_clear_message(monkeypatch):
     from app.config import Settings
 
     def broken():
-        raise _err(1049, "Unknown database 'timepick'")
+        raise _err(1049, "Unknown database 'picktiming'")
 
     monkeypatch.setattr(main, "init_db", broken)
     app = main.create_app(Settings(database_url=URL, frontend_url=""))
-    with pytest.raises(RuntimeError, match="DATABASE_URL의 데이터베이스 'timepick'"):
+    with pytest.raises(RuntimeError, match="DATABASE_URL의 데이터베이스 'picktiming'"):
         with TestClient(app):
             pass

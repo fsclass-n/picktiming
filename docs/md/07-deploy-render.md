@@ -51,15 +51,20 @@ Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/picktim
 | `VITE_API_URL` | `https://picktiming.onrender.com` |
 | `NODE_VERSION` | `22` |
 
-**Redirects/Rewrites** — React Router 화면 경로(`/login`, `/product/3`)를 위해 필수
+위 값으로 **Create Static Site**를 누르면 첫 배포가 시작됩니다. 생성 화면에는 Rewrite·Headers 항목이 **없습니다**.
+아래 두 설정은 만들어진 사이트 화면의 **왼쪽 메뉴**에서 추가합니다.
+
+**Redirects/Rewrites** (왼쪽 메뉴 → Redirects/Rewrites → Add Rule) — React Router 화면 경로(`/login`, `/product/3`)를 위해 필수
 
 | Source | Destination | Action |
 |---|---|---|
 | `/*` | `/index.html` | **Rewrite** |
 
-Render는 실제 파일(`/assets/*.js`, `/favicon.svg`)이 있으면 규칙보다 파일을 먼저 응답합니다.
+- 이 규칙이 없으면 홈(`/`)은 열리지만, `/product/3` 같은 주소를 직접 열거나 새로고침하면 **404 Not Found**가 납니다.
+- Render는 실제 파일(`/assets/*.js`, `/favicon.svg`)이 있으면 규칙보다 파일을 먼저 응답하므로 JS·CSS는 영향이 없습니다.
+- 규칙은 저장 즉시 적용되며 다시 배포할 필요가 없습니다.
 
-**Headers** (권장)
+**Headers** (왼쪽 메뉴 → Headers → Add Header, 권장)
 
 | Path | Name | Value |
 |---|---|---|

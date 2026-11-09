@@ -8,7 +8,7 @@ from app import oauth
 from app.config import Settings, get_settings
 from app.main import create_app
 
-WEB = "https://picktiming-web.onrender.com"
+WEB = "https://timepick.onrender.com"
 
 
 @pytest.fixture
@@ -27,14 +27,14 @@ def test_settings_add_frontend_origin_to_cors():
     assert Settings(frontend_url=f"{WEB}/").frontend_link("/login") == f"{WEB}/login"
 
 
-@pytest.mark.parametrize("bad", ["picktiming-web.onrender.com", "ftp://example.com", "https://"])
+@pytest.mark.parametrize("bad", ["timepick.onrender.com", "ftp://example.com", "https://"])
 def test_settings_reject_invalid_frontend_url(bad):
     with pytest.raises(ValueError):
         Settings(frontend_url=bad)
 
 
 def test_api_only_redirects_screens_to_frontend(api_only):
-    """기존 주소(https://picktiming.onrender.com)로 들어온 화면 요청은 Static Site로 보낸다"""
+    """기존 주소(https://timepick-api.onrender.com)로 들어온 화면 요청은 Static Site로 보낸다"""
     root = api_only.get("/", follow_redirects=False)
     assert root.status_code == 302 and root.headers["location"] == f"{WEB}/"
     deep = api_only.get("/product/3?tab=chart", follow_redirects=False)

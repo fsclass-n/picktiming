@@ -17,7 +17,7 @@
 
 **[포트폴리오 · 발표·시연 영상 보기](https://fsclass-n.github.io/picktiming/)**
 
-[서비스 체험](https://picktiming.netlify.app) · [운영 API 문서](https://picktiming.onrender.com/docs) · [발표자료 PDF](docs/pdf/프로젝트_발표자료.pdf)
+[서비스 체험](https://picktiming.netlify.app) · [운영 API 문서](https://timepick-api.onrender.com/docs) · [발표자료 PDF](docs/pdf/프로젝트_발표자료.pdf)
 
 **현재 구현 기준:** 운영 화면(Render·EC2)은 **실제 제품 13종의 다나와·에누리 가격을 하루 4회 수집**합니다(GitHub Actions). 새 제품은 가격 이력 30일이 쌓이기 전까지 판단 보류로 표시됩니다. Netlify 체험 화면은 브라우저 목업 데이터를 사용하며, 그 화면의 상품·가격·관리자 지표는 운영 실적을 의미하지 않습니다.
 
@@ -179,7 +179,7 @@ flowchart LR
 | 운영 지표 | `GET /admin/rpa-logs`, `GET /admin/ai-metrics` | `ADMIN` |
 | 회원 권한 | `PATCH /admin/users/{id}/role` | `ADMIN` · 테스트 관리자 변경 금지 |
 
-헬스 체크는 접두사 없이 `GET /health`로 제공합니다. 전체 계약은 [OpenAPI 문서](https://picktiming.onrender.com/docs)에서 확인할 수 있습니다.
+헬스 체크는 접두사 없이 `GET /health`로 제공합니다. 전체 계약은 [OpenAPI 문서](https://timepick-api.onrender.com/docs)에서 확인할 수 있습니다.
 
 ## Directory Structure
 

@@ -21,8 +21,8 @@
 |---|---|---|---|
 | Netlify | https://picktiming.netlify.app | **프런트엔드 전용 — 데모 모드** | 새 UI 배포 확인 |
 | 로컬 PC | http://localhost:8000 | FastAPI가 빌드한 React + API 제공 | 운영 DB 사용 시 데이터 변경 주의 |
-| Render 프런트엔드 | https://picktiming-web.onrender.com | **Static Site**: React 빌드 결과, `VITE_API_URL`로 백엔드 호출 | 분리 전환 진행(07 문서) |
-| Render 백엔드 | https://picktiming.onrender.com | **Web Service**: FastAPI API·AI·수집 수신 (Docker, 무료 플랜). 화면 경로는 Static Site로 이동 | 기존 주소 유지 |
+| Render 프런트엔드 | https://timepick.onrender.com | **Static Site**: React 빌드 결과, `VITE_API_URL`로 백엔드 호출 | 분리 전환 진행(07 문서) |
+| Render 백엔드 | https://timepick-api.onrender.com | **Web Service**: FastAPI API·AI·수집 수신 (Docker, 무료 플랜). 화면 경로는 Static Site로 이동 | 기존 주소 유지 |
 | AWS EC2 | http://picktiming.duckdns.org | **단독 풀스택 구성**: nginx + FastAPI + RPA | 실제 운영 확인 전 |
 | TiDB Cloud | (TiDB 접속 주소) | **유일한 DB — 로컬·Render·EC2가 같은 DB를 공유** | DB 생성 완료 |
 | MySQL 8 | GitHub Actions CI | MySQL 호환성 자동 테스트 전용 | CI에 이미 구성됨 |
@@ -33,10 +33,10 @@
 ```
  사용자 ──▶ Netlify  (frontend only, 데모 모드 — API 호출 없음)
 
- 사용자 ──▶ Render Static Site  https://picktiming-web.onrender.com      사용자 ──▶ EC2  http://picktiming.duckdns.org
+ 사용자 ──▶ Render Static Site  https://timepick.onrender.com      사용자 ──▶ EC2  http://picktiming.duckdns.org
                      │ VITE_API_URL (CORS 허용)                             ┌───────────────────────────────────┐
                      ▼                                                       │ nginx(프런트) ─▶ api ◀─ rpa(학습) │
-            Render Web Service  https://picktiming.onrender.com             └─────────────────┬─────────────────┘
+            Render Web Service  https://timepick-api.onrender.com             └─────────────────┬─────────────────┘
             ┌──────────────────────────────┐                                                  │
             │ FastAPI = API 전용            │                                                  │
             └──────────────┬───────────────┘                                                  │

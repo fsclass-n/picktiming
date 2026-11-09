@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     tz: str = "Asia/Seoul"
     # 프런트엔드 정적 파일 폴더. 비우면 저장소의 frontend/를 찾아 있으면(로컬) 서빙, 없으면(EC2 api 컨테이너) API만 제공
     frontend_dir: str | None = None
-    # 분리 배포한 프런트엔드 주소(Render Static Site, 예: https://picktiming-web.onrender.com). 환경마다 다르므로 .env가 아닌 Render에만 등록한다.
+    # 분리 배포한 프런트엔드 주소(Render Static Site, 예: https://timepick.onrender.com). 환경마다 다르므로 .env가 아닌 Render에만 등록한다.
     # 값이 있으면 CORS 허용 목록에 자동 추가, 소셜 로그인 후 이 주소로 복귀, API 전용 서버의 화면 경로(/, /login 등)를 이 주소로 보낸다.
     frontend_url: str = ""
 

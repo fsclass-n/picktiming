@@ -46,8 +46,8 @@ Docker 실행 명령은 `uvicorn app.main:app --port ${PORT:-8000}` 입니다. R
 | `DB_SSL_CA` | (없음) | `/etc/ssl/certs/ca-certificates.crt` | 값이 있으면 TLS. 파일이 없는 Windows 로컬은 certifi 사용 |
 | `JWT_SECRET` | change-me | 생성한 무작위 값 | 로그인 토큰 서명 키 |
 | `RPA_API_KEY` | change-me-rpa | 생성한 무작위 값 | RPA 전용 API 인증 키. GitHub Secret `RENDER_RPA_API_KEY`에도 같은 값 |
-| `ALLOWED_ORIGINS` | * | `https://picktiming-web.onrender.com,https://picktiming.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173` | CORS 허용 출처. 세 환경 공용 값 |
-| `FRONTEND_URL` | (없음) | **Render 백엔드에만** `https://picktiming-web.onrender.com` | 분리 배포 화면 주소. CORS 자동 허용·소셜 로그인 복귀·화면 경로 리다이렉트. `.env`·EC2에는 넣지 않음 |
+| `ALLOWED_ORIGINS` | * | `https://timepick.onrender.com,https://timepick-api.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173` | CORS 허용 출처. 세 환경 공용 값 |
+| `FRONTEND_URL` | (없음) | **Render 백엔드에만** `https://timepick.onrender.com` | 분리 배포 화면 주소. CORS 자동 허용·소셜 로그인 복귀·화면 경로 리다이렉트. `.env`·EC2에는 넣지 않음 |
 | `ADMIN_EMAILS` | (없음) | 선택 | 이 이메일로 가입하면 관리자 |
 | `GEMINI_API_KEY` | (없음) | 선택 | 비우면 규칙 기반 템플릿 문장으로 동작 |
 | `GEMINI_MODEL`, `AI_DAILY_LIMIT`, `JWT_EXPIRE_MINUTES`, `TZ` | gemini-2.5-flash, 20, 60, Asia/Seoul | 넣지 않음 | 기본값 사용 |

@@ -8,7 +8,7 @@ Claude는 이 저장소에서 작업을 시작하기 전에 이 문서를 먼저
 RPA가 실제 제품(`rpa/catalog.json`)의 다나와·에누리 가격을 하루 4회 수집(GitHub Actions) → FastAPI 백엔드가 저장·분석(scikit-learn) → Gemini가 "지금 사도 되는가"를 설명 → 정적 프런트엔드가 보여준다.
 Final-Project 3조 팀 저장소이며 `main`에 push하면 **실제 운영 환경(Netlify · Render · AWS EC2)에 자동 배포**된다.
 
-운영 구성: **Netlify = 프런트엔드 데모 모드(API 연결 없음)**, **Render = Static Site(`picktiming-web`) + API Web Service(`picktiming`, 기존 주소) 분리**,
+운영 구성: **Netlify = 프런트엔드 데모 모드(API 연결 없음)**, **Render = Static Site(`timepick`) + API Web Service(`picktiming`, 기존 주소) 분리**,
 **EC2 = nginx 같은 도메인 풀스택**(Render와 EC2는 서로 호출하지 않음),
 **DB = TiDB 하나를 로컬·Render·EC2가 공유**(MySQL 8은 CI 호환성 테스트 전용), **설정 = `.env` 하나**(로컬 작성 → EC2 `scp` → Render "Add from .env").
 Render 배포는 Auto-Deploy "After CI Checks Pass", EC2 배포는 `deploy.yml`. 실제 가격 수집은 GitHub Actions(`collect-render.yml`) 한 곳에서만 하고, EC2 rpa 컨테이너는 `COLLECT_ENABLED=false`로 재학습·리포트만 한다.

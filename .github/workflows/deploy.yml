@@ -11,7 +11,7 @@ name: Deploy
 #   docker-compose.yml, deploy/        -         -        O           O(compose만)
 #
 #   Netlify       : 프런트엔드 전용(데모 모드)
-#   Render        : 분리 배포(render.yaml). frontend/ → Static Site(picktiming-web), backend/ → Web Service(picktiming, backend/Dockerfile)
+#   Render        : 분리 배포(render.yaml). frontend/ → Static Site(timepick), backend/ → Web Service(timepick-api, backend/Dockerfile)
 #                   각 서비스의 Build Filter가 자기 경로만 배포한다. 가격 수집은 collect-render.yml
 #                   기본은 Render Auto-Deploy "After CI Checks Pass"(이 워크플로의 CI 통과 후 Render가 직접 배포)라
 #                   RENDER_DEPLOY_HOOK_URL을 등록하지 않으며 아래 render 작업은 건너뛴다. Auto-Deploy를 Off로 둘 때만 Hook을 등록.

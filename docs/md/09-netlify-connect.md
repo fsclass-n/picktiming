@@ -2,7 +2,7 @@
 
 https://picktiming.netlify.app 은 **프런트엔드 시연용**으로 유지합니다. 서버·DB와 연결하지 않고,
 [`frontend/src/lib/mock.js`](../../frontend/src/lib/mock.js)가 API와 같은 형식의 응답을 브라우저에서 만듭니다.
-실제 API 연동은 Render(https://picktiming.onrender.com)에서 확인합니다. EC2 운영은 별도 확인이 필요합니다.
+실제 API 연동은 Render(https://timepick-api.onrender.com)에서 확인합니다. EC2 운영은 별도 확인이 필요합니다.
 
 ## 1. 현재 상태와 확인
 

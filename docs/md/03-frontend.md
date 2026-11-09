@@ -75,7 +75,7 @@ npm run preview -- --host 127.0.0.1 --port 4173
 | 순서 | 값 | 동작 | 환경 |
 |---|---|---|---|
 | ① | `window.APP_CONFIG.API_BASE_URL = "/"` | 같은 도메인의 `/api/v1/…` 호출 | EC2(nginx), 로컬 풀스택(FastAPI), 기본 Vite 개발 서버 |
-| ② | 빌드 시 `VITE_API_URL` | 그 주소의 `/api/v1/…` 호출(백엔드 CORS 허용 필요) | **Render Static Site** (`https://picktiming.onrender.com`) |
+| ② | 빌드 시 `VITE_API_URL` | 그 주소의 `/api/v1/…` 호출(백엔드 CORS 허용 필요) | **Render Static Site** (`https://timepick-api.onrender.com`) |
 | ③ | 둘 다 없음 | 브라우저의 `src/lib/mock.js`로 응답 | Netlify, preview, `VITE_DEMO=1` |
 
 - `VITE_API_URL`은 [`vite.config.js`](../../frontend/vite.config.js)가 검증합니다. `https://` 없는 값·쿼리·해시가 있으면 **빌드를 실패**시키고, 끝의 `/`는 지웁니다.

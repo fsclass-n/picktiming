@@ -4,20 +4,43 @@ Render에서 화면과 API를 **서로 다른 서비스**로 배포합니다. �
 
 | 서비스 | 종류 | 주소 | 담당 |
 |---|---|---|---|
-| `picktiming-web` | **Static Site** (무료) | https://picktiming-web.onrender.com | React + Vite 빌드 결과(`frontend/dist`) |
-| `picktiming` | **Web Service** (Docker, 무료) | https://picktiming.onrender.com | FastAPI API, 구매 적기 판정·Gemini 설명, RPA 수집 수신 |
+| `timepick` | **Static Site** (무료) | https://timepick.onrender.com | React + Vite 빌드 결과(`frontend/dist`) |
+| `timepick-api` | **Web Service** (Docker, 무료) | https://timepick-api.onrender.com | FastAPI API, 구매 적기 판정·Gemini 설명, RPA 수집 수신 |
 
 ```
-브라우저 ──▶ picktiming-web (CDN 정적 파일)
-   │           빌드 시 VITE_API_URL=https://picktiming.onrender.com 주입
-   └──────▶ picktiming /api/v1/*  (CORS: FRONTEND_URL 출처 허용, Authorization 헤더 토큰)
-                 └──▶ TiDB Cloud
-GitHub Actions collect-render ──▶ picktiming /api/v1/rpa/* (X-RPA-KEY, 주소 변경 없음)
+브라우저 ──▶ timepick (CDN 정적 파일)
+   │           빌드 시 VITE_API_URL=https://timepick-api.onrender.com 주입
+   └──────▶ timepick-api /api/v1/*  (CORS: FRONTEND_URL 출처 허용, Authorization 헤더 토큰)
+                 └──▶ TiDB Cloud — 데이터베이스 이름은 picktiming (서비스 이름과 별개, 바꾸지 않음)
+GitHub Actions collect-render ──▶ timepick-api /api/v1/rpa/* (X-RPA-KEY, Variable RENDER_URL)
 ```
 
-- **기존 주소는 백엔드가 유지**합니다. 수집 워크플로(`RENDER_URL`)와 소셜 로그인 콜백 주소는 바꿀 필요가 없습니다.
-- 예전 링크(`https://picktiming.onrender.com/product/3` 등)로 들어오면 백엔드가 **같은 경로의 Static Site 주소로 302 이동**시킵니다. `/api/*`, `/docs`, `/health`는 이동하지 않습니다.
+- **서비스·도메인 이름과 DB 이름은 별개**입니다. `DATABASE_URL`의 경로는 계속 `/picktiming`이어야 합니다(`/timepick`이면 `Unknown database` 오류, 0절).
+- 화면 경로(`/product/3` 등)로 백엔드 주소에 들어오면 **같은 경로의 Static Site 주소로 302 이동**합니다. `/api/*`, `/docs`, `/health`는 이동하지 않습니다.
 - EC2(nginx 같은 도메인)와 Netlify(데모 모드)는 영향이 없습니다.
+
+## 0. 주소 변경: picktiming → timepick (2026-11)
+
+Render의 `onrender.com` 주소는 **서비스를 만들 때의 이름**으로 정해지고, 나중에 이름을 바꿔도 주소는 바뀌지 않습니다.
+그래서 새 주소는 새 서비스로 만들고, 예전 서비스(`picktiming`, `picktiming-web`)는 전환이 끝난 뒤 정리합니다.
+
+| 순서 | 할 일 | 확인 |
+|---|---|---|
+| 1 | `timepick-api` Environment의 **`DATABASE_URL` 경로를 `/picktiming`** 으로(로컬 `.env`도 같이) → Save, rebuild, and deploy | `https://timepick-api.onrender.com/health` → `"status":"ok"` |
+| 2 | `timepick-api`에 `FRONTEND_URL=https://timepick.onrender.com`, `ALLOWED_ORIGINS`(아래 3-1) | 로그에 `Unknown database` 없음 |
+| 3 | `timepick` Static Site: `VITE_API_URL=https://timepick-api.onrender.com` → **Manual Deploy**(빌드 시 들어가는 값), Rewrite `/*` → `/index.html` | 화면 로그인·검색, `/product/1` 새로고침 시 404 아님 |
+| 4 | GitHub → Settings → Variables → **`RENDER_URL` = `https://timepick-api.onrender.com`** | Actions → Collect (Render) 수동 실행 성공 |
+| 5 | 소셜 로그인 콘솔(Google·Naver·Kakao)에 콜백 추가: `https://timepick-api.onrender.com/api/v1/auth/oauth/<google\|naver\|kakao>/callback` | 소셜 로그인 후 timepick 화면으로 복귀 |
+| 6 | UptimeRobot 등 깨우기 주소를 `https://timepick-api.onrender.com/health`로 | — |
+| 7 | 예전 `picktiming`(Web Service)은 `FRONTEND_URL=https://timepick.onrender.com`으로 바꿔 예전 링크를 새 화면으로 보내거나, 안정 후 **Suspend**. `picktiming-web`은 Suspend | 무료 인스턴스 시간(월 750시간)은 Web Service끼리 나눠 씀 |
+
+### `Unknown database 'timepick'` (1049)
+
+- **원인**: `DATABASE_URL=mysql+pymysql://…:4000/timepick?…`처럼 DB 이름 부분까지 `timepick`으로 바뀌었습니다. TiDB에는 `picktiming` 데이터베이스만 있고(테이블 12개, 운영 데이터), `timepick`은 없습니다.
+  `.env`에서 `picktiming`을 `timepick`으로 일괄 바꾸면 DB 이름, `ADMIN_EMAILS`, `S3_PREFIX`, `ALLOWED_ORIGINS`의 EC2 주소(`picktiming.duckdns.org`)까지 함께 바뀌니 주의합니다.
+- **해결**: 경로만 `/picktiming`으로 되돌립니다. 데이터를 옮길 필요가 없습니다.
+- 백엔드는 이 오류를 원인과 고칠 값을 담은 한 줄 메시지로 기동 로그에 남깁니다([`database.py`](../../backend/app/database.py)의 `describe_db_error`, 비밀번호는 출력하지 않음).
+- DB 이름 자체를 `timepick`으로 바꾸고 싶다면 TiDB는 DB 이름 변경을 지원하지 않아 새 DB를 만들고 테이블을 `RENAME TABLE`로 옮겨야 합니다(06 문서). 로컬·EC2·Render를 동시에 바꿔야 하므로 권하지 않습니다.
 
 ## 1. 코드에서 바뀐 점
 
@@ -36,7 +59,7 @@ Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/picktim
 
 | 항목 | 값 |
 |---|---|
-| Name | `picktiming-web` |
+| Name | `timepick` |
 | Branch | `main` |
 | Root Directory | **`frontend`** |
 | Build Command | **`npm install && npm run build`** |
@@ -48,7 +71,7 @@ Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/picktim
 
 | Key | Value |
 |---|---|
-| `VITE_API_URL` | `https://picktiming.onrender.com` |
+| `VITE_API_URL` | `https://timepick-api.onrender.com` |
 | `NODE_VERSION` | `22` |
 
 위 값으로 **Create Static Site**를 누르면 첫 배포가 시작됩니다. 생성 화면에는 Rewrite·Headers 항목이 **없습니다**.
@@ -74,41 +97,43 @@ Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/picktim
 | `/js/config.js` | `Cache-Control` | `no-cache` |
 | `/assets/*` | `Cache-Control` | `public, max-age=31536000, immutable` |
 
-> 이름 `picktiming-web`이 이미 쓰이고 있으면 Render가 `picktiming-web-xxxx.onrender.com` 같은 주소를 줍니다.
+> 이름 `timepick`이 이미 쓰이고 있으면 Render가 `timepick-xxxx.onrender.com` 같은 주소를 줍니다.
 > **생성 후 실제 주소를 확인**하고, 3단계의 `FRONTEND_URL`·`ALLOWED_ORIGINS`에 그 주소를 넣습니다.
 
-## 3. 백엔드 — 기존 Web Service(`picktiming`)를 API 전용으로 바꾸기
+## 3. 백엔드 — Web Service(`timepick-api`) 설정
 
-### 3-1. 환경 변수 추가 (먼저)
+### 3-1. 환경 변수
 
-Environment에 아래 값을 추가하고 **Save, rebuild, and deploy**를 누릅니다. 아직 통합 이미지라 기존 화면은 그대로 동작합니다.
+**Add from .env**로 비밀값을 넣은 뒤, 아래 값을 확인·추가하고 **Save, rebuild, and deploy**를 누릅니다.
 
 | Key | Value | 역할 |
 |---|---|---|
-| `FRONTEND_URL` | `https://picktiming-web.onrender.com` | CORS 자동 허용, 소셜 로그인 복귀, 화면 경로 리다이렉트 |
-| `ALLOWED_ORIGINS` | `https://picktiming-web.onrender.com,https://picktiming.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173` | `.env`와 같은 값(`FRONTEND_URL`은 빠져 있어도 자동 추가) |
+| `DATABASE_URL` | `mysql+pymysql://<USER>:<PASSWORD>@<HOST>:4000/`**`picktiming`**`?charset=utf8mb4` | **DB 이름은 picktiming**(서비스 이름 timepick과 무관) |
+
+| Key | Value | 역할 |
+|---|---|---|
+| `FRONTEND_URL` | `https://timepick.onrender.com` | CORS 자동 허용, 소셜 로그인 복귀, 화면 경로 리다이렉트 |
+| `ALLOWED_ORIGINS` | `https://timepick.onrender.com,https://timepick-api.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173` | `.env`와 같은 값(`FRONTEND_URL`은 빠져 있어도 자동 추가) |
 
 `FRONTEND_URL`은 Render 전용 값이라 **`.env`에 넣지 않습니다**(EC2에 들어가면 소셜 로그인이 Render 화면으로 돌아감).
 나머지 비밀값(`DATABASE_URL`, `JWT_SECRET`, `RPA_API_KEY`, `GEMINI_API_KEY` …)은 기존처럼 **Add from .env**로 관리합니다.
 
 ### 3-2. Static Site 동작 확인
 
-https://picktiming-web.onrender.com 에서 로그인(테스트 계정) → 검색 → 상품 상세가 열리는지 봅니다.
-브라우저 개발자 도구 Network에서 API 요청이 `https://picktiming.onrender.com/api/v1/...`로 가고 CORS 오류가 없어야 합니다.
+https://timepick.onrender.com 에서 로그인(테스트 계정) → 검색 → 상품 상세가 열리는지 봅니다.
+브라우저 개발자 도구 Network에서 API 요청이 `https://timepick-api.onrender.com/api/v1/...`로 가고 CORS 오류가 없어야 합니다.
 
-### 3-3. Dockerfile·Build Filter 전환
+### 3-3. 서비스 설정 (Settings → Build & Deploy)
 
-Settings → Build & Deploy
-
-| 항목 | 이전 | **변경 후** |
-|---|---|---|
-| Dockerfile Path | `./Dockerfile` | **`./backend/Dockerfile`** |
-| Docker Build Context Directory | `.` | `.` (그대로, `requirements.txt`가 저장소 루트에 있음) |
-| Build Filters → Included Paths | `backend/**`, `frontend/**`, `Dockerfile`, … | **`backend/**`, `requirements.txt`, `render.yaml`, `.dockerignore`** |
-| Health Check Path | `/health` | `/health` (그대로) |
-| Auto-Deploy | After CI Checks Pass | 그대로 |
-
-저장 후 **Manual Deploy → Deploy latest commit**. 이제 백엔드는 API만 제공합니다.
+| 항목 | 값 |
+|---|---|
+| Name | `timepick-api` (주소 `https://timepick-api.onrender.com`은 만들 때 이름으로 정해짐) |
+| Runtime | Docker, Region Singapore, Instance Free |
+| Dockerfile Path | **`./backend/Dockerfile`** (API 전용. 루트 `./Dockerfile`은 화면까지 포함한 예전 통합 이미지) |
+| Docker Build Context Directory | `.` (`requirements.txt`가 저장소 루트에 있음) |
+| Build Filters → Included Paths | `backend/**`, `requirements.txt`, `render.yaml`, `.dockerignore` |
+| Health Check Path | `/health` |
+| Auto-Deploy | After CI Checks Pass |
 
 > Blueprint(`render.yaml`)로 서비스를 관리한다면 위 값이 이미 들어 있습니다. Blueprint 동기화 시 Static Site가 함께 만들어지고
 > 백엔드도 곧바로 `./backend/Dockerfile`로 바뀌므로, 2단계 화면 확인까지 잠깐 화면이 비는 구간이 생길 수 있습니다.
@@ -118,21 +143,21 @@ Settings → Build & Deploy
 
 | 주소 | 기대 결과 |
 |---|---|
-| https://picktiming-web.onrender.com/ | 홈 화면, **데모 배너 없음**(실제 API 모드) |
-| https://picktiming-web.onrender.com/product/1 | 새로고침해도 404가 아닌 상품 화면(Rewrite 규칙) |
-| https://picktiming.onrender.com/health | `{"status":"ok","env":"production",...}` |
-| https://picktiming.onrender.com/ | **302 →** https://picktiming-web.onrender.com/ |
-| https://picktiming.onrender.com/docs | API 문서(이동 없음) |
-| 소셜 로그인 | 제공자 로그인 후 **picktiming-web** 주소의 `/oauth/callback`으로 돌아와 로그인 완료 |
+| https://timepick.onrender.com/ | 홈 화면, **데모 배너 없음**(실제 API 모드) |
+| https://timepick.onrender.com/product/1 | 새로고침해도 404가 아닌 상품 화면(Rewrite 규칙) |
+| https://timepick-api.onrender.com/health | `{"status":"ok","env":"production",...}` |
+| https://timepick-api.onrender.com/ | **302 →** https://timepick.onrender.com/ |
+| https://timepick-api.onrender.com/docs | API 문서(이동 없음) |
+| 소셜 로그인 | 제공자 로그인 후 **timepick** 주소의 `/oauth/callback`으로 돌아와 로그인 완료 |
 
 명령으로 CORS를 확인하려면:
 
 ```bash
-curl -si -X OPTIONS https://picktiming.onrender.com/api/v1/auth/login \
-  -H "Origin: https://picktiming-web.onrender.com" \
+curl -si -X OPTIONS https://timepick-api.onrender.com/api/v1/auth/login \
+  -H "Origin: https://timepick.onrender.com" \
   -H "Access-Control-Request-Method: POST" \
   -H "Access-Control-Request-Headers: authorization,content-type" | grep -i access-control-allow-origin
-# access-control-allow-origin: https://picktiming-web.onrender.com
+# access-control-allow-origin: https://timepick.onrender.com
 ```
 
 ## 5. 되돌리기
@@ -142,7 +167,7 @@ curl -si -X OPTIONS https://picktiming.onrender.com/api/v1/auth/login \
 
 ## 6. 자동 배포 — After CI Checks Pass
 
-| 바뀐 경로 | picktiming-web | picktiming |
+| 바뀐 경로 | timepick | timepick-api |
 |---|---|---|
 | `frontend/**` | 배포 | - |
 | `backend/**`, `requirements.txt`, `.dockerignore` | - | 배포 |
@@ -157,7 +182,7 @@ curl -si -X OPTIONS https://picktiming.onrender.com/api/v1/auth/login \
 
 | 특성 | 영향 | 대응 |
 |---|---|---|
-| Web Service는 15분간 요청이 없으면 잠듦, 깨어나는 데 약 1분 | 화면(Static Site)은 바로 뜨지만 첫 API 응답이 느림 | UptimeRobot 등으로 5분마다 `https://picktiming.onrender.com/health` 호출 |
+| Web Service는 15분간 요청이 없으면 잠듦, 깨어나는 데 약 1분 | 화면(Static Site)은 바로 뜨지만 첫 API 응답이 느림 | UptimeRobot 등으로 5분마다 `https://timepick-api.onrender.com/health` 호출 |
 | Static Site는 잠들지 않음(CDN) | 화면 로딩은 콜드 스타트 영향 없음 | — |
 | 셸·SSH 접속 불가 | Render에서 `python -m app.seed` 실행 불가 | 시드는 로컬 PC에서 TiDB로(06 문서) |
 | 상주 작업(Background Worker·Cron) 불가 | 서버 안에서 RPA 스케줄러를 돌릴 수 없음 | GitHub Actions `collect-render.yml`이 매시 수집(10 문서). 깨어날 때까지 `/health`를 기다린 뒤 수집 |

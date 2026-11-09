@@ -88,11 +88,11 @@ jobs:
         run: "test -f dist/index.html && grep -q API_BASE_URL dist/js/config.js"
       - name: "Render Static Site 빌드 확인 (VITE_API_URL 주입·정규화, 잘못된 주소 거부)"
         run: |
-          VITE_API_URL="https://picktiming.onrender.com/" npm run build
-          grep -rq "https://picktiming.onrender.com" dist/assets
-          if grep -rq "https://picktiming.onrender.com/[\`\"']" dist/assets; then echo "끝의 / 가 정리되지 않았습니다"; exit 1; fi
+          VITE_API_URL="https://timepick-api.onrender.com/" npm run build
+          grep -rq "https://timepick-api.onrender.com" dist/assets
+          if grep -rq "https://timepick-api.onrender.com/[\`\"']" dist/assets; then echo "끝의 / 가 정리되지 않았습니다"; exit 1; fi
           grep -q 'API_BASE_URL: ""' dist/js/config.js
-          if VITE_API_URL="picktiming.onrender.com" npm run build; then echo "잘못된 VITE_API_URL이 통과했습니다"; exit 1; fi
+          if VITE_API_URL="timepick-api.onrender.com" npm run build; then echo "잘못된 VITE_API_URL이 통과했습니다"; exit 1; fi
 
   docker:
     name: Docker build
@@ -109,7 +109,7 @@ jobs:
           docker logs api; exit 1
       - name: Render 백엔드 구성 확인 (API 전용 + FRONTEND_URL 리다이렉트·CORS)
         run: |
-          WEB=https://picktiming-web.onrender.com
+          WEB=https://timepick.onrender.com
           docker run -d --name split -p 8002:8000 -e DATABASE_URL=sqlite:////app/data/ci.db \
             -e FRONTEND_URL=$WEB -e ALLOWED_ORIGINS=http://localhost:5173 picktiming-api:ci
           for i in $(seq 1 30); do curl -fsS http://localhost:8002/health && break; sleep 2; done

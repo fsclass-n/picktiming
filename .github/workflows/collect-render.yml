@@ -8,7 +8,7 @@ name: Collect (Render)
 #   KST 03시 train / 06시 public / 월요일 07시 report(엑셀은 Actions 아티팩트로 30일 보관)
 #   그 밖의 시각에는 아무 작업도 하지 않는다(Render도 깨우지 않음).
 #
-# 필요한 값(없으면 건너뜀): Variable RENDER_URL(예: https://picktiming.onrender.com), Secret RENDER_RPA_API_KEY(Render의 RPA_API_KEY)
+# 필요한 값(없으면 건너뜀): Variable RENDER_URL(예: https://timepick-api.onrender.com), Secret RENDER_RPA_API_KEY(Render의 RPA_API_KEY)
 # 선택: Variable KCA_API_URL, Secret DATA_GO_KR_KEY (참가격 공공데이터)
 
 on:

@@ -7,10 +7,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
+from sqlalchemy.exc import OperationalError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .config import Settings, get_settings
-from .database import engine, init_db
+from .database import describe_db_error, engine, init_db
 from .errors import register_error_handlers
 from .routers import admin, ai, auth, products, rpa, user_data
 
@@ -69,7 +70,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(_: FastAPI):
         settings.validate_for_production()
-        init_db()
+        try:
+            init_db()
+        except OperationalError as exc:  # 긴 드라이버 오류 대신 원인과 고칠 값을 로그 첫 줄에 남기고 기동을 멈춘다
+            raise RuntimeError(describe_db_error(exc, settings.database_url)) from exc
         yield
 
     app = FastAPI(title="PickTiming API", version="1.2.0", description="실시간 가격 비교 & 구매 적기 추천 API", lifespan=lifespan)

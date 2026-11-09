@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // API 주소 결정 순서 (src/lib/api.js)
 //   1) 서버가 응답한 /js/config.js의 API_BASE_URL — EC2(nginx)·로컬 풀스택(FastAPI)은 같은 도메인 "/"
-//   2) 빌드 시 주입한 VITE_API_URL — Render Static Site(예: https://picktiming.onrender.com)
+//   2) 빌드 시 주입한 VITE_API_URL — Render Static Site(예: https://timepick-api.onrender.com)
 //   3) 둘 다 없으면 데모 모드(브라우저 목업 API) — Netlify
 // 커밋되는 public/js/config.js는 데모 모드("")라서 VITE_API_URL이 있으면 2)가 적용된다.
 

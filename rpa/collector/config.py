@@ -10,33 +10,41 @@ load_dotenv(ROOT / ".env")
 load_dotenv(ROOT.parent / ".env")
 
 
+def _flag(name: str, default: str) -> bool:
+    return os.getenv(name, default).strip().lower() == "true"
+
+
 @dataclass(frozen=True)
 class Config:
     api_base_url: str = field(default_factory=lambda: os.getenv("RPA_TARGET_API", "http://localhost:8000").rstrip("/"))
     rpa_api_key: str = field(default_factory=lambda: os.getenv("RPA_API_KEY", ""))
     request_interval_sec: float = field(default_factory=lambda: float(os.getenv("REQUEST_INTERVAL_SEC", "3")))
     user_agent: str = field(default_factory=lambda: os.getenv("COLLECTOR_USER_AGENT", "PickTimingBot/1.0 (+contact: team3@picktiming.example)"))
-    simulate: bool = field(default_factory=lambda: os.getenv("SIMULATE_MALLS", "true").lower() == "true")
+    # 시연용 쇼핑몰(*.example.com) 모의 가격. 실제 수집 환경(GitHub Actions)은 false
+    simulate: bool = field(default_factory=lambda: _flag("SIMULATE_MALLS", "true"))
+    # 외부 사이트 가격 수집 여부. 실제 수집은 GitHub Actions 한 곳만 하고 EC2 rpa 컨테이너는 false(docker-compose.yml)
+    collect_enabled: bool = field(default_factory=lambda: _flag("COLLECT_ENABLED", "true"))
     mall_config_path: pathlib.Path = field(default_factory=lambda: pathlib.Path(os.getenv("MALL_CONFIG", ROOT / "malls.json")))
+    # 실제 수집 상품 목록(다나와 pcode·에누리 modelno). 수집 전에 API(PUT /rpa/catalog)로 DB와 맞춘다
+    catalog_path: pathlib.Path = field(default_factory=lambda: pathlib.Path(os.getenv("CATALOG", ROOT / "catalog.json")))
     public_api_url: str = field(default_factory=lambda: os.getenv("KCA_API_URL", ""))
     public_api_key: str = field(default_factory=lambda: os.getenv("DATA_GO_KR_KEY", ""))
     public_map_path: pathlib.Path = field(default_factory=lambda: pathlib.Path(os.getenv("PUBLIC_PRICE_MAP", ROOT / "public_price_map.json")))
     report_dir: pathlib.Path = field(default_factory=lambda: pathlib.Path(os.getenv("REPORT_DIR", ROOT / "reports")))
     tz: str = field(default_factory=lambda: os.getenv("TZ", "Asia/Seoul"))
-    # 네이버 쇼핑 검색 OpenAPI (developers.naver.com) — 값이 있으면 '네이버쇼핑' 가격을 함께 수집
-    #   NAVER_SEARCH_CLIENT_*가 없으면 네이버 로그인용 NAVER_CLIENT_*를 사용(같은 애플리케이션에 '검색' API를 추가한 경우)
-    naver_client_id: str = field(default_factory=lambda: os.getenv("NAVER_SEARCH_CLIENT_ID") or os.getenv("NAVER_CLIENT_ID", ""))
-    naver_client_secret: str = field(default_factory=lambda: os.getenv("NAVER_SEARCH_CLIENT_SECRET") or os.getenv("NAVER_CLIENT_SECRET", ""))
     # AWS S3 (선택) — 값이 있으면 수집 원본·주간 리포트를 업로드
     s3_bucket: str = field(default_factory=lambda: os.getenv("S3_BUCKET", ""))
     s3_prefix: str = field(default_factory=lambda: os.getenv("S3_PREFIX", "picktiming").strip("/"))
     aws_region: str = field(default_factory=lambda: os.getenv("AWS_REGION", "ap-northeast-2"))
 
-    @property
-    def naver_enabled(self) -> bool:
-        return bool(self.naver_client_id and self.naver_client_secret)
+    @staticmethod
+    def _load(path: pathlib.Path) -> dict:
+        if not path.exists():
+            return {}
+        return {k: v for k, v in json.loads(path.read_text(encoding="utf-8")).items() if not k.startswith("_")}  # _comment 등 설명 키 제외
 
     def mall_rules(self) -> dict:
-        if self.mall_config_path.exists():
-            return json.loads(self.mall_config_path.read_text(encoding="utf-8"))
-        return {}
+        return self._load(self.mall_config_path)
+
+    def catalog(self) -> dict:
+        return self._load(self.catalog_path)

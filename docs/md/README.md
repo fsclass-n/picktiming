@@ -26,7 +26,7 @@
 | AWS EC2 | http://picktiming.duckdns.org | **단독 풀스택 구성**: nginx + FastAPI + RPA | 실제 운영 확인 전 |
 | TiDB Cloud | (TiDB 접속 주소) | **유일한 DB — 로컬·Render·EC2가 같은 DB를 공유** | DB 생성 완료 |
 | MySQL 8 | GitHub Actions CI | MySQL 호환성 자동 테스트 전용 | CI에 이미 구성됨 |
-| GitHub Actions | — | CI/CD + **Render용 가격 수집(매시 예약 실행)** | CI 통과, 대상별 실제 배포 단계 별도 확인 |
+| GitHub Actions | — | CI/CD + **다나와·에누리 실제 가격 수집(KST 00·06·12·18시, 수집은 이곳 한 곳)** | CI 통과, 대상별 실제 배포 단계 별도 확인 |
 
 **설정 파일은 `.env` 하나**: 로컬에서 작성 → EC2로 `scp` 복사 → Render는 Environment → "Add from .env"로 같은 내용을 붙여 넣기.
 
@@ -35,7 +35,7 @@
 
  사용자 ──▶ Render Static Site  https://picktiming-web.onrender.com      사용자 ──▶ EC2  http://picktiming.duckdns.org
                      │ VITE_API_URL (CORS 허용)                             ┌───────────────────────────────────┐
-                     ▼                                                       │ nginx(프런트) ─▶ api ◀─ rpa(매시) │
+                     ▼                                                       │ nginx(프런트) ─▶ api ◀─ rpa(학습) │
             Render Web Service  https://picktiming.onrender.com             └─────────────────┬─────────────────┘
             ┌──────────────────────────────┐                                                  │
             │ FastAPI = API 전용            │                                                  │
@@ -43,7 +43,7 @@
                  ▲         │                                                                  │
  GitHub Actions  │         └───────────────▶  TiDB Cloud (운영 DB 하나를 공유)  ◀──────────┘
  collect-render  │                            같은 시간대 같은 판매처 가격은 한 번만 저장
- (매시 07분 수집) ─┘
+ (하루 4회 수집) ─┘
 ```
 
 - **독립 구성**: Render와 EC2는 서로를 호출하지 않습니다. 두 환경의 운영이 확인되면 독립적으로 사용할 수 있습니다.

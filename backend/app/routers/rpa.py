@@ -2,7 +2,7 @@
 import base64
 import logging
 from datetime import timedelta
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Response
@@ -15,7 +15,7 @@ from ..errors import ApiError
 from ..jobs.weekly_report import build_report
 from ..ml.train import train_and_register
 from ..models import Mall, ModelVersion, PriceHistory, Product, ProductListing, PublicPrice, RpaJobLog
-from ..schemas import EnsureListingsIn, JobLogIn, ModelUploadIn, PriceBulkIn, PublicPriceIn
+from ..schemas import CatalogIn, EnsureListingsIn, JobLogIn, ModelUploadIn, PriceBulkIn, PublicPriceIn
 from ..security import rpa_key
 from ..services.alerts import refresh_product
 
@@ -158,3 +158,63 @@ def ensure_listings(body: EnsureListingsIn, db: Session = Depends(get_db)):
         created += 1
     db.commit()
     return {"mall_id": mall.id, "created": created}
+
+
+@router.put("/catalog")
+def sync_catalog(body: CatalogIn, db: Session = Depends(get_db)):
+    """실제 수집 대상(rpa/catalog.json)을 DB에 맞춘다. 여러 번 호출해도 결과가 같다(수집 작업이 매번 먼저 호출).
+
+    - 쇼핑몰: 이름으로 찾아 만들거나 주소·활성 상태를 갱신
+    - 상품: model_no로 찾아 만들거나 이름·브랜드·분류를 갱신 / 판매처: (상품, 쇼핑몰)마다 하나, 주소가 바뀌면 갱신
+    - retire_mall_hosts: 더 이상 수집하지 않는 쇼핑몰을 삭제 없이 비활성화 → 수집 대상·검색 결과에서 빠짐(가격 이력은 보존)
+    """
+    hosts = {m.name: urlparse(m.base_url).netloc for m in body.malls}
+    for p in body.products:  # 먼저 전부 검증해 일부만 반영되는 일이 없게 한다
+        for item in p.listings:
+            if item.mall not in hosts:
+                raise ApiError(400, "UNKNOWN_MALL", f"카탈로그 malls에 없는 쇼핑몰입니다: {item.mall}")
+            if urlparse(item.url).netloc != hosts[item.mall]:
+                raise ApiError(400, "LISTING_DOMAIN_MISMATCH", f"{item.mall} 판매처 주소는 {hosts[item.mall]} 도메인이어야 합니다: {item.url}")
+
+    today = now_local().date()
+    malls: dict[str, Mall] = {}
+    for m in body.malls:
+        mall = db.execute(select(Mall).where(Mall.name == m.name)).scalars().first()
+        if mall is None:
+            mall = Mall(name=m.name, base_url=m.base_url)
+            db.add(mall)
+        mall.base_url, mall.is_active, mall.robots_checked_at = m.base_url, True, today
+        malls[m.name] = mall
+    db.flush()
+
+    stats = {"products_created": 0, "products_updated": 0, "listings_created": 0, "listings_updated": 0}
+    for p in body.products:
+        product = db.execute(select(Product).where(Product.model_no == p.model_no).order_by(Product.id)).scalars().first()
+        if product is None:
+            product = Product(model_no=p.model_no, name=p.name, brand=p.brand, category=p.category)
+            db.add(product)
+            db.flush()
+            stats["products_created"] += 1
+        elif (product.name, product.brand, product.category) != (p.name, p.brand, p.category):
+            product.name, product.brand, product.category = p.name, p.brand, p.category
+            stats["products_updated"] += 1
+        for item in p.listings:
+            mall = malls[item.mall]
+            listing = db.execute(select(ProductListing).where(ProductListing.product_id == product.id,
+                                                              ProductListing.mall_id == mall.id)).scalar_one_or_none()
+            if listing is None:
+                db.add(ProductListing(product_id=product.id, mall_id=mall.id, url=item.url))
+                stats["listings_created"] += 1
+            elif listing.url != item.url or not listing.is_active:
+                listing.url, listing.is_active = item.url, True
+                stats["listings_updated"] += 1
+
+    keep = set(hosts.values())
+    retire = {h.strip().lower() for h in body.retire_mall_hosts if h.strip()} - keep
+    retired = 0
+    for mall in db.execute(select(Mall).where(Mall.is_active.is_(True))).scalars():
+        if urlparse(mall.base_url).netloc.lower() in retire:
+            mall.is_active = False
+            retired += 1
+    db.commit()
+    return {"malls": len(malls), **stats, "malls_retired": retired}

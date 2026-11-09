@@ -142,3 +142,30 @@ class EnsureListingsIn(BaseModel):
     name: str = Field(min_length=1, max_length=50)
     base_url: str = Field(pattern=r"^https://", max_length=200)
     url_template: str = Field(pattern=r"^https://.*\{query\}", max_length=300)
+
+
+# ---------------------------------------------------------------- 실제 수집 카탈로그(rpa/catalog.json → PUT /rpa/catalog)
+class CatalogMallIn(BaseModel):
+    name: str = Field(min_length=1, max_length=50)
+    base_url: str = Field(pattern=r"^https://[^/]+$", max_length=200)
+
+
+class CatalogListingIn(BaseModel):
+    mall: str = Field(min_length=1, max_length=50)
+    url: str = Field(pattern=r"^https://", max_length=500)
+
+
+class CatalogProductIn(BaseModel):
+    # 사용자가 URL로 등록한 상품의 기본값 "-"과 겹치지 않게 실제 모델 번호만 허용
+    model_no: str = Field(min_length=2, max_length=100, pattern=r"^[A-Za-z0-9][A-Za-z0-9._/+-]*$")
+    name: str = Field(min_length=1, max_length=200)
+    brand: str = Field(default="-", min_length=1, max_length=100)
+    category: str = Field(default="기타", min_length=1, max_length=30)
+    listings: list[CatalogListingIn] = Field(min_length=1, max_length=10)
+
+
+class CatalogIn(BaseModel):
+    malls: list[CatalogMallIn] = Field(min_length=1, max_length=20)
+    products: list[CatalogProductIn] = Field(max_length=200)
+    # 더 이상 수집하지 않을 쇼핑몰 도메인(예: 시연용 mall-a.example.com). 삭제하지 않고 is_active=False로 숨긴다
+    retire_mall_hosts: list[str] = Field(default_factory=list, max_length=20)

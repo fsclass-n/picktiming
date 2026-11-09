@@ -40,7 +40,8 @@ PPT는 170초 대본+10초 전환 여유이며 실제 리허설 시간을 측정
 - [ ] Deploy 워크플로 수동 실행 성공, Collect (Render) 수동 실행 성공
 
 ### 독립 동작·데이터 흐름 최종 확인
-- [ ] 매시 이후 관리자 화면에 `collect_prices` 로그가 두 곳(EC2 정각, Actions 07분)에서 추가 — 나중 쪽은 저장 0건일 수 있음(중복 방지, 정상)
+- [ ] KST 00·06·12·18시(07분) 이후 관리자 화면에 `collect_prices` 로그가 추가(GitHub Actions 한 곳, 실제 제품 13종 × 다나와·에누리 = 26건)
+- [ ] EC2 `.env`에 `COLLECT_ENABLED`가 없거나 `false` — EC2가 외부 사이트를 중복 수집하지 않음
 - [ ] Render와 duckdns 화면에서 같은 계정으로 로그인되고 같은 상품·같은 최신 가격이 보임 (같은 TiDB 공유)
 - [ ] EC2를 잠시 멈춰도 Render 화면·API·Actions 수집이 계속 동작 (반대도 동일)
 

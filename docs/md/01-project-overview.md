@@ -2,7 +2,7 @@
 
 ## 1. 서비스 한 줄 설명
 
-**RPA가 상품 가격을 1시간 주기로 수집**하고(공공 가격은 설정된 경우 별도 일일 작업),
+**RPA가 실제 제품 13종의 다나와·에누리 가격을 하루 4회 수집**하고(GitHub Actions, 공공 가격은 설정된 경우 별도 일일 작업),
 **학습 모델 또는 규칙이 "과거 흐름상 지금이 싼 시점인가"를 점수로 판정**하며,
 **Google Gemini가 그 근거를 자연어로 설명**하는 가격 비교·구매 적기 추천 서비스입니다.
 (Final-Project 3조: 박미금(조장·발표자), 김모란, 이오리, 홍기흥)
@@ -17,7 +17,7 @@
 | Frontend | React 19, Vite 8, Tailwind CSS v4, FontAwesome, SVG 가격 차트, 관리자 Plotly | `frontend/` |
 | Backend | Python 3.11.9, FastAPI, SQLAlchemy 2, PyMySQL, PyJWT, bcrypt | `backend/` |
 | AI / ML | Google Gemini(`gemini-2.5-flash`), scikit-learn RandomForest, pandas, NumPy | `backend/app/ai`, `backend/app/ml` |
-| RPA | Requests, BeautifulSoup4, pandas, 내장 스케줄러, 선택적 Playwright·네이버 검색·S3 | `rpa/` |
+| RPA | Requests, BeautifulSoup4, pandas, 내장 스케줄러, JSON-LD 파싱, 선택적 Playwright·S3 | `rpa/` |
 | DB | TiDB Cloud(로컬·Render·EC2 공용), SQLite(자동 테스트), MySQL 8(CI 호환성 테스트) | — |
 | 배포 | Netlify, Render(Docker), AWS EC2(docker compose + nginx) | `netlify.toml`, `render.yaml`, `docker-compose.yml`, `deploy/` |
 | CI/CD | GitHub Actions | `.github/` |
@@ -71,11 +71,11 @@ picktiming/
 ## 4. 전체 데이터 흐름
 
 ```
-[매시] 수집기 — 두 갈래가 각자 자기 서버의 API로 보냄
-   EC2:    rpa 컨테이너(정각)          ──▶ http://api:8000 (EC2 API)
-   Render: GitHub Actions(매시 07분)   ──▶ https://picktiming.onrender.com (Render API)
+[KST 00·06·12·18시] 수집기 — GitHub Actions 한 곳에서만 실행 (EC2 rpa는 COLLECT_ENABLED=false)
+   GitHub Actions(07분) ──▶ https://picktiming.onrender.com (Render API)
+   │ 0) PUT  /api/v1/rpa/catalog         rpa/catalog.json의 실제 제품 13종·다나와·에누리 판매처를 DB와 맞춤(시연 쇼핑몰 비활성)
    │ 1) GET  /api/v1/rpa/listings        수집 대상(판매 페이지) 목록
-   │ 2) 각 쇼핑몰 페이지 수집 (robots.txt 확인, 3초 간격)  ※ *.example.com 시연 쇼핑몰은 모의 가격
+   │ 2) 다나와·에누리 상품 페이지 수집 (robots.txt 확인, 같은 사이트 3초 간격, JSON-LD 최저가)
    │ 3) pandas 정제 (중복·이상치 제거)
    │ 4) POST /api/v1/rpa/prices/bulk     가격 저장(같은 시간대 중복은 건너뜀) → 적기 판정 갱신 → 알림 생성
    ▼
@@ -89,7 +89,7 @@ Netlify(picktiming.netlify.app): 데모 모드 — 브라우저 목업 데이터
 
 | 시각(KST) | 작업 | 결과 |
 |---|---|---|
-| 매시 | 가격 수집(`collect`) | `price_history` 추가, 판정·알림 갱신 |
+| 00·06·12·18시 | 가격 수집(`collect`, GitHub Actions) | `price_history` 추가, 판정·알림 갱신 |
 | 매일 03시 | 모델 재학습(`train`) | 성능이 같거나 좋으면 새 모델을 활성화(`model_versions`) |
 | 매일 06시 | 참가격 공공데이터(`public`) | `public_prices` 갱신 (키가 없으면 건너뜀) |
 | 매주 월 07시 | 주간 리포트(`report`) | EC2: `~/picktiming/reports/`, Render: Actions 아티팩트(30일 보관) |

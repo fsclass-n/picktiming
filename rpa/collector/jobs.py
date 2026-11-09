@@ -1,6 +1,7 @@
 """RPA 작업 (API 명세서 3.5)
 
-  BOT-01 collect   매시 정각   쇼핑몰 가격 수집 → pandas 정제 → 일괄 등록
+  BOT-01 collect   카탈로그 동기화 → 다나와·에누리 상품 페이지 수집(JSON-LD) → pandas 정제 → 일괄 등록
+                   실제 수집은 GitHub Actions(collect-render.yml, KST 0·6·12·18시)만 한다. EC2 rpa는 COLLECT_ENABLED=false
   BOT-02 public    매일 06:00  한국소비자원 참가격 공공데이터 수집
   BOT-03 train     매일 03:00  모델 재학습 요청(API 백그라운드 실행)
   BOT-04 report    매주 월 07:00 주간 가격 리포트(엑셀) 저장
@@ -19,11 +20,11 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import requests
 
-from . import naver, storage
+from . import storage
 from .api_client import ApiClient
 from .config import Config
 from .http import CollectError, PoliteSession
-from .parsers import parse_product
+from .parsers import parse_jsonld_offer, parse_product
 
 log = logging.getLogger("collector")
 OUTLIER_RATIO = 0.5  # 직전 가격 대비 ±50% 초과 변동은 이상치로 제외
@@ -55,38 +56,45 @@ def clean(rows: list[dict], listings: dict[int, dict]) -> pd.DataFrame:
     return df[~outlier].astype({"listing_id": int, "price": int, "shipping_fee": int, "in_stock": bool})
 
 
+def scrape(session: PoliteSession, url: str, rule: dict) -> dict:
+    """규칙(malls.json)대로 한 판매처의 가격을 읽는다. render=playwright면 브라우저로 화면을 그린 뒤 읽는다"""
+    soup = session.fetch(url, render=rule.get("render") == "playwright", wait_for=rule.get("wait_for") or rule.get("price"))
+    return parse_jsonld_offer(soup) if rule.get("parser") == "jsonld" else parse_product(soup, rule)
+
+
 def collect(cfg: Config, api: ApiClient) -> dict:
+    if not cfg.collect_enabled:
+        return {"status": "SKIPPED", "reason": "COLLECT_ENABLED=false"}
     started = now(cfg)
-    if cfg.naver_enabled and hasattr(api, "ensure_listings"):
-        api.ensure_listings(**naver.NAVER_MALL)  # 모든 상품에 '네이버쇼핑' 판매처가 있도록 보장(없으면 생성)
+    catalog = cfg.catalog()
+    if catalog and hasattr(api, "sync_catalog"):
+        log.info("카탈로그 동기화: %s", api.sync_catalog(catalog))  # 수집 대상 상품·판매처를 DB에 맞춤(여러 번 호출해도 같음)
     listings = {l["listing_id"]: l for l in api.listings()}
     rules = cfg.mall_rules()
-    session = PoliteSession(cfg.user_agent, cfg.request_interval_sec)
     rows, failed, skipped, errors = [], 0, 0, []
-    for l in listings.values():
-        host = urlparse(l["url"]).netloc
-        try:
-            if host.endswith(".example.com"):
-                if not cfg.simulate:
-                    skipped += 1
-                    continue
-                rows.append({"listing_id": l["listing_id"], **simulated_price(l, started)})
-            elif naver.is_naver(l["url"]):
-                if not cfg.naver_enabled:
-                    skipped += 1
-                    continue
-                session.wait()
-                p = naver.fetch_price(l["url"], cfg.naver_client_id, cfg.naver_client_secret, session.s)
-                rows.append({"listing_id": l["listing_id"], "price": p["price"], "shipping_fee": p["shipping_fee"], "in_stock": p["in_stock"]})
-            elif l["mall"] in rules:
-                rule = rules[l["mall"]]
-                rows.append({"listing_id": l["listing_id"], **parse_product(session.fetch(l["url"], render=rule.get("render") == "playwright",
-                                                                                          wait_for=rule.get("price")), rule)})
-            else:
-                skipped += 1  # 셀렉터 규칙이 없는 쇼핑몰은 수집하지 않음
-        except (CollectError, naver.NaverError, requests.RequestException) as exc:
-            failed += 1
-            errors.append(str(exc))
+    with PoliteSession(cfg.user_agent, cfg.request_interval_sec) as session:
+        for l in listings.values():
+            host = urlparse(l["url"]).netloc
+            try:
+                if host.endswith(".example.com"):
+                    if not cfg.simulate:
+                        skipped += 1
+                        continue
+                    rows.append({"listing_id": l["listing_id"], **simulated_price(l, started)})
+                elif l["mall"] in rules:
+                    rows.append({"listing_id": l["listing_id"], **scrape(session, l["url"], rules[l["mall"]])})
+                else:
+                    skipped += 1  # 규칙이 없는(수집을 허용받지 않은) 쇼핑몰은 수집하지 않음
+            except (CollectError, requests.RequestException) as exc:
+                failed += 1
+                errors.append(str(exc))
+    # 가격을 읽지 못한 판매처(0원: 판매처 0곳·구조 변경·차단 화면)는 저장하지 않고 실패로 기록한다 → 관리자 수집 현황에 표시
+    missing = [r["listing_id"] for r in rows if r["price"] <= 0]
+    if missing:
+        failed += len(missing)
+        errors.append(f"가격을 읽지 못한 판매처 {len(missing)}곳(구조 변경·차단 확인 필요): {missing[:10]}")
+        log.warning(errors[-1])
+        rows = [r for r in rows if r["price"] > 0]
     df = clean(rows, listings)
     if len(df):
         storage.upload(cfg.s3_bucket, f"{cfg.s3_prefix}/raw/{started:%Y/%m/%d/%H%M}.json", df.to_json(orient="records", force_ascii=False).encode(),

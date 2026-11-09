@@ -16,10 +16,10 @@ RUN pip install -r requirements.txt \
     && rm -rf /var/lib/apt/lists/*
 
 COPY rpa/collector ./collector
-COPY rpa/malls.json rpa/public_price_map.json ./
+COPY rpa/malls.json rpa/catalog.json rpa/public_price_map.json ./
 RUN useradd --create-home rpa && mkdir -p /app/reports && chown -R rpa /app /ms-playwright
 USER rpa
 
-# 기본: 내장 스케줄러(매시 수집, 03:00 재학습, 06:00 참가격, 월 07:00 리포트)
+# 기본: 내장 스케줄러(03:00 재학습, 06:00 참가격, 월 07:00 리포트. 외부 가격 수집은 COLLECT_ENABLED=true일 때만 — compose 기본 false)
 # 단발 실행: docker compose run --rm rpa python -m collector.jobs collect
 CMD ["python", "-m", "collector.scheduler"]

@@ -1,8 +1,5 @@
 {
-  "_comment": "쇼핑몰 이름(DB malls.name)별 CSS 셀렉터. 약관·robots.txt로 수집이 허용된 쇼핑몰만 등록한다. *.example.com 시연 쇼핑몰은 SIMULATE_MALLS=true일 때 모의 가격을 생성한다.",
-  "예시 쇼핑몰": {
-    "price": ".product-price .sale",
-    "shipping": ".delivery-fee",
-    "soldout": ".btn-soldout"
-  }
+  "_comment": "쇼핑몰 이름(DB malls.name = catalog.json malls.name)별 수집 규칙. robots.txt로 허용된 경로만 등록한다(2026-11 확인). parser: jsonld(구조화 데이터) | css(기본, price·shipping·soldout 셀렉터). render: playwright면 Headless Chromium으로 화면을 그린 뒤 읽는다(GitHub Actions가 필요할 때만 설치). *.example.com 시연 쇼핑몰은 SIMULATE_MALLS=true일 때만 모의 가격을 생성한다.",
+  "다나와": {"parser": "jsonld"},
+  "에누리": {"parser": "jsonld"}
 }

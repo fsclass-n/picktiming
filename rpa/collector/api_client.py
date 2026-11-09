@@ -20,6 +20,10 @@ class ApiClient:
         """쇼핑몰(예: 네이버쇼핑)과 모든 상품의 판매처를 없으면 만든다"""
         return self._req("POST", "/ensure-listings", json={"name": name, "base_url": base_url, "url_template": url_template}).json()
 
+    def sync_catalog(self, catalog: dict) -> dict:
+        """실제 수집 상품·판매처(rpa/catalog.json)를 DB에 맞춘다. 시연용 쇼핑몰은 retire_mall_hosts로 비활성화"""
+        return self._req("PUT", "/catalog", json=catalog).json()
+
     def listings(self) -> list[dict]:
         return self._req("GET", "/listings").json()["items"]
 

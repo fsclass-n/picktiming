@@ -19,7 +19,7 @@
 
 [서비스 체험](https://picktiming.netlify.app) · [운영 API 문서](https://picktiming.onrender.com/docs) · [발표자료 PDF](docs/pdf/프로젝트_발표자료.pdf)
 
-**현재 구현 기준:** 가격 수집은 **1시간 주기**입니다. Netlify 체험 화면은 브라우저 목업 데이터를 사용하며, 화면의 상품·가격·관리자 지표는 운영 실적을 의미하지 않습니다.
+**현재 구현 기준:** 운영 화면(Render·EC2)은 **실제 제품 13종의 다나와·에누리 가격을 하루 4회 수집**합니다(GitHub Actions). 새 제품은 가격 이력 30일이 쌓이기 전까지 판단 보류로 표시됩니다. Netlify 체험 화면은 브라우저 목업 데이터를 사용하며, 그 화면의 상품·가격·관리자 지표는 운영 실적을 의미하지 않습니다.
 
 ## 주요 기능
 
@@ -38,12 +38,12 @@
 
 ```mermaid
 flowchart LR
-    GH["GitHub Actions<br/>매시 07분"] --> RPA
-    EC2["EC2 RPA 스케줄러<br/>매시 정각"] --> RPA
+    GH["GitHub Actions<br/>KST 00·06·12·18시"] --> SYNC
 
     subgraph Collection["수집·정제"]
-        RPA["Requests / 공식 API<br/>필요 시 Playwright"]
-        RPA --> CLEAN["가격·배송비 정규화<br/>중복·이상치 처리"]
+        SYNC["catalog.json 동기화<br/>실제 제품 13종"] --> RPA
+        RPA["다나와·에누리 상품 페이지<br/>Requests + JSON-LD<br/>필요 시 Playwright"]
+        RPA --> CLEAN["가격 없음·이상치 제외<br/>중복 정리"]
     end
 
     CLEAN --> INGEST["FastAPI 일괄 수신<br/>X-RPA-KEY 인증"]
@@ -56,14 +56,14 @@ flowchart LR
     ALERT --> UI
 ```
 
-위 다이어그램은 공통 처리 흐름입니다. GitHub Actions 수집기는 **Render API**, EC2 수집기는 **EC2 API**로 전송합니다. 두 서버는 서로 호출하지 않고 같은 TiDB를 사용합니다.
+실제 사이트 수집은 GitHub Actions 한 곳에서만 실행해 **Render API**로 보냅니다. EC2 `rpa` 컨테이너는 외부 수집을 끄고(`COLLECT_ENABLED=false`) 재학습·리포트만 맡습니다. 두 서버는 서로 호출하지 않고 같은 TiDB를 쓰므로 어느 쪽 화면에서도 같은 가격이 보입니다.
 
 | 환경 | 역할 | 설계 의도 |
 |---|---|---|
 | GitHub Pages | 단일 HTML 포트폴리오 | 별도 프레임워크 빌드 없이 프로젝트 소개 |
 | Netlify | React 데모 · API·DB 연결 없음 | 운영 데이터 변경 없이 기능 체험 |
 | Render | Static Site(React 빌드) + Web Service(FastAPI API) 분리 | 화면은 CDN, API는 `VITE_API_URL`·CORS로 연결 |
-| AWS EC2 | nginx + FastAPI + RPA의 Docker Compose 구성 | 수집 스케줄러를 별도 컨테이너로 실행 |
+| AWS EC2 | nginx + FastAPI + RPA의 Docker Compose 구성 | 재학습·리포트 스케줄러를 별도 컨테이너로 실행(외부 수집은 Actions 담당) |
 | TiDB Cloud | 공용 운영 DB | 두 풀스택 환경의 가격·회원·관심 상품 저장 |
 
 구성 근거: [컨테이너 스케줄러](rpa/collector/scheduler.py) · [Render 예약 수집](.github/workflows/collect-render.yml) · [EC2 Compose](docker-compose.yml)
@@ -72,20 +72,22 @@ flowchart LR
 
 ### 1. 동적 페이지 대응과 브라우저 실행 비용 관리
 
-**문제:** 판매처마다 가격 표기와 DOM 구조가 다르고, 일부 페이지는 JavaScript 실행 후에 가격을 표시합니다.
+**문제:** 네이버 쇼핑 검색 API가 2026-07-31 종료되어 실제 가격을 웹에서 직접 수집해야 했습니다. 판매처마다 DOM 구조가 다르고, 일부 페이지는 JavaScript 실행 후에 가격을 표시합니다.
 
-- 일반 페이지는 `Requests + BeautifulSoup`으로 처리하고, 수집 규칙에 `render: "playwright"`가 지정된 경우에만 Chromium을 실행합니다.
-- Playwright는 **헤드리스 모드**, 선택자 대기, 타임아웃을 적용합니다. 모듈은 필요할 때 불러오고, 실행이 끝나면 `finally`에서 브라우저를 닫습니다.
-- 요청 전 `robots.txt`를 확인하고 기본 **3초 간격**을 유지합니다. 일시적인 요청 실패는 지수 백오프로 재시도하며, 허용되지 않은 경로는 수집하지 않습니다.
-- 판매처별 CSS 선택자를 코드에서 분리해 [수집 규칙](rpa/malls.json)으로 관리합니다.
+- **대상 선정:** 국내 주요 쇼핑·가격 비교 사이트의 robots.txt를 확인해 일반 봇을 허용하는 **다나와·에누리**만 수집합니다. 금지하거나 봇 접속을 403으로 막는 사이트는 우회하지 않고 제외했습니다.
+- **정적 우선:** 두 사이트는 상품 페이지 HTML에 schema.org `AggregateOffer`(JSON-LD)를 담고 있어 `Requests + BeautifulSoup`으로 최저가를 읽습니다. CSS 셀렉터보다 화면 개편에 강하고 브라우저가 필요 없습니다.
+- **Playwright는 필요할 때만:** 규칙에 `render: "playwright"`가 있을 때만 Headless Chromium을 띄우고, 수집 1회 동안 브라우저를 재사용합니다. 이미지·폰트·미디어, 다른 사이트 XHR, robots.txt 금지 경로 XHR은 차단합니다.
+- **예의 있는 요청:** 같은 사이트끼리 3초 이상(robots `Crawl-delay` 반영) 간격을 두고, 봇 이름을 밝히며, 403·429는 재시도하지 않고 실패로 기록합니다. 가격을 읽지 못한 판매처는 0원을 저장하지 않습니다.
 
-**적용 범위:** 현재 Playwright 경로는 동기식입니다. 브라우저 재사용, 이미지·폰트 요청 차단, 제한된 비동기 병렬 처리는 후속 최적화 과제입니다.
+**적용 범위:** 현재 수집 대상은 정적 페이지라 Playwright 경로는 대기 상태입니다. 두 사이트는 같은 회사가 운영해 가격 출처가 사실상 하나이고, 이용약관상 비영리·소규모로만 운영합니다.
 
 근거: [HTTP 요청 정책](rpa/collector/http.py) · [브라우저 렌더링](rpa/collector/browser.py) · [가격 파서](rpa/collector/parsers.py)
 
 ### 2. 여러 수집 경로의 데이터 동기화와 중복 적재
 
-**문제:** Render와 EC2 수집기가 같은 DB를 사용하므로, 같은 판매처의 가격이 반복 기록될 수 있습니다.
+**문제:** 수집 작업이 재실행되거나 여러 경로(Actions 수동 실행, EC2에서 수집을 켠 경우)가 같은 DB에 보내면 같은 판매처의 가격이 반복 기록될 수 있습니다.
+
+- **수집 대상 동기화:** 실제 상품·판매처 목록([`catalog.json`](rpa/catalog.json))을 수집 전에 `PUT /rpa/catalog`로 DB와 맞춥니다. 몇 번 실행해도 결과가 같고, 시연용 쇼핑몰은 삭제 없이 비활성화해 검색·수집에서만 뺍니다.
 
 - **정규화:** 원화 표기를 정수로 변환하고 판매가·배송비·실구매가를 구분합니다. 가격이 없거나 0원이면 품절로 처리합니다.
 - **정제:** pandas로 배치 내 `listing_id` 중복을 제거하고, 직전 가격 대비 ±50%를 초과한 재고 보유 상품의 가격 변동을 이상치로 제외합니다.
@@ -239,7 +241,7 @@ npm run dev
 
 | 과제 | 검증할 내용 |
 |---|---|
-| 수집 처리량 | 브라우저 재사용·리소스 차단·제한된 병렬 처리의 메모리와 소요 시간 비교 |
+| 수집 출처 다양화 | 다나와·에누리는 같은 운영사라 출처가 사실상 하나 → 수집을 허락받은 판매처·공식 API 추가, 상업 운영 전 제휴 |
 | 수집 간격·동시성 | 30분 슬롯 도입 시 스케줄·중복 키 동시 변경, DB 유일 제약과 동시 적재 테스트 |
 | 추천 품질 | 실제 가격 이력 기반 평가, 7일 예측 구간을 고려한 검증 경계 보강, 판정 적중률 집계 |
 | AI 설명 품질 | 숫자 검증을 넘어선 의미 일치 평가, 응답 지연·토큰 비용 실측 |

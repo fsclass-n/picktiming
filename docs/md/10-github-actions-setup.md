@@ -2,7 +2,7 @@
 
 07~09를 마치면 수동 배포는 끝난 상태입니다. 이 단계에서 값을 등록하면
 - `main` push 때 **CI 통과 → EC2 자동 배포**(바뀐 폴더에 해당할 때, 05 문서)
-- **매시 07분 Render용 가격 수집**(`collect-render.yml`, 04 문서)
+- **다나와·에누리 실제 가격 수집 KST 00·06·12·18시**(`collect-render.yml`, 04 문서 — 수집은 이 워크플로 한 곳에서만)
 
 이 동작합니다. 값을 등록하지 않은 대상·작업은 자동으로 건너뜁니다.
 Render 배포는 GitHub가 요청하지 않고, Render의 Auto-Deploy(**After CI Checks Pass**)가 CI 통과를 보고 직접 배포합니다(07 문서 3단계).
@@ -18,7 +18,6 @@ Render 배포는 GitHub가 요청하지 않고, Render의 Auto-Deploy(**After CI
 | `EC2_USER` | `ubuntu` | Ubuntu AMI 기본 사용자 | 자동 배포 |
 | `EC2_SSH_KEY` | `.pem` 파일 **전체 내용** (`-----BEGIN ... KEY-----`부터 `-----END ... KEY-----`까지 줄바꿈 포함) | 08 문서 1단계의 키 페어 | 자동 배포 |
 | `DATA_GO_KR_KEY` | `.env`의 같은 이름 값 (선택) | 로컬 `.env` | Render 참가격 수집 |
-| `NAVER_SEARCH_CLIENT_ID`, `NAVER_SEARCH_CLIENT_SECRET` | 네이버 검색 API용 값 (선택) | 네이버 개발자 콘솔 | Render용 네이버 쇼핑 수집 |
 
 > `RENDER_DEPLOY_HOOK_URL`은 **등록하지 않습니다**. Render Auto-Deploy(After CI Checks Pass)와 함께 쓰면 같은 커밋이 두 번 배포됩니다.
 > (Render Auto-Deploy를 Off로 두고 GitHub가 배포를 요청하게 할 때만 등록)
@@ -77,8 +76,9 @@ Render 배포는 GitHub가 요청하지 않고, Render의 Auto-Deploy(**After CI
    - `docs/`만 바꾸면: 배포 없음 (Render는 Build Filter로 건너뜀)
    - Render 대시보드 → Events에서 "Deploy started for <커밋> after CI checks passed" 같은 기록으로 자동 배포를 확인합니다.
 4. **Render 가격 수집 확인**: Actions → **Collect (Render)** → Run workflow → `collect` 실행
-   - 성공 기준: "Render 깨우기"에서 `{"status":"ok"...}`, "작업 실행"에서 `{'status': 'SUCCESS', 'inserted': ..., 'duplicate': ...}`
-   - 이후 매시 07분에 자동 실행됩니다(몇 분 늦을 수 있음). 실행 기록은 Actions → Collect (Render)에서 확인합니다.
+   - 성공 기준: "Render 깨우기"에서 `{"status":"ok"...}`, "작업 실행"에서 `카탈로그 동기화: {...}`와 `{'status': 'SUCCESS', 'inserted': 26, 'failed': 0, ...}`
+   - `failed`가 있으면 로그의 `HTTP 403`(사이트가 Actions IP를 거부) 또는 "가격을 읽지 못한 판매처"(구조 변경)를 확인합니다. 우회하지 않습니다(04 문서 4절).
+   - 예약 실행은 매시 07분에 돌지만 수집은 KST 00·06·12·18시에만 하고, 그 밖의 시각은 03시 재학습 등 해당 작업이 있을 때만 Render를 깨웁니다(몇 분 늦을 수 있음).
    - 공개 저장소에 60일간 활동이 없으면 GitHub가 예약 실행을 멈춥니다. 그때는 이 화면에서 **Enable workflow**를 누릅니다.
 
 ## 5. 실패했을 때

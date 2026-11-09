@@ -83,40 +83,136 @@ def test_collect_simulated_and_skips_unconfigured(monkeypatch):
     assert api.logs[0][0][0] == "collect_prices"
 
 
-def test_naver_lowest_price_and_query():
-    from collector import naver
-
-    url = naver.search_url("무선 이어폰 X2")
-    assert naver.is_naver(url) and naver.query_of(url) == "무선 이어폰 X2"
-    p = naver.lowest_price([{"lprice": "0"}, {"lprice": "129000", "title": "<b>X2</b>"}])
-    assert p["price"] == 129000 and p["in_stock"]
-    assert naver.lowest_price([])["in_stock"] is False
-
-
-def test_collect_uses_naver_api_when_configured(monkeypatch):
-    from collector import naver
-
-    monkeypatch.setenv("NAVER_CLIENT_ID", "id")
-    monkeypatch.setenv("NAVER_CLIENT_SECRET", "secret")
-    monkeypatch.setattr(naver, "fetch_price", lambda url, cid, sec, s=None: {"price": 9900, "shipping_fee": 0, "in_stock": True})
-    api = FakeApi([{"listing_id": 3, "mall": "네이버쇼핑", "url": naver.search_url("생수"), "last_price": 9800, "last_shipping_fee": 0}])
-    api.ensured = []
-    api.ensure_listings = lambda **kw: api.ensured.append(kw) or {"created": 0}
-    cfg = Config()
-    monkeypatch.setattr(cfg.__class__, "request_interval_sec", 0, raising=False)
-    res = jobs.collect(cfg, api)
-    assert res["inserted"] == 1 and api.posted[0]["price"] == 9900 and api.ensured[0]["name"] == "네이버쇼핑"
-
-
 def test_s3_upload_is_skipped_without_bucket():
     from collector import storage
 
     assert storage.upload("", "k", b"x", "text/plain") is None
 
 
-def test_naver_search_keys_take_precedence(monkeypatch):
-    monkeypatch.setenv("NAVER_CLIENT_ID", "login-id")
-    monkeypatch.setenv("NAVER_SEARCH_CLIENT_ID", "search-id")
-    monkeypatch.setenv("NAVER_SEARCH_CLIENT_SECRET", "search-secret")
-    cfg = Config()
-    assert cfg.naver_client_id == "search-id" and cfg.naver_enabled
+# ---------------------------------------------------------------- 실제 수집(다나와·에누리 상품 페이지의 JSON-LD)
+def _jsonld(offers: dict, kind: str = "Product") -> str:
+    import json
+
+    return (f'<html><head><script type="application/ld+json">{json.dumps({"@context": "https://schema.org", "@type": kind, "name": "X", "offers": offers})}'
+            '</script></head><body>화면 문구 123,000원</body></html>')
+
+
+def test_parse_jsonld_aggregate_offer_lowest_price():
+    from collector.parsers import parse_jsonld_offer
+
+    danawa = _jsonld({"@type": "AggregateOffer", "lowPrice": "315000", "offerCount": "116", "priceCurrency": "KRW"})
+    assert parse_jsonld_offer(BeautifulSoup(danawa, "html.parser")) == {"price": 315000, "shipping_fee": 0, "in_stock": True}
+    enuri = _jsonld({"@type": "AggregateOffer", "lowPrice": 226510, "highPrice": 517000, "offerCount": 222})
+    assert parse_jsonld_offer(BeautifulSoup(enuri, "html.parser"))["price"] == 226510
+    single = _jsonld({"@type": "Offer", "price": "8,900"})
+    assert parse_jsonld_offer(BeautifulSoup(single, "html.parser"))["price"] == 8900
+
+
+def test_parse_jsonld_marks_missing_or_empty_offers_as_unavailable():
+    from collector.parsers import parse_jsonld_offer
+
+    for html in (_jsonld({"@type": "AggregateOffer", "lowPrice": "315000", "offerCount": 0}),  # 판매처 0곳
+                 _jsonld({"@type": "AggregateOffer"}),  # 가격 없음
+                 _jsonld({"lowPrice": "1000"}, kind="BreadcrumbList"),  # Product가 아님
+                 '<script type="application/ld+json">{깨진 JSON</script>',
+                 "<html>JSON-LD 없음(차단 화면·구조 변경)</html>"):
+        assert parse_jsonld_offer(BeautifulSoup(html, "html.parser")) == {"price": 0, "shipping_fee": 0, "in_stock": False}
+    graph = '<script type="application/ld+json">{"@graph": [{"@type": "Product", "offers": {"lowPrice": 5000}}]}</script>'
+    assert parse_jsonld_offer(BeautifulSoup(graph, "html.parser"))["price"] == 5000
+
+
+def test_robots_crawl_delay_is_respected_per_host():
+    from collector.http import PoliteSession
+
+    s = PoliteSession("PickTimingBot/1.0", interval_sec=3)
+    for root, lines in {"https://search.example.org": ["User-agent: *", "Crawl-delay: 10"], "https://prod.example.org": ["User-agent: *", "Allow: /"]}.items():
+        import urllib.robotparser
+
+        rp = urllib.robotparser.RobotFileParser()
+        rp.parse(lines)
+        s._robots[root] = rp
+    assert s.delay_for("https://search.example.org/q") == 10
+    assert s.delay_for("https://prod.example.org/p") == 3
+
+
+def test_requests_to_different_hosts_do_not_wait_for_each_other(monkeypatch):
+    from collector import http
+
+    slept = []
+    monkeypatch.setattr(http.time, "sleep", slept.append)
+    s = http.PoliteSession("PickTimingBot/1.0", interval_sec=3)
+    s.wait("https://a.example.org/1")
+    s.wait("https://b.example.org/1")
+    assert slept == []  # 다른 사이트는 바로 요청
+    s.wait("https://a.example.org/2")
+    assert len(slept) == 1 and 2.5 < slept[0] <= 3  # 같은 사이트는 간격 유지
+
+
+class CatalogApi(FakeApi):
+    def __init__(self, listings):
+        super().__init__(listings)
+        self.catalog = None
+
+    def sync_catalog(self, body):
+        self.catalog = body
+        return {"products_created": 0}
+
+
+def test_collect_syncs_catalog_and_parses_jsonld(monkeypatch, tmp_path):
+    import json
+
+    from collector import http
+
+    catalog = tmp_path / "catalog.json"
+    catalog.write_text(json.dumps({"_comment": "설명", "malls": [{"name": "다나와", "base_url": "https://prod.danawa.com"}],
+                                   "products": [], "retire_mall_hosts": ["mall-a.example.com"]}, ensure_ascii=False), encoding="utf-8")
+    rules = tmp_path / "malls.json"
+    rules.write_text(json.dumps({"다나와": {"parser": "jsonld"}}, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setenv("CATALOG", str(catalog))
+    monkeypatch.setenv("MALL_CONFIG", str(rules))
+    monkeypatch.setenv("SIMULATE_MALLS", "false")
+    page = _jsonld({"@type": "AggregateOffer", "lowPrice": "315000", "offerCount": "116"})
+    monkeypatch.setattr(http.PoliteSession, "fetch", lambda self, url, render=False, wait_for=None: BeautifulSoup(page, "html.parser"))
+    api = CatalogApi([{"listing_id": 7, "mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=28208783", "last_price": 316000, "last_shipping_fee": 0},
+                      {"listing_id": 8, "mall": "쇼핑몰 A", "url": "https://mall-a.example.com/p/1", "last_price": 10000, "last_shipping_fee": 0}])
+    res = jobs.collect(Config(), api)
+    assert "_comment" not in api.catalog and api.catalog["retire_mall_hosts"] == ["mall-a.example.com"]
+    assert api.posted == [{"listing_id": 7, "price": 315000, "shipping_fee": 0, "in_stock": True}]
+    assert res["skipped"] == 1  # 모의 가격 꺼짐 → 시연 쇼핑몰 건너뜀
+
+
+def test_collect_disabled_environment_does_nothing(monkeypatch):
+    """EC2 rpa 컨테이너(COLLECT_ENABLED=false): 외부 사이트 수집은 GitHub Actions만 한다"""
+    monkeypatch.setenv("COLLECT_ENABLED", "false")
+    api = FakeApi([{"listing_id": 1, "mall": "쇼핑몰 A", "url": "https://mall-a.example.com/p/1", "last_price": 1, "last_shipping_fee": 0}])
+    assert jobs.collect(Config(), api) == {"status": "SKIPPED", "reason": "COLLECT_ENABLED=false"}
+    assert api.posted is None and api.logs == []
+    assert due_jobs(datetime(2026, 12, 8, 3, 0), collect=False) == ["train"]
+
+
+class FakeRoute:
+    def __init__(self, url, kind):
+        self.request = type("Req", (), {"url": url, "resource_type": kind})()
+        self.result = None
+
+    def abort(self):
+        self.result = "abort"
+
+    def continue_(self):
+        self.result = "continue"
+
+
+def test_browser_blocks_heavy_and_disallowed_requests():
+    """Playwright 렌더링: 이미지·폰트·미디어, 다른 사이트의 XHR, robots.txt 금지 경로(예: 다나와 /info/ajax/) 호출을 보내지 않는다"""
+    from collector.browser import BrowserSession
+
+    b = BrowserSession("PickTimingBot/1.0", allowed=lambda url: "/info/ajax/" not in url)
+    b._page_host = "prod.danawa.com"
+    cases = {("https://img.danawa.com/a.jpg", "image"): "abort", ("https://prod.danawa.com/font.woff2", "font"): "abort",
+             ("https://prod.danawa.com/info/ajax/getPrice.php", "xhr"): "abort", ("https://ads.example.net/track", "fetch"): "abort",
+             ("https://prod.danawa.com/info/price.json", "fetch"): "continue", ("https://static.danawa.com/app.js", "script"): "continue",
+             ("https://prod.danawa.com/info/?pcode=1", "document"): "continue"}
+    for (url, kind), expected in cases.items():
+        route = FakeRoute(url, kind)
+        b._filter(route)
+        assert route.result == expected, (url, kind)

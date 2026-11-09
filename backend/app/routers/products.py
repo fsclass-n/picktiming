@@ -22,9 +22,15 @@ def get_product(db: Session, product_id: int) -> Product:
     return p
 
 
+def _has_active_listing():
+    """활성 쇼핑몰의 활성 판매처가 하나라도 있는 상품만 노출한다(비활성화한 시연용 쇼핑몰 상품은 숨김, 데이터는 보존)"""
+    return (select(ProductListing.id).join(Mall, Mall.id == ProductListing.mall_id)
+            .where(ProductListing.product_id == Product.id, ProductListing.is_active.is_(True), Mall.is_active.is_(True)).exists())
+
+
 @router.get("/products/search")
 def search(q: str = Query("", max_length=100), db: Session = Depends(get_db), _: User = Depends(current_user)):
-    stmt = select(Product).order_by(Product.id).limit(50)
+    stmt = select(Product).where(_has_active_listing()).order_by(Product.id).limit(50)
     if q.strip():
         like = f"%{q.strip()}%"
         stmt = stmt.where(or_(Product.name.ilike(like), Product.brand.ilike(like), Product.category.ilike(like), Product.model_no.ilike(like)))
@@ -53,7 +59,7 @@ def register(body: ProductRegisterIn, db: Session = Depends(get_db), _: User = D
     db.flush()
     db.add(ProductListing(product_id=product.id, mall_id=mall.id, url=body.url))
     db.commit()
-    return {"product": ProductOut.model_validate(product), "status": "PENDING", "message": "다음 수집 주기(매시 정각)부터 가격이 반영됩니다."}
+    return {"product": ProductOut.model_validate(product), "status": "PENDING", "message": "다음 수집 주기(하루 4회: 0·6·12·18시)부터 가격이 반영됩니다."}
 
 
 @router.get("/products/{product_id}", response_model=ProductDetailOut)

@@ -309,7 +309,7 @@ const routes = [
     const custom = load(LS.custom, []);
     const p = { id: 1000 + custom.length + 1, name: body.name?.trim() || '등록 상품', brand: '-', model_no: '-', category: '기타', base: 0, days: 0 };
     save(LS.custom, [...custom, p]);
-    return ok({ product: publicProduct(p), status: 'PENDING', message: '다음 수집 주기(매시 정각)부터 가격이 반영됩니다.' }, 201);
+    return ok({ product: publicProduct(p), status: 'PENDING', message: '다음 수집 주기(하루 4회: 0·6·12·18시)부터 가격이 반영됩니다.' }, 201);
   }],
   ['GET', /^\/products\/(\d+)$/, (m) => {
     const p = findProduct(m[1]);

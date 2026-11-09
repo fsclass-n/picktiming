@@ -1,10 +1,12 @@
 name: Collect (Render)
 
-# Render 무료 플랜은 상주 작업(RPA 스케줄러)을 돌릴 수 없으므로 GitHub Actions가 RPA 수집기를 매시 실행해 Render API로 보낸다.
-# EC2는 자체 rpa 컨테이너가 수집한다. 두 수집기가 같은 TiDB에 보내도 API가 같은 시간대 중복을 건너뛴다.
+# 실제 가격 수집은 이 워크플로 한 곳에서만 한다(EC2 rpa 컨테이너는 COLLECT_ENABLED=false).
+# 수집 결과는 Render API로 보내 TiDB에 저장되므로 EC2 화면에도 같은 가격이 보인다.
 #
-#   매시 07분(정각 혼잡 회피): collect
-#   KST 03시 + train / 06시 + public / 월요일 07시 + report(엑셀은 Actions 아티팩트로 30일 보관)
+#   수집 대상: rpa/catalog.json의 실제 상품 × 다나와·에누리 상품 페이지(robots.txt 허용 경로, 사이트별 간격 3초 이상)
+#   KST 00·06·12·18시: collect (적기 점수는 하루 최저가로 계산하므로 하루 4회면 충분하고 상대 사이트 부담을 줄인다)
+#   KST 03시 train / 06시 public / 월요일 07시 report(엑셀은 Actions 아티팩트로 30일 보관)
+#   그 밖의 시각에는 아무 작업도 하지 않는다(Render도 깨우지 않음).
 #
 # 필요한 값(없으면 건너뜀): Variable RENDER_URL(예: https://picktiming.onrender.com), Secret RENDER_RPA_API_KEY(Render의 RPA_API_KEY)
 # 선택: Variable KCA_API_URL, Secret DATA_GO_KR_KEY (참가격 공공데이터)
@@ -51,12 +53,14 @@ jobs:
           if [ "$EVENT" = "workflow_dispatch" ]; then
             jobs="$INPUT_JOB"
           else
-            h=$(date +%H); d=$(date +%u); jobs="collect"
+            h=$(date +%H); d=$(date +%u); jobs=""
+            case "$h" in 00|06|12|18) jobs="collect" ;; esac
             [ "$h" = "03" ] && jobs="$jobs train"
             [ "$h" = "06" ] && jobs="$jobs public"
             [ "$d" = "1" ] && [ "$h" = "07" ] && jobs="$jobs report"
+            jobs="$(echo $jobs)"
           fi
-          echo "실행할 작업(KST $(date '+%F %H:%M')): $jobs"
+          echo "실행할 작업(KST $(date '+%F %H:%M')): ${jobs:-없음}"
           echo "jobs=$jobs" >> "$GITHUB_OUTPUT"
 
   run:
@@ -70,8 +74,8 @@ jobs:
       RPA_API_KEY: ${{ secrets.RENDER_RPA_API_KEY }}
       KCA_API_URL: ${{ vars.KCA_API_URL }}
       DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
-      NAVER_SEARCH_CLIENT_ID: ${{ secrets.NAVER_SEARCH_CLIENT_ID }}
-      NAVER_SEARCH_CLIENT_SECRET: ${{ secrets.NAVER_SEARCH_CLIENT_SECRET }}
+      SIMULATE_MALLS: "false"     # 시연용 쇼핑몰 모의 가격을 만들지 않는다(실제 수집만)
+      COLLECT_ENABLED: "true"
       JOBS: ${{ needs.plan.outputs.jobs }}
     steps:
       - uses: actions/checkout@v4
@@ -81,6 +85,20 @@ jobs:
           cache: pip
           cache-dependency-path: requirements.txt
       - run: pip install -r requirements.txt
+      - name: "Playwright 필요 여부 확인 (malls.json에 render=playwright 규칙이 있을 때만 브라우저 설치)"
+        id: pw
+        run: |
+          need=$(python -c "import json;r=json.load(open('rpa/malls.json',encoding='utf-8'));print(str(any(isinstance(v,dict) and v.get('render')=='playwright' for v in r.values())).lower())")
+          echo "need=$need" >> "$GITHUB_OUTPUT"; echo "Playwright 필요: $need"
+      - name: Playwright 브라우저 캐시
+        if: steps.pw.outputs.need == 'true' && contains(env.JOBS, 'collect')
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+      - name: Chromium + 시스템 의존성 설치
+        if: steps.pw.outputs.need == 'true' && contains(env.JOBS, 'collect')
+        run: python -m playwright install --with-deps chromium   # 시스템 라이브러리는 apt로 설치(실행기에 sudo 있음)
       - name: Render 깨우기 (무료 플랜은 15분간 요청이 없으면 잠듦)
         run: |
           for i in $(seq 1 18); do curl -fsS -m 20 "${RPA_TARGET_API%/}/health" && exit 0; sleep 10; done

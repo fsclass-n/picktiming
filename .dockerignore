@@ -7,6 +7,7 @@
 !rpa/Dockerfile
 !rpa/collector/
 !rpa/malls.json
+!rpa/catalog.json
 !rpa/public_price_map.json
 !frontend/
 !deploy/nginx.conf

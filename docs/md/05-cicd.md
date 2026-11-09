@@ -10,7 +10,7 @@
 | `main` 외 브랜치 push, Pull Request | `ci.yml` | 검사만 (배포 없음) |
 | `main` push | `deploy.yml` | `ci.yml` 전체 통과 → **바뀐 폴더에 해당하는 대상만** 배포 |
 | 수동 실행 (Actions → Deploy → Run workflow) | `deploy.yml` | 체크한 대상(Netlify/Render/EC2)에 전체 배포 |
-| 매시 07분 예약 실행 / 수동 실행 | `collect-render.yml` | **Render용 가격 수집** (KST 03시 재학습, 06시 참가격, 월 07시 리포트 포함) |
+| 매시 07분 예약 실행 / 수동 실행 | `collect-render.yml` | **다나와·에누리 실제 가격 수집**(KST 00·06·12·18시만, 유일한 수집 경로) + 03시 재학습, 06시 참가격, 월 07시 리포트 |
 
 ## 2. CI 작업 (`ci.yml`)
 

@@ -108,3 +108,9 @@ API는 `hmac.compare_digest`로 비교합니다. 값이 다르면 401(`INVALID_R
 - `cd backend && pytest -q tests/test_catalog.py`: 카탈로그 생성·갱신·도메인 검증, 시연 쇼핑몰 비활성화 후 검색·수집 제외와 복구
 
 다음 문서: [05. CI/CD 파이프라인](05-cicd.md)
+
+## 8. 인기 상품 후보 찾기와 TiDB 무료 한도
+
+- `python -m collector.discover`(Actions: 월요일 04시, 수동 `discover`): robots.txt가 허용하는 다나와 카테고리 목록에서 상위 10개씩 후보를 찾아 `reports/discovered.json`에 저장합니다(에누리 연결 확인 후 `catalog.json`에 수동 추가).
+- 수집은 `priority` 높은 순으로 1회 최대 `COLLECT_MAX_PRODUCTS`(기본 100)개.
+- TiDB Starter 무료: 인스턴스당 행 저장 5 GiB, 월 5,000만 RU. 프로젝트마다 인스턴스 1개를 쓰고, 연결은 `DB_POOL_SIZE`=3, `DB_MAX_OVERFLOW`=2.

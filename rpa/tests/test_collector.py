@@ -216,3 +216,15 @@ def test_browser_blocks_heavy_and_disallowed_requests():
         route = FakeRoute(url, kind)
         b._filter(route)
         assert route.result == expected, (url, kind)
+
+
+def test_collect_if_due_skips_when_this_slot_is_done(monkeypatch):
+    """예약 실행은 불규칙하므로 KST 6시간 구간(0·6·12·18시 시작)마다 한 번만 수집한다"""
+    monkeypatch.setenv("COLLECT_IF_DUE", "true")
+    api = FakeApi([])
+    api.status = lambda: {"last_collect_at": "2026-12-01T13:07:00"}
+    monkeypatch.setattr(jobs, "now", lambda cfg: datetime(2026, 12, 1, 17, 40))
+    assert jobs.collect(Config(), api)["status"] == "SKIPPED"
+    monkeypatch.setattr(jobs, "now", lambda cfg: datetime(2026, 12, 1, 18, 5))
+    assert jobs.collect(Config(), api)["status"] != "SKIPPED"
+    assert jobs.slot_start(datetime(2026, 12, 1, 5, 59)) == datetime(2026, 12, 1, 0, 0)

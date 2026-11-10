@@ -56,6 +56,13 @@ def clean(rows: list[dict], listings: dict[int, dict]) -> pd.DataFrame:
     return df[~outlier].astype({"listing_id": int, "price": int, "shipping_fee": int, "in_stock": bool})
 
 
+SLOT_HOURS = 6  # 하루 4회: 00·06·12·18시에 시작하는 구간
+
+
+def slot_start(at: datetime) -> datetime:
+    return at.replace(hour=at.hour - at.hour % SLOT_HOURS, minute=0, second=0, microsecond=0)
+
+
 def scrape(session: PoliteSession, url: str, rule: dict) -> dict:
     """규칙(malls.json)대로 한 판매처의 가격을 읽는다. render=playwright면 브라우저로 화면을 그린 뒤 읽는다"""
     soup = session.fetch(url, render=rule.get("render") == "playwright", wait_for=rule.get("wait_for") or rule.get("price"))
@@ -66,6 +73,10 @@ def collect(cfg: Config, api: ApiClient) -> dict:
     if not cfg.collect_enabled:
         return {"status": "SKIPPED", "reason": "COLLECT_ENABLED=false"}
     started = now(cfg)
+    if cfg.collect_if_due and hasattr(api, "status"):
+        last = api.status().get("last_collect_at")
+        if last and datetime.fromisoformat(last) >= slot_start(started):
+            return {"status": "SKIPPED", "reason": f"이번 구간({slot_start(started):%H}시~) 수집 완료: {last}"}
     catalog = cfg.catalog()
     if catalog and hasattr(api, "sync_catalog"):
         log.info("카탈로그 동기화: %s", api.sync_catalog(catalog))  # 수집 대상 상품·판매처를 DB에 맞춤(여러 번 호출해도 같음)

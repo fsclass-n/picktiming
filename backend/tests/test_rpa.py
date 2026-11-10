@@ -84,3 +84,14 @@ def test_ensure_listings_is_idempotent(client):
     assert first["created"] >= 12 and again["created"] == 0 and first["mall_id"] == again["mall_id"]
     urls = [i["url"] for i in client.get(f"{API}/listings", headers=RPA).json()["items"] if i["mall"] == "네이버쇼핑"]
     assert any("query=" in u and "%20" in u for u in urls)
+
+
+def test_collect_status_reports_last_successful_collection(client):
+    """수집기가 '이번 6시간 구간에 이미 수집했는지' 판단할 수 있도록 마지막 수집 시각을 알려 준다"""
+    assert client.get(f"{API}/status").status_code == 401
+    body = {"job_name": "collect_prices", "status": "SUCCESS", "collected": 26, "failed": 0,
+            "started_at": "2026-12-01T06:07:00", "ended_at": "2026-12-01T06:08:00"}
+    client.post(f"{API}/logs", headers=RPA, json=body)
+    client.post(f"{API}/logs", headers=RPA, json={**body, "status": "FAIL", "started_at": "2026-12-01T13:07:00"})
+    st = client.get(f"{API}/status", headers=RPA).json()
+    assert st["last_collect_at"] >= "2026-12-01T06:07:00" and not st["last_collect_at"].startswith("2026-12-01T13")

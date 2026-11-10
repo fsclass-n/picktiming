@@ -218,3 +218,11 @@ def sync_catalog(body: CatalogIn, db: Session = Depends(get_db)):
             retired += 1
     db.commit()
     return {"malls": len(malls), **stats, "malls_retired": retired}
+
+
+@router.get("/status")
+def collect_status(db: Session = Depends(get_db)):
+    """마지막으로 성공(또는 일부 성공)한 가격 수집 시각. 수집기가 이번 6시간 구간에 이미 수집했는지 판단할 때 쓴다"""
+    last = db.execute(select(func.max(RpaJobLog.started_at)).where(
+        RpaJobLog.job_name == "collect_prices", RpaJobLog.status.in_(("SUCCESS", "PARTIAL")))).scalar_one_or_none()
+    return {"last_collect_at": last.isoformat() if last else None}

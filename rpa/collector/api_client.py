@@ -24,6 +24,10 @@ class ApiClient:
         """실제 수집 상품·판매처(rpa/catalog.json)를 DB에 맞춘다. 시연용 쇼핑몰은 retire_mall_hosts로 비활성화"""
         return self._req("PUT", "/catalog", json=catalog).json()
 
+    def status(self) -> dict:
+        """마지막 가격 수집 시각(KST naive ISO)"""
+        return self._req("GET", "/status").json()
+
     def listings(self) -> list[dict]:
         return self._req("GET", "/listings").json()["items"]
 

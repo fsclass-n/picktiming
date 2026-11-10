@@ -24,6 +24,8 @@ class Config:
     simulate: bool = field(default_factory=lambda: _flag("SIMULATE_MALLS", "true"))
     # 외부 사이트 가격 수집 여부. 실제 수집은 GitHub Actions 한 곳만 하고 EC2 rpa 컨테이너는 false(docker-compose.yml)
     collect_enabled: bool = field(default_factory=lambda: _flag("COLLECT_ENABLED", "true"))
+    # 예약 실행용: 이번 KST 6시간 구간(0·6·12·18시 시작)에 이미 수집했으면 건너뛴다(GitHub 예약 실행이 불규칙해서)
+    collect_if_due: bool = field(default_factory=lambda: _flag("COLLECT_IF_DUE", "false"))
     mall_config_path: pathlib.Path = field(default_factory=lambda: pathlib.Path(os.getenv("MALL_CONFIG", ROOT / "malls.json")))
     # 실제 수집 상품 목록(다나와 pcode·에누리 modelno). 수집 전에 API(PUT /rpa/catalog)로 DB와 맞춘다
     catalog_path: pathlib.Path = field(default_factory=lambda: pathlib.Path(os.getenv("CATALOG", ROOT / "catalog.json")))

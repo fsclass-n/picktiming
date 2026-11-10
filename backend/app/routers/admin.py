@@ -153,6 +153,7 @@ def trigger_collect(db: Session = Depends(get_db), user: User = Depends(admin_us
                             "X-GitHub-Api-Version": "2022-11-28"})
     if r.status_code != 204:
         raise ApiError(502, "COLLECT_DISPATCH_FAILED", f"GitHub Actions 실행 요청에 실패했습니다(HTTP {r.status_code}). 토큰 권한을 확인해 주세요.")
-    db.add(RpaJobLog(job_name="manual_collect", status="SUCCESS", message=f"수집 요청 접수({user.email}) · 결과는 이후 collect_prices 기록", started_at=now_local(), ended_at=now_local()))
+    db.add(RpaJobLog(job_name="manual_collect", status="SUCCESS", message=f"수집 요청 접수({user.email}) · 결과는 이후 collect_prices 기록",
+                     started_at=now_local(), ended_at=now_local()))
     db.commit()
     return {"status": "REQUESTED", "message": "수집을 요청했습니다. 1~2분 뒤 수집 현황에서 결과를 확인하세요."}

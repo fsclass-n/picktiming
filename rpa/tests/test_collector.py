@@ -233,3 +233,10 @@ def test_collect_if_due_skips_when_this_slot_is_done(monkeypatch):
 def test_limit_products_keeps_highest_priority_first():
     items = [{"listing_id": i, "product_id": pid} for i, pid in enumerate([9, 9, 4, 4, 7, 7])]
     assert [l["listing_id"] for l in jobs.limit_products(items, 2)] == [0, 1, 2, 3]
+
+
+def test_discover_ranked_codes_keeps_page_order():
+    from collector.discover import ranked_codes
+
+    html = "a prod.danawa.com/info/?pcode=111111 b prod.danawa.com/info/?pcode=222222 prod.danawa.com/info/?pcode=111111"
+    assert ranked_codes(html, 5) == ["111111", "222222"]

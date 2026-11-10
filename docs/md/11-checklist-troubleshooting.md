@@ -17,7 +17,7 @@ PPT는 170초 대본+10초 전환 여유이며 실제 리허설 시간을 측정
 
 ### Render — 프런트엔드·백엔드 분리 (07)
 - [ ] Static Site `timepick`: Root Directory `frontend`, Build `npm install && npm run build`, Publish `dist`, Rewrite `/*` → `/index.html`
-- [ ] Static Site Environment `VITE_API_URL=https://timepick-api.onrender.com`, `NODE_VERSION=22`, 실제 발급 주소 확인
+- [ ] Static Site Environment `VITE_API_URL=https://timepick-ai.onrender.com`, `NODE_VERSION=22`, 실제 발급 주소 확인
 - [ ] Web Service `picktiming`: Docker, Singapore, Free, Health Check `/health`, Dockerfile Path **`./backend/Dockerfile`**, Build Context `.`
 - [ ] Web Service Environment → **Add from .env** + Render 전용 `FRONTEND_URL`(Static Site 실제 주소), `ALLOWED_ORIGINS`에 Static Site 주소 (`FRONTEND_DIR`은 넣지 않음)
 - [ ] 두 서비스 Auto-Deploy **After CI Checks Pass**, Build Filter: Static Site `frontend/**` / Web Service `backend/**`, `requirements.txt`, `render.yaml`, `.dockerignore`

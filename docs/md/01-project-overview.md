@@ -72,7 +72,7 @@ picktiming/
 
 ```
 [KST 00·06·12·18시] 수집기 — GitHub Actions 한 곳에서만 실행 (EC2 rpa는 COLLECT_ENABLED=false)
-   GitHub Actions(07분) ──▶ https://timepick-api.onrender.com (Render API)
+   GitHub Actions(07분) ──▶ https://timepick-ai.onrender.com (Render API)
    │ 0) PUT  /api/v1/rpa/catalog         rpa/catalog.json의 실제 제품 13종·다나와·에누리 판매처를 DB와 맞춤(시연 쇼핑몰 비활성)
    │ 1) GET  /api/v1/rpa/listings        수집 대상(판매 페이지) 목록
    │ 2) 다나와·에누리 상품 페이지 수집 (robots.txt 확인, 같은 사이트 3초 간격, JSON-LD 최저가)
@@ -82,7 +82,7 @@ picktiming/
 TiDB (운영 DB) ◀── Render API, EC2 API 둘 다 같은 DB 사용
    ▲
    │ 사용자 요청 (JWT 로그인 후) — 각 서버의 프런트엔드가 같은 도메인의 API를 호출
-Render(timepick-api.onrender.com) / EC2(picktiming.duckdns.org): 검색 / 상세·가격 비교 / 적기 판정 / AI 조언·상담 / 관심 상품 / 알림
+Render(timepick-ai.onrender.com) / EC2(picktiming.duckdns.org): 검색 / 상세·가격 비교 / 적기 판정 / AI 조언·상담 / 관심 상품 / 알림
 
 Netlify(picktiming.netlify.app): 데모 모드 — 브라우저 목업 데이터만 사용, 서버·DB와 연결 없음
 ```
@@ -98,7 +98,7 @@ Netlify(picktiming.netlify.app): 데모 모드 — 브라우저 목업 데이터
 
 | 항목 | 로컬 PC | Netlify | Render | EC2 |
 |---|---|---|---|---|
-| 주소 | http://localhost:8000 | picktiming.netlify.app | timepick-api.onrender.com | picktiming.duckdns.org |
+| 주소 | http://localhost:8000 | picktiming.netlify.app | timepick-ai.onrender.com | picktiming.duckdns.org |
 | DB | **TiDB** | 없음 | **TiDB** | **TiDB** (세 곳 같은 DB) |
 | 프런트엔드 제공 | FastAPI(StaticFiles, 저장소 `frontend/` 자동) | Netlify CDN | FastAPI(StaticFiles) | nginx |
 | API 주소(프런트) | 같은 도메인(`/`) | 없음(데모 모드) | 같은 도메인(`/`) | 같은 도메인(`/`) |

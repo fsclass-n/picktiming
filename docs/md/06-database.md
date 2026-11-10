@@ -109,7 +109,7 @@ RENAME TABLE buytiming.rpa_job_logs TO picktiming.rpa_job_logs;
 
 ## 8. DB 이름 변경 기록 (picktiming → timepick, 2026-11-09)
 
-서비스 주소를 `timepick`(Static Site)·`timepick-api`(Web Service)로 바꾸면서 DB 이름도 같은 방식(7절 SQL의 `buytiming`→`picktiming`, `picktiming`→`timepick`)으로 옮겼다.
+서비스 주소를 `timepick`(Static Site)·`timepick-ai`(Web Service)로 바꾸면서 DB 이름도 같은 방식(7절 SQL의 `buytiming`→`picktiming`, `picktiming`→`timepick`)으로 옮겼다.
 
 - 확인: `timepick`에 테이블 12개, `users` 3·`products` 25·`price_history` 5,417건(변경 전과 동일), `picktiming`은 없음(접속 시 1049).
-- `DATABASE_URL` 경로를 `/timepick`으로: 로컬 `.env`, Render `timepick-api`, EC2 `.env`. 예전 Render 서비스(`picktiming`)는 경로가 `/picktiming`이라 더 이상 시작하지 않으므로 Suspend한다.
+- `DATABASE_URL` 경로를 `/timepick`으로: 로컬 `.env`, Render `timepick-ai`, EC2 `.env`. 예전 Render 서비스(`picktiming`)는 경로가 `/picktiming`이라 더 이상 시작하지 않으므로 Suspend한다.

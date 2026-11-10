@@ -34,7 +34,7 @@ def test_settings_reject_invalid_frontend_url(bad):
 
 
 def test_api_only_redirects_screens_to_frontend(api_only):
-    """기존 주소(https://timepick-api.onrender.com)로 들어온 화면 요청은 Static Site로 보낸다"""
+    """기존 주소(https://timepick-ai.onrender.com)로 들어온 화면 요청은 Static Site로 보낸다"""
     root = api_only.get("/", follow_redirects=False)
     assert root.status_code == 302 and root.headers["location"] == f"{WEB}/"
     deep = api_only.get("/product/3?tab=chart", follow_redirects=False)

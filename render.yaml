@@ -1,6 +1,6 @@
 # Render Blueprint: 프런트엔드(Static Site)와 백엔드(Web Service) 분리 배포. DB는 TiDB Cloud(MySQL 호환)를 DATABASE_URL로 연결한다.
 #
-#   timepick-api    (Web Service, Docker)  https://timepick-api.onrender.com  FastAPI API·AI·수집 수신. 화면 경로는 FRONTEND_URL로 리다이렉트
+#   timepick-ai    (Web Service, Docker)  https://timepick-ai.onrender.com  FastAPI API·AI·수집 수신. 화면 경로는 FRONTEND_URL로 리다이렉트
 #   timepick        (Static Site)          https://timepick.onrender.com      React 빌드 결과(dist). VITE_API_URL로 위 API를 호출
 #
 # 운영 DB 이름은 timepick(2026-11-09 picktiming에서 변경). DATABASE_URL 경로가 다르면 Unknown database(1049)로 기동 실패.
@@ -12,7 +12,7 @@
 services:
   # ---------------------------------------------------------------- 백엔드: API 전용(backend/Dockerfile)
   - type: web
-    name: timepick-api
+    name: timepick-ai
     runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: .
@@ -46,7 +46,7 @@ services:
       - key: FRONTEND_URL          # Static Site 주소: CORS 자동 허용, 소셜 로그인 복귀, 화면 경로 리다이렉트
         value: https://timepick.onrender.com
       - key: ALLOWED_ORIGINS       # .env와 같은 값(FRONTEND_URL은 자동 추가되므로 빠져 있어도 동작)
-        value: https://timepick.onrender.com,https://timepick-api.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173
+        value: https://timepick.onrender.com,https://timepick-ai.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173
       - key: ADMIN_EMAILS
         sync: false
       - key: DEMO_LOGIN_ENABLED    # 로그인 화면의 테스트 계정 버튼
@@ -78,7 +78,7 @@ services:
         - frontend/**
     envVars:
       - key: VITE_API_URL            # 빌드 시 코드에 들어감. 바꾸면 다시 배포해야 반영된다
-        value: https://timepick-api.onrender.com
+        value: https://timepick-ai.onrender.com
       - key: NODE_VERSION
         value: "22"
     routes:

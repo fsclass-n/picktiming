@@ -30,7 +30,7 @@ Render 배포는 GitHub가 요청하지 않고, Render의 Auto-Deploy(**After CI
 
 | Name | 값 | 비고 |
 |---|---|---|
-| `RENDER_URL` | `https://timepick-api.onrender.com` | Render 가격 수집 대상 (끝에 `/` 없이) |
+| `RENDER_URL` | `https://timepick-ai.onrender.com` | Render 가격 수집 대상 (끝에 `/` 없이) |
 | `EC2_APP_DIR` | `~/picktiming` | 기본값과 같으면 생략 가능 |
 | `EC2_MODE` | `full` | 기본값과 같으면 생략 가능 (`rpa-only`로 두지 않음) |
 | `KCA_API_URL` | `.env`의 같은 이름 값 (선택) | Render 참가격 수집 |

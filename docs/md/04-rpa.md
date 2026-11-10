@@ -5,7 +5,7 @@
 
 | 실행 위치 | 하는 일 | 보내는 곳 |
 |---|---|---|
-| **GitHub Actions** ([`collect-render.yml`](../../.github/workflows/collect-render.yml)) | 가격 수집 KST 00·06·12·18시(매시 07분 예약 중 해당 시각만), 03시 재학습, 06시 참가격, 월 07시 리포트 | `https://timepick-api.onrender.com` (Render API, Secret `RENDER_RPA_API_KEY`) |
+| **GitHub Actions** ([`collect-render.yml`](../../.github/workflows/collect-render.yml)) | 가격 수집 KST 00·06·12·18시(매시 07분 예약 중 해당 시각만), 03시 재학습, 06시 참가격, 월 07시 리포트 | `https://timepick-ai.onrender.com` (Render API, Secret `RENDER_RPA_API_KEY`) |
 | EC2 `rpa` 컨테이너 ([`scheduler.py`](../../rpa/collector/scheduler.py)) | 재학습·참가격·리포트만. **외부 사이트 수집은 하지 않음**(`COLLECT_ENABLED=false`, compose 기본값) | `http://api:8000` |
 
 - 수집 위치를 한 곳으로 정해 **같은 사이트에 이중 접속하지 않습니다**. EC2에서 직접 수집하려면 EC2 `.env`에 `COLLECT_ENABLED=true`를 넣고 Actions 수집을 끕니다.

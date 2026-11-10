@@ -88,11 +88,11 @@ jobs:
         run: "test -f dist/index.html && grep -q API_BASE_URL dist/js/config.js"
       - name: "Render Static Site 빌드 확인 (VITE_API_URL 주입·정규화, 잘못된 주소 거부)"
         run: |
-          VITE_API_URL="https://timepick-api.onrender.com/" npm run build
-          grep -rq "https://timepick-api.onrender.com" dist/assets
-          if grep -rq "https://timepick-api.onrender.com/[\`\"']" dist/assets; then echo "끝의 / 가 정리되지 않았습니다"; exit 1; fi
+          VITE_API_URL="https://timepick-ai.onrender.com/" npm run build
+          grep -rq "https://timepick-ai.onrender.com" dist/assets
+          if grep -rq "https://timepick-ai.onrender.com/[\`\"']" dist/assets; then echo "끝의 / 가 정리되지 않았습니다"; exit 1; fi
           grep -q 'API_BASE_URL: ""' dist/js/config.js
-          if VITE_API_URL="timepick-api.onrender.com" npm run build; then echo "잘못된 VITE_API_URL이 통과했습니다"; exit 1; fi
+          if VITE_API_URL="timepick-ai.onrender.com" npm run build; then echo "잘못된 VITE_API_URL이 통과했습니다"; exit 1; fi
 
   docker:
     name: Docker build

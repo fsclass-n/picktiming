@@ -5,14 +5,14 @@ Render에서 화면과 API를 **서로 다른 서비스**로 배포합니다. �
 | 서비스 | 종류 | 주소 | 담당 |
 |---|---|---|---|
 | `timepick` | **Static Site** (무료) | https://timepick.onrender.com | React + Vite 빌드 결과(`frontend/dist`) |
-| `timepick-api` | **Web Service** (Docker, 무료) | https://timepick-api.onrender.com | FastAPI API, 구매 적기 판정·Gemini 설명, RPA 수집 수신 |
+| `timepick-ai` | **Web Service** (Docker, 무료) | https://timepick-ai.onrender.com | FastAPI API, 구매 적기 판정·Gemini 설명, RPA 수집 수신 |
 
 ```
 브라우저 ──▶ timepick (CDN 정적 파일)
-   │           빌드 시 VITE_API_URL=https://timepick-api.onrender.com 주입
-   └──────▶ timepick-api /api/v1/*  (CORS: FRONTEND_URL 출처 허용, Authorization 헤더 토큰)
+   │           빌드 시 VITE_API_URL=https://timepick-ai.onrender.com 주입
+   └──────▶ timepick-ai /api/v1/*  (CORS: FRONTEND_URL 출처 허용, Authorization 헤더 토큰)
                  └──▶ TiDB Cloud — 데이터베이스 이름 timepick (2026-11-09 picktiming에서 변경)
-GitHub Actions collect-render ──▶ timepick-api /api/v1/rpa/* (X-RPA-KEY, Variable RENDER_URL)
+GitHub Actions collect-render ──▶ timepick-ai /api/v1/rpa/* (X-RPA-KEY, Variable RENDER_URL)
 ```
 
 - `DATABASE_URL`의 경로는 실제 DB 이름 **`/timepick`** 이어야 합니다. 다르면 `Unknown database`(1049)로 서버가 시작하지 않습니다(0절).
@@ -26,12 +26,12 @@ Render의 `onrender.com` 주소는 **서비스를 만들 때의 이름**으로 �
 
 | 순서 | 할 일 | 확인 |
 |---|---|---|
-| 1 | TiDB DB 이름 변경(06 문서 8절) 후 `timepick-api`·로컬 `.env`·EC2 `.env`의 **`DATABASE_URL` 경로를 `/timepick`** 으로 → Save, rebuild, and deploy | `https://timepick-api.onrender.com/health` → `"status":"ok"` |
-| 2 | `timepick-api`에 `FRONTEND_URL=https://timepick.onrender.com`, `ALLOWED_ORIGINS`(아래 3-1) | 로그에 `Unknown database` 없음 |
-| 3 | `timepick` Static Site: `VITE_API_URL=https://timepick-api.onrender.com` → **Manual Deploy**(빌드 시 들어가는 값), Rewrite `/*` → `/index.html` | 화면 로그인·검색, `/product/1` 새로고침 시 404 아님 |
-| 4 | GitHub → Settings → Variables → **`RENDER_URL` = `https://timepick-api.onrender.com`** | Actions → Collect (Render) 수동 실행 성공 |
-| 5 | 소셜 로그인 콘솔(Google·Naver·Kakao)에 콜백 추가: `https://timepick-api.onrender.com/api/v1/auth/oauth/<google\|naver\|kakao>/callback` | 소셜 로그인 후 timepick 화면으로 복귀 |
-| 6 | UptimeRobot 등 깨우기 주소를 `https://timepick-api.onrender.com/health`로 | — |
+| 1 | TiDB DB 이름 변경(06 문서 8절) 후 `timepick-ai`·로컬 `.env`·EC2 `.env`의 **`DATABASE_URL` 경로를 `/timepick`** 으로 → Save, rebuild, and deploy | `https://timepick-ai.onrender.com/health` → `"status":"ok"` |
+| 2 | `timepick-ai`에 `FRONTEND_URL=https://timepick.onrender.com`, `ALLOWED_ORIGINS`(아래 3-1) | 로그에 `Unknown database` 없음 |
+| 3 | `timepick` Static Site: `VITE_API_URL=https://timepick-ai.onrender.com` → **Manual Deploy**(빌드 시 들어가는 값), Rewrite `/*` → `/index.html` | 화면 로그인·검색, `/product/1` 새로고침 시 404 아님 |
+| 4 | GitHub → Settings → Variables → **`RENDER_URL` = `https://timepick-ai.onrender.com`** | Actions → Collect (Render) 수동 실행 성공 |
+| 5 | 소셜 로그인 콘솔(Google·Naver·Kakao)에 콜백 추가: `https://timepick-ai.onrender.com/api/v1/auth/oauth/<google\|naver\|kakao>/callback` | 소셜 로그인 후 timepick 화면으로 복귀 |
+| 6 | UptimeRobot 등 깨우기 주소를 `https://timepick-ai.onrender.com/health`로 | — |
 | 7 | 예전 `picktiming`(Web Service)은 `FRONTEND_URL=https://timepick.onrender.com`으로 바꿔 예전 링크를 새 화면으로 보내거나, 안정 후 **Suspend**. `picktiming-web`은 Suspend | 무료 인스턴스 시간(월 750시간)은 Web Service끼리 나눠 씀 |
 
 ### `Unknown database 'timepick'` (1049)
@@ -71,7 +71,7 @@ Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/picktim
 
 | Key | Value |
 |---|---|
-| `VITE_API_URL` | `https://timepick-api.onrender.com` |
+| `VITE_API_URL` | `https://timepick-ai.onrender.com` |
 | `NODE_VERSION` | `22` |
 
 위 값으로 **Create Static Site**를 누르면 첫 배포가 시작됩니다. 생성 화면에는 Rewrite·Headers 항목이 **없습니다**.
@@ -100,7 +100,7 @@ Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/picktim
 > 이름 `timepick`이 이미 쓰이고 있으면 Render가 `timepick-xxxx.onrender.com` 같은 주소를 줍니다.
 > **생성 후 실제 주소를 확인**하고, 3단계의 `FRONTEND_URL`·`ALLOWED_ORIGINS`에 그 주소를 넣습니다.
 
-## 3. 백엔드 — Web Service(`timepick-api`) 설정
+## 3. 백엔드 — Web Service(`timepick-ai`) 설정
 
 ### 3-1. 환경 변수
 
@@ -113,7 +113,7 @@ Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/picktim
 | Key | Value | 역할 |
 |---|---|---|
 | `FRONTEND_URL` | `https://timepick.onrender.com` | CORS 자동 허용, 소셜 로그인 복귀, 화면 경로 리다이렉트 |
-| `ALLOWED_ORIGINS` | `https://timepick.onrender.com,https://timepick-api.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173` | `.env`와 같은 값(`FRONTEND_URL`은 빠져 있어도 자동 추가) |
+| `ALLOWED_ORIGINS` | `https://timepick.onrender.com,https://timepick-ai.onrender.com,http://picktiming.duckdns.org,http://localhost:8000,http://localhost:5173` | `.env`와 같은 값(`FRONTEND_URL`은 빠져 있어도 자동 추가) |
 
 `FRONTEND_URL`은 Render 전용 값이라 **`.env`에 넣지 않습니다**(EC2에 들어가면 소셜 로그인이 Render 화면으로 돌아감).
 나머지 비밀값(`DATABASE_URL`, `JWT_SECRET`, `RPA_API_KEY`, `GEMINI_API_KEY` …)은 기존처럼 **Add from .env**로 관리합니다.
@@ -121,13 +121,13 @@ Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/picktim
 ### 3-2. Static Site 동작 확인
 
 https://timepick.onrender.com 에서 로그인(테스트 계정) → 검색 → 상품 상세가 열리는지 봅니다.
-브라우저 개발자 도구 Network에서 API 요청이 `https://timepick-api.onrender.com/api/v1/...`로 가고 CORS 오류가 없어야 합니다.
+브라우저 개발자 도구 Network에서 API 요청이 `https://timepick-ai.onrender.com/api/v1/...`로 가고 CORS 오류가 없어야 합니다.
 
 ### 3-3. 서비스 설정 (Settings → Build & Deploy)
 
 | 항목 | 값 |
 |---|---|
-| Name | `timepick-api` (주소 `https://timepick-api.onrender.com`은 만들 때 이름으로 정해짐) |
+| Name | `timepick-ai` (주소 `https://timepick-ai.onrender.com`은 만들 때 이름으로 정해짐) |
 | Runtime | Docker, Region Singapore, Instance Free |
 | Dockerfile Path | **`./backend/Dockerfile`** (API 전용. 루트 `./Dockerfile`은 화면까지 포함한 예전 통합 이미지) |
 | Docker Build Context Directory | `.` (`requirements.txt`가 저장소 루트에 있음) |
@@ -145,15 +145,15 @@ https://timepick.onrender.com 에서 로그인(테스트 계정) → 검색 → 
 |---|---|
 | https://timepick.onrender.com/ | 홈 화면, **데모 배너 없음**(실제 API 모드) |
 | https://timepick.onrender.com/product/1 | 새로고침해도 404가 아닌 상품 화면(Rewrite 규칙) |
-| https://timepick-api.onrender.com/health | `{"status":"ok","env":"production",...}` |
-| https://timepick-api.onrender.com/ | **302 →** https://timepick.onrender.com/ |
-| https://timepick-api.onrender.com/docs | API 문서(이동 없음) |
+| https://timepick-ai.onrender.com/health | `{"status":"ok","env":"production",...}` |
+| https://timepick-ai.onrender.com/ | **302 →** https://timepick.onrender.com/ |
+| https://timepick-ai.onrender.com/docs | API 문서(이동 없음) |
 | 소셜 로그인 | 제공자 로그인 후 **timepick** 주소의 `/oauth/callback`으로 돌아와 로그인 완료 |
 
 명령으로 CORS를 확인하려면:
 
 ```bash
-curl -si -X OPTIONS https://timepick-api.onrender.com/api/v1/auth/login \
+curl -si -X OPTIONS https://timepick-ai.onrender.com/api/v1/auth/login \
   -H "Origin: https://timepick.onrender.com" \
   -H "Access-Control-Request-Method: POST" \
   -H "Access-Control-Request-Headers: authorization,content-type" | grep -i access-control-allow-origin
@@ -167,7 +167,7 @@ curl -si -X OPTIONS https://timepick-api.onrender.com/api/v1/auth/login \
 
 ## 6. 자동 배포 — After CI Checks Pass
 
-| 바뀐 경로 | timepick | timepick-api |
+| 바뀐 경로 | timepick | timepick-ai |
 |---|---|---|
 | `frontend/**` | 배포 | - |
 | `backend/**`, `requirements.txt`, `.dockerignore` | - | 배포 |
@@ -182,7 +182,7 @@ curl -si -X OPTIONS https://timepick-api.onrender.com/api/v1/auth/login \
 
 | 특성 | 영향 | 대응 |
 |---|---|---|
-| Web Service는 15분간 요청이 없으면 잠듦, 깨어나는 데 약 1분 | 화면(Static Site)은 바로 뜨지만 첫 API 응답이 느림 | UptimeRobot 등으로 5분마다 `https://timepick-api.onrender.com/health` 호출 |
+| Web Service는 15분간 요청이 없으면 잠듦, 깨어나는 데 약 1분 | 화면(Static Site)은 바로 뜨지만 첫 API 응답이 느림 | UptimeRobot 등으로 5분마다 `https://timepick-ai.onrender.com/health` 호출 |
 | Static Site는 잠들지 않음(CDN) | 화면 로딩은 콜드 스타트 영향 없음 | — |
 | 셸·SSH 접속 불가 | Render에서 `python -m app.seed` 실행 불가 | 시드는 로컬 PC에서 TiDB로(06 문서) |
 | 상주 작업(Background Worker·Cron) 불가 | 서버 안에서 RPA 스케줄러를 돌릴 수 없음 | GitHub Actions `collect-render.yml`이 매시 수집(10 문서). 깨어날 때까지 `/health`를 기다린 뒤 수집 |

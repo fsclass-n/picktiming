@@ -37,6 +37,7 @@
    "name": "갤럭시 버즈3 프로 (정품)",
    "brand": "삼성전자",
    "category": "디지털",
+   "image_url": "https://images.samsung.com/kdp/goods/2024/07/04/02484655-39be-4cae-b3dc-4033a10bb643.png",
    "listings": [
     {
      "mall": "다나와",
@@ -69,6 +70,7 @@
    "name": "MX Master 3S 무선 마우스 (정품, 블랙)",
    "brand": "로지텍",
    "category": "디지털",
+   "image_url": "https://resource.logitech.com/c_fill,q_auto,f_auto,dpr_1.0/d_transparent.gif/content/dam/logitech/en/products/mice/mx-master-3s/migration-assets-for-delorean-2025/gallery/mx-master-3s-top-view-graphite.png",
    "listings": [
     {
      "mall": "다나와",
@@ -85,6 +87,7 @@
    "name": "6인용 전기압력밥솥 CRP-P0660FD",
    "brand": "쿠쿠전자",
    "category": "가전",
+   "image_url": "https://www.cuckoo.co.kr/upload_cuckoo/_bo_mall/product/ff4aeca5-0ab4-420a-bef6-33ea993d1913.png",
    "listings": [
     {
      "mall": "다나와",
@@ -101,6 +104,7 @@
    "name": "5000시리즈 XXL 에어프라이어 HD9285/93",
    "brand": "필립스",
    "category": "가전",
+   "image_url": "https://images.philips.com/is/image/philipsconsumer/vrs_62e76a38_eca3_46ae_91eb36eb20938391?$png$&wid=1200&hei=630",
    "listings": [
     {
      "mall": "다나와",
@@ -117,6 +121,7 @@
    "name": "퓨리케어 360˚ Hit 공기청정기 AS183HWWA",
    "brand": "LG전자",
    "category": "가전",
+   "image_url": "https://www.lge.co.kr/kr/images/air-purifier/md09862826/gallery/medium01.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -315,6 +320,7 @@
    "brand": "LG전자",
    "category": "디지털",
    "priority": 20,
+   "image_url": "https://www.lge.co.kr/kr/images/notebook/md10770858/gallery/medium01.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -332,6 +338,7 @@
    "brand": "크로스오버",
    "category": "디지털",
    "priority": 100,
+   "image_url": "https://www.crosslcd.co.kr/data/item/1736754498/27QD166CM_01.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -349,6 +356,7 @@
    "brand": "크로스오버",
    "category": "디지털",
    "priority": 90,
+   "image_url": "https://www.crosslcd.co.kr/data/item/1788248394/27LGQ188MC_01.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -366,6 +374,7 @@
    "brand": "알파스캔",
    "category": "디지털",
    "priority": 80,
+   "image_url": "https://alphascan.co.kr/wp-content/uploads/2026/09/Q27G40HE_01-1.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -383,6 +392,7 @@
    "brand": "알파스캔",
    "category": "디지털",
    "priority": 70,
+   "image_url": "https://alphascan.co.kr/wp-content/uploads/2025/09/01.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -400,6 +410,7 @@
    "brand": "알파스캔",
    "category": "디지털",
    "priority": 60,
+   "image_url": "https://alphascan.co.kr/wp-content/uploads/2026/06/27B36XE_01-1.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -417,6 +428,7 @@
    "brand": "알파스캔",
    "category": "디지털",
    "priority": 50,
+   "image_url": "https://alphascan.co.kr/wp-content/uploads/2026/05/24B36XE_01-1.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -434,6 +446,7 @@
    "brand": "LG전자",
    "category": "디지털",
    "priority": 40,
+   "image_url": "https://www.lge.co.kr/kr/images/monitors/md10852826/gallery/medium01.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -451,6 +464,7 @@
    "brand": "크로스오버",
    "category": "디지털",
    "priority": 30,
+   "image_url": "https://www.crosslcd.co.kr/data/item/1736213747/KakaoTalk_20250109_145427176.png",
    "listings": [
     {
      "mall": "다나와",
@@ -502,6 +516,7 @@
    "brand": "LG전자",
    "category": "디지털",
    "priority": 100,
+   "image_url": "https://www.lge.co.kr/kr/images/tvs/md10575830/gallery/medium01.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -536,6 +551,7 @@
    "brand": "ANKER",
    "category": "디지털",
    "priority": 80,
+   "image_url": "https://cdn.shopify.com/s/files/1/0516/3761/6830/files/D1202Z11_01.jpg?v=1761790592",
    "listings": [
     {
      "mall": "다나와",
@@ -570,6 +586,7 @@
    "brand": "삼성전자",
    "category": "디지털",
    "priority": 60,
+   "image_url": "https://images.samsung.com/kdp/goods/2026/07/07/98c23c0c-f381-417d-8f21-29d80b9df901.png",
    "listings": [
     {
      "mall": "다나와",
@@ -587,6 +604,7 @@
    "brand": "삼성전자",
    "category": "디지털",
    "priority": 50,
+   "image_url": "https://images.samsung.com/kdp/goods/2025/03/06/59183f55-a81b-465e-a305-f7ea323632d7.png",
    "listings": [
     {
      "mall": "다나와",
@@ -604,6 +622,7 @@
    "brand": "LG전자",
    "category": "가전",
    "priority": 100,
+   "image_url": "https://www.lge.co.kr/kr/images/stan-by-me/md10801828/gallery/medium01.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -621,6 +640,7 @@
    "brand": "삼성전자",
    "category": "가전",
    "priority": 90,
+   "image_url": "https://images.samsung.com/kdp/goods/2026/03/16/d97d2822-010b-44d9-81f6-10d3f1a74f3f.png",
    "listings": [
     {
      "mall": "다나와",
@@ -638,6 +658,7 @@
    "brand": "LG전자",
    "category": "가전",
    "priority": 80,
+   "image_url": "https://www.lge.co.kr/kr/images/tvs/md10799855/gallery/medium01.jpg",
    "listings": [
     {
      "mall": "다나와",
@@ -672,6 +693,7 @@
    "brand": "PALIT",
    "category": "디지털",
    "priority": 100,
+   "image_url": "https://www.palit.com/product/vga/picture/p05605/p05605_propng_80768342e6cf136d.png",
    "listings": [
     {
      "mall": "다나와",

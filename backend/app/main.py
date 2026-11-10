@@ -85,6 +85,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     for r in (auth.router, products.router, ai.router, user_data.router, rpa.router, admin.router):
         app.include_router(r, prefix="/api/v1")
 
+    # UptimeRobot 등 외부 감시 도구는 HEAD로 확인하는 경우가 많아 HEAD도 받는다. /healthz는 같은 응답의 별칭(문서에는 GET /health만 표시)
+    @app.api_route("/healthz", methods=["GET", "HEAD"], include_in_schema=False)
+    @app.head("/health", include_in_schema=False)
     @app.get("/health", tags=["운영"])
     def health():
         with engine.connect() as conn:

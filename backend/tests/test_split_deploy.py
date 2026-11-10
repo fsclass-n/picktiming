@@ -82,3 +82,11 @@ def test_oauth_returns_to_frontend_url(client, monkeypatch):
     assert done.headers["location"].startswith(f"{WEB}/oauth/callback#token=") and done.headers["location"].endswith("next=/alerts")
     failed = client.get("/api/v1/auth/oauth/naver/callback", params={"code": "c", "state": "forged"}, follow_redirects=False)
     assert failed.headers["location"].startswith(f"{WEB}/login?oauth_error=")
+
+
+def test_health_answers_head_and_healthz_for_uptime_monitors(api_only):
+    """UptimeRobot 무료 플랜은 HEAD로 확인한다. /health·/healthz 모두 GET·HEAD에 200(화면으로 리다이렉트하지 않음)"""
+    for path in ("/health", "/healthz"):
+        assert api_only.head(path, follow_redirects=False).status_code == 200, path
+        got = api_only.get(path, follow_redirects=False)
+        assert got.status_code == 200 and got.json()["status"] == "ok", path

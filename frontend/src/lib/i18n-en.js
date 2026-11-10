@@ -23,8 +23,8 @@ export default {
   '문제 제보': 'Report an issue', '데이터 기준': 'About the data',
   '다나와·에누리 상품 페이지에서 하루 4회(0·6·12·18시) 수집합니다. 판매처 최저가를 비교하며, 최종 결제 금액은 판매처에서 확인해 주세요.':
     'Prices are collected from Danawa and Enuri product pages four times a day (00, 06, 12, 18 KST). Confirm the final amount with the seller.',
-  '상품 이미지는 제조사 공식 이미지이며, 찾지 못한 상품은 다나와·에누리 상품 이미지를 출처와 함께 보여 줍니다. 구매 적기 예측은 참고 정보이며 미래 가격을 보장하지 않습니다.':
-    'Product images come from manufacturers; when none is found, the Danawa/Enuri product image is shown with its source. Buy-timing predictions are for reference only and do not guarantee future prices.',
+  '상품 이미지는 제조사 공식 이미지이며, 찾지 못한 상품은 다나와·에누리 상품 이미지를 출처와 함께 보여 줍니다(데모 모드는 Unsplash 참고 이미지). 구매 적기 예측은 참고 정보이며 미래 가격을 보장하지 않습니다.':
+    'Product images come from manufacturers; when none is found, the Danawa/Enuri product image is shown with its source (demo mode uses Unsplash reference images). Buy-timing predictions are for reference only and do not guarantee future prices.',
   'TimePick · Final-Project 3조': 'TimePick · Final Project Team 3', '박미금 · 김모란 · 이오리 · 홍기흥': 'Migeum Park · Moran Kim · Ori Lee · Giheung Hong',
   '맨 위로': 'Back to top', '아직 가격 이력이 없어요': 'No price history yet', '다음 수집 후 차트가 표시됩니다.': 'The chart appears after the next collection.',
   '차트 판매처': 'Chart seller', '최저 실구매가': 'Lowest total price', '최근 90일 최저가 추이': '90-day lowest price trend', '가격 변동 차트': 'Price change chart',
@@ -133,8 +133,8 @@ export default {
   '가격은 하루 4회(0·6·12·18시) 수집하며 수집 환경에 따라 지연되거나 누락될 수 있습니다. 적기 예측과 AI 답변은 참고 정보입니다. 구매 결과나 미래 가격을 보장하지 않습니다.':
     'Prices are collected four times a day (00, 06, 12, 18 KST) and may be delayed or missed. Timing predictions and AI answers are for reference and do not guarantee outcomes or future prices.',
   '이미지와 데모': 'Images & demo',
-  '상품 사진은 제조사 공식 이미지이며, 찾지 못한 상품은 다나와·에누리 상품 이미지를 쓰고 사진 아래에 출처를 표시합니다. 사진이 없으면 카테고리 아이콘이 나옵니다. 화면 상단에 체험 공간으로 표시되는 경우 가격과 계정은 데모 데이터입니다.':
-    'Product photos come from manufacturers; otherwise the Danawa/Enuri product image is used with its source shown below the photo. Without a photo, a category icon is shown. When the demo banner is shown, prices and accounts are sample data.',
+  '상품 사진은 제조사 공식 이미지이며, 찾지 못한 상품은 다나와·에누리 상품 이미지를 쓰고 사진 아래에 출처를 표시합니다. 사진이 없으면 카테고리 아이콘이 나옵니다. 화면 상단에 체험 공간으로 표시되는 경우 가격과 계정은 데모 데이터이고, 상품 사진은 카테고리를 설명하는 Unsplash 참고 이미지입니다.':
+    'Product photos come from manufacturers; otherwise the Danawa/Enuri product image is used with its source shown below the photo. Without a photo, a category icon is shown. When the demo banner is shown, prices and accounts are sample data and product photos are Unsplash images illustrating the category.',
   '문의': 'Contact', '프로젝트 GitHub Issues에서 오류를 제보할 수 있습니다. 비밀번호, 토큰, 이메일 등의 개인정보를 공개 이슈에 올리지 마세요.':
     'Report problems in the project\'s GitHub Issues. Do not post passwords, tokens, emails or other personal data publicly.',
   '계정과 이용 정보': 'Account & usage data', '운영 서비스는 이름, 이메일, 비밀번호 해시 및 계정 권한을 저장합니다. 관심 상품, 목표가, 가격 알림은 계정에 연결해 관리합니다.':
@@ -145,8 +145,8 @@ export default {
   '소셜 로그인': 'Social login', '선택한 제공자의 동의 화면을 거쳐 전달받은 이메일과 프로필 이름을 계정 연결에 사용합니다. 제공자의 비밀번호를 TimePick에 입력하지 않습니다.':
     'After the provider\'s consent screen, the email and profile name we receive are used to link your account. You never enter the provider\'s password in TimePick.',
   '외부 서비스': 'Third-party services',
-  '가격 데이터 기반 AI 조언에는 서버에서 Gemini를 사용할 수 있습니다. 상담창에 개인정보를 입력하지 마세요. 글꼴과 이미지를 불러올 때 Google Fonts, Spoqa, Unsplash(로그인 화면), 제조사·다나와·에누리 이미지 서버에 브라우저 요청이 전송됩니다.':
-    'AI advice may use Gemini on the server. Do not enter personal data in the chat. Loading fonts and images sends browser requests to Google Fonts, Spoqa, Unsplash (login page) and manufacturer/Danawa/Enuri image servers.',
+  '가격 데이터 기반 AI 조언에는 서버에서 Gemini를 사용할 수 있습니다. 상담창에 개인정보를 입력하지 마세요. 글꼴과 이미지를 불러올 때 Google Fonts, Spoqa, Unsplash(로그인 화면·데모 상품), 제조사·다나와·에누리 이미지 서버에 브라우저 요청이 전송됩니다.':
+    'AI advice may use Gemini on the server. Do not enter personal data in the chat. Loading fonts and images sends browser requests to Google Fonts, Spoqa, Unsplash (login page, demo products) and manufacturer/Danawa/Enuri image servers.',
   '문의와 데이터 요청': 'Contact & data requests',
   '현재 셀프서비스 계정 삭제 기능은 제공하지 않습니다. 계정과 데이터 관련 요청은 프로젝트 운영자에게 문의해 주세요. 공개 GitHub Issues에는 개인정보를 기재하지 마세요.':
     'Self-service account deletion is not available yet. Contact the project team for account or data requests. Do not include personal data in public GitHub Issues.',
@@ -194,7 +194,7 @@ export default {
     'Test accounts · Look around before signing up. The test admin is read-only; real admins log in with email and password above.',
   '제조사 이미지': 'Manufacturer image', '{c} 카테고리': '{c} category',
   '검색 결과 페이지': 'Result pages', '판매처 {n}곳': '{n} sellers', '최고 {x}': 'High {x}', '리뷰 {n}': '{n} reviews', '주요 사양': 'Key specs',
-  '이미지: 다나와·에누리': 'Image: Danawa/Enuri',
+  '이미지: 다나와·에누리': 'Image: Danawa/Enuri', '참고 이미지 · Unsplash': 'Reference image · Unsplash',
   '오프라인 최저가 (참가격)': 'Lowest in-store price (KCA survey)', '{d} 조사': 'surveyed {d}',
   // 테마·언어 전환
   '테마': 'Theme', '다크 모드로 전환': 'Switch to dark mode', '라이트 모드로 전환': 'Switch to light mode', '언어': 'Language', 'English로 보기': '한국어로 보기',

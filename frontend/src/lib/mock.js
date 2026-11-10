@@ -52,7 +52,16 @@ const sigmoid = (x) => 1 / (1 + Math.exp(-x));
 
 function allProducts() { return [...PRODUCTS, ...load(LS.custom, [])]; }
 function findProduct(id) { return allProducts().find((p) => p.id === Number(id)); }
-const publicProduct = ({ id, name, brand, model_no, category }) => ({ id, name, brand, model_no, category });
+// 데모 모드 상품 사진: 가상 상품이라 실제 사진이 없어 Unsplash 참고 이미지를 쓴다(화면에 "참고 이미지 · Unsplash"로 표시)
+const DEMO_PHOTOS = [[/이어폰/, 'photo-1606220945770-b5b6c2c55bf1'], [/헤드폰/, 'photo-1505740420928-5e560c06d30e'],
+  [/노트북/, 'photo-1496181133206-80ce9b88a853'], [/워치/, 'photo-1523275335684-37898b6baf30'], [/생수/, 'photo-1602143407151-7111542de6e8']];
+const CATEGORY_PHOTOS = { 디지털: 'photo-1505740420928-5e560c06d30e', 가전: 'photo-1556911220-bff31c812dba', 생필품: 'photo-1542838132-92c53300491e',
+  패션: 'photo-1542291026-7eec264c27ff', 유아: 'photo-1515488042361-ee00e0ddd4e4' };
+function demoPhoto({ name = '', category }) {
+  const id = (DEMO_PHOTOS.find(([re]) => re.test(name)) || [])[1] || CATEGORY_PHOTOS[category] || CATEGORY_PHOTOS.디지털;
+  return `https://images.unsplash.com/${id}?auto=format&fit=crop&w=700&q=80`;
+}
+const publicProduct = (p) => ({ id: p.id, name: p.name, brand: p.brand, model_no: p.model_no, category: p.category, image_url: demoPhoto(p) });
 
 // ------------------------------------------------------------------ 가격 이력 생성
 const seriesCache = new Map();

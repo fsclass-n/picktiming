@@ -68,6 +68,9 @@ class PlatformUI(unittest.TestCase):
             expect(p.get_by_role("img", name="가격 변동 차트")).to_be_visible()
         expect(p.get_by_role("button", name="120일", exact=True)).to_have_count(0)
         expect(p.get_by_role("list", name="주요 사양").get_by_role("listitem").first).to_have_text("커널형")
+        # 데모 모드 상품 사진은 Unsplash 참고 이미지이며 출처를 표시한다
+        expect(p.locator('img[src^="https://images.unsplash.com/"][alt="무선 이어폰 X2"]').first).to_be_visible()
+        expect(p.get_by_text("참고 이미지 · Unsplash").first).to_be_visible()
 
     def test_daily_goods_show_offline_kca_price(self):
         """생필품 상세에는 참가격(오프라인 판매점 조사 최저가)과 조사일이 함께 보인다. 디지털 상품에는 없다"""

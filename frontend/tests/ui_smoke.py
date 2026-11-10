@@ -67,6 +67,27 @@ class PlatformUI(unittest.TestCase):
             p.get_by_role("button", name=f"{days}일", exact=True).click()
             expect(p.get_by_role("img", name="가격 변동 차트")).to_be_visible()
         expect(p.get_by_role("button", name="120일", exact=True)).to_have_count(0)
+        expect(p.get_by_role("list", name="주요 사양").get_by_role("listitem").first).to_have_text("커널형")
+
+    def test_daily_goods_show_offline_kca_price(self):
+        """생필품 상세에는 참가격(오프라인 판매점 조사 최저가)과 조사일이 함께 보인다. 디지털 상품에는 없다"""
+        p = self.page
+        p.goto(BASE + "/product/8")
+        expect(p.get_by_text("오프라인 최저가 (참가격)")).to_be_visible()
+        expect(p.get_by_text(re.compile(r"대형마트 · \d{4}-\d{2}-\d{2} 조사"))).to_be_visible()
+        p.goto(BASE + "/product/1")
+        expect(p.get_by_role("heading", name="무선 이어폰 X2")).to_be_visible()
+        expect(p.get_by_text("오프라인 최저가 (참가격)")).to_have_count(0)
+
+    def test_search_pages_keep_all_products(self):
+        """상품 탐색은 서버(데모: mock) 페이지 단위로 받는다. 한 페이지보다 적으면 페이지 이동 버튼이 없다"""
+        p = self.page
+        p.goto(BASE + "/search")
+        expect(p.get_by_role("heading", name="무선 이어폰 X2", exact=True)).to_be_visible()
+        expect(p.get_by_role("navigation", name="검색 결과 페이지")).to_have_count(0)
+        p.get_by_label("지금 구매 추천만").check()
+        expect(p.get_by_text("검색 결과").first).to_be_visible()
+        self.assertEqual(self.errors, [])
 
     def test_watch_modal_and_keyboard(self):
         p = self.page

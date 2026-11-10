@@ -32,6 +32,8 @@ class Product(Base):
     priority: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
     # 제조사 공식 이미지 주소(직접 확인해 등록한 것만). 없으면 화면은 카테고리 아이콘 + 판매처 링크를 보여 준다
     image_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    # 사양 요약(다나와 상품 페이지 JSON-LD description, 수집 때 갱신). 예: "노트북 / 40.6cm(16인치) / …"
+    spec_summary: Mapped[str | None] = mapped_column(String(500), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now_local)
     listings: Mapped[list["ProductListing"]] = relationship(back_populates="product")
 
@@ -54,6 +56,11 @@ class ProductListing(Base):
     url: Mapped[str] = mapped_column(String(500))
     option_text: Mapped[str | None] = mapped_column(String(200), nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    # 가격 비교 사이트가 집계한 최신 값(수집 때 갱신, 없으면 NULL): 판매처 수 · 최고가 · 평점(5점) · 리뷰 수
+    offer_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    high_price: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    rating: Mapped[float | None] = mapped_column(Float, nullable=True)
+    review_count: Mapped[int | None] = mapped_column(Integer, nullable=True)
     product: Mapped[Product] = relationship(back_populates="listings")
     mall: Mapped[Mall] = relationship()
 

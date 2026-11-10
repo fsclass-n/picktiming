@@ -63,8 +63,17 @@ class ProductOut(ORM):
     image_url: str | None = None
 
 
+class OfflinePriceOut(BaseModel):
+    """한국소비자원 참가격: 오프라인 판매점(대형마트 등) 조사 가격 중 최저가(포장 수량 환산 후)"""
+    price: int
+    store_type: str | None = None
+    survey_date: date
+
+
 class ProductDetailOut(ProductOut):
     listings_count: int
+    spec_summary: str | None = None
+    offline_price: OfflinePriceOut | None = None
 
 
 class ProductSearchItem(ProductOut):
@@ -100,6 +109,12 @@ class PriceItem(BaseModel):
     price: int = Field(ge=0)
     shipping_fee: int = Field(default=0, ge=0)
     in_stock: bool = True
+    # 가격 비교 사이트 JSON-LD의 부가 정보(선택). 값이 온 것만 판매처·상품에 덮어쓴다
+    spec: str | None = Field(default=None, max_length=500)
+    offer_count: int | None = Field(default=None, ge=0)
+    high_price: int | None = Field(default=None, ge=0)
+    rating: float | None = Field(default=None, ge=0, le=5)
+    review_count: int | None = Field(default=None, ge=0)
 
 
 class PriceBulkIn(BaseModel):
@@ -169,6 +184,6 @@ class CatalogProductIn(BaseModel):
 
 class CatalogIn(BaseModel):
     malls: list[CatalogMallIn] = Field(min_length=1, max_length=20)
-    products: list[CatalogProductIn] = Field(max_length=200)
+    products: list[CatalogProductIn] = Field(max_length=600)
     # 더 이상 수집하지 않을 쇼핑몰 도메인(예: 시연용 mall-a.example.com). 삭제하지 않고 is_active=False로 숨긴다
     retire_mall_hosts: list[str] = Field(default_factory=list, max_length=20)

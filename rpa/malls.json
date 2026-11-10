@@ -1,5 +1,6 @@
 {
   "_comment": "쇼핑몰 이름(DB malls.name = catalog.json malls.name)별 수집 규칙. robots.txt로 허용된 경로만 등록한다(2026-11 확인). parser: jsonld(구조화 데이터) | css(기본, price·shipping·soldout 셀렉터). render: playwright면 Headless Chromium으로 화면을 그린 뒤 읽는다(GitHub Actions가 필요할 때만 설치). *.example.com 시연 쇼핑몰은 SIMULATE_MALLS=true일 때만 모의 가격을 생성한다.",
-  "다나와": {"parser": "jsonld"},
+  "_spec": "spec: true인 쇼핑몰의 JSON-LD description을 상품 사양 요약으로 저장한다(다나와. 에누리는 같은 내용에서 공백이 빠져 있음).",
+  "다나와": {"parser": "jsonld", "spec": true},
   "에누리": {"parser": "jsonld"}
 }

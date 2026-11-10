@@ -240,6 +240,20 @@ def test_parse_jsonld_marks_missing_or_empty_offers_as_unavailable():
     assert parse_jsonld_offer(BeautifulSoup(graph, "html.parser"))["price"] == 5000
 
 
+def test_parse_jsonld_meta_reads_comparison_details():
+    import json
+
+    from collector.parsers import parse_jsonld_meta
+
+    item = {"@type": "Product", "description": "노트북 /  40.6cm(16인치)\n/ 8GB", "aggregateRating": {"ratingValue": 9, "bestRating": 10, "reviewCount": 5},
+            "offers": {"@type": "AggregateOffer", "lowPrice": 1149000, "highPrice": "1,870,000", "offerCount": 22}}
+    soup = BeautifulSoup(f'<script type="application/ld+json">{json.dumps(item, ensure_ascii=False)}</script>', "html.parser")
+    assert parse_jsonld_meta(soup, spec=True) == {"offer_count": 22, "high_price": 1870000, "review_count": 5, "rating": 4.5,
+                                                  "spec": "노트북 / 40.6cm(16인치) / 8GB"}
+    assert "spec" not in parse_jsonld_meta(soup)  # 사양 요약은 spec=true 쇼핑몰(다나와)에서만
+    assert parse_jsonld_meta(BeautifulSoup("<html>차단 화면</html>", "html.parser")) == {}
+
+
 def test_robots_crawl_delay_is_respected_per_host():
     from collector.http import PoliteSession
 
@@ -296,7 +310,7 @@ def test_collect_syncs_catalog_and_parses_jsonld(monkeypatch, tmp_path):
                       {"listing_id": 8, "mall": "쇼핑몰 A", "url": "https://mall-a.example.com/p/1", "last_price": 10000, "last_shipping_fee": 0}])
     res = jobs.collect(Config(), api)
     assert "_comment" not in api.catalog and api.catalog["retire_mall_hosts"] == ["mall-a.example.com"]
-    assert api.posted == [{"listing_id": 7, "price": 315000, "shipping_fee": 0, "in_stock": True}]
+    assert api.posted == [{"listing_id": 7, "price": 315000, "shipping_fee": 0, "in_stock": True, "offer_count": 116}]
     assert res["skipped"] == 1  # 모의 가격 꺼짐 → 시연 쇼핑몰 건너뜀
 
 
@@ -354,8 +368,72 @@ def test_limit_products_keeps_highest_priority_first():
     assert [l["listing_id"] for l in jobs.limit_products(items, 2)] == [0, 1, 2, 3]
 
 
+def test_lower_priority_products_rotate_once_a_day():
+    """상위 상품은 매 구간, 나머지는 product_id % 4 == 구간 번호일 때만 → 하루 4구간 동안 모든 상품이 한 번 이상 수집된다"""
+    items = [{"listing_id": pid * 10 + m, "product_id": pid} for pid in [50, 51, 52, 53, 54, 55, 56, 57] for m in (1, 2)]
+    picked = [{l["product_id"] for l in jobs.limit_products(items, 2, slot)} for slot in range(jobs.SLOTS_PER_DAY)]
+    assert all({50, 51} <= p for p in picked)
+    assert set().union(*picked) == {50, 51, 52, 53, 54, 55, 56, 57}
+    assert picked[0] == {50, 51, 52, 56} and picked[2] == {50, 51, 54}  # 상위 상품과 겹치는 구간은 그만큼 적게 수집
+
+
+def test_collect_posts_prices_in_chunks(monkeypatch):
+    monkeypatch.setenv("SIMULATE_MALLS", "true")
+    monkeypatch.setenv("COLLECT_MAX_PRODUCTS", "500")
+    api = FakeApi([{"listing_id": i, "product_id": i, "mall": "쇼핑몰 A", "url": f"https://mall-a.example.com/p/{i}", "last_price": 10000,
+                    "last_shipping_fee": 0} for i in range(1, 121)])
+    sizes = []
+    api.post_prices = lambda items, at: sizes.append(len(items)) or {"inserted": len(items), "alerts_created": 1}
+    res = jobs.collect(Config(), api)
+    assert sizes == [50, 50, 20] and res["inserted"] == 120 and res["alerts_created"] == 3
+
+
 def test_discover_ranked_codes_keeps_page_order():
     from collector.discover import ranked_codes
 
     html = "a prod.danawa.com/info/?pcode=111111 b prod.danawa.com/info/?pcode=222222 prod.danawa.com/info/?pcode=111111"
     assert ranked_codes(html, 5) == ["111111", "222222"]
+
+
+def test_discover_matches_enuri_only_when_name_and_spec_agree():
+    """에누리 대조: 옵션까지 같은 이름 + 같은 사양 요약일 때만 연결. 다른 옵션(SSD 용량)·쇼핑몰 단독 상품은 버린다"""
+    import json
+
+    from collector import discover
+
+    danawa = {"name": "HP 옴니북 3 16-bu0020TU (SSD 512GB)",
+              "description": "노트북 / 40.6cm(16인치) / 1.64kg / 윈도우11홈 / 코어5 / 120U / 8GB / 램 교체: 가능 / 용량: 512GB / 41Wh"}
+    same = {"name": "HP 옴니북 3 16-bu0020TU [SSD 512GB]", "description": "노트북/40.6cm(16인치)/1.64kg/윈도우11홈/코어5/120U/8GB/용량:512GB/41Wh"}
+    assert discover.same_product(danawa, same)  # 에누리가 항목 하나(램 교체)를 빼고 보여 줘도 같은 제품
+    assert not discover.same_product(danawa, {**same, "name": "HP 옴니북 3 16-bu0020TU [SSD 256GB]"})
+    assert not discover.same_product(danawa, {**same, "description": "노트북/40.6cm(16인치)/1.7kg/윈도우11프로/코어7/150U/16GB/용량:512GB/41Wh"})
+    assert not discover.same_product(danawa, {**same, "description": "태블릿/40.6cm(16인치)/1.64kg/윈도우11홈/코어5/120U/8GB/용량:512GB/41Wh"})
+    assert not discover.same_product(danawa, {**same, "description": ""})
+
+    assert discover.base_name("광동제약 제주 삼다수 그린 2L (24개)") == discover.base_name("광동제약 제주 삼다수 그린 2L (6개)")
+    assert discover.base_name("코디 순수 3겹 데코 30m (30롤) (3팩)") == discover.base_name("코디 순수 3겹 데코 30m (30롤) (1팩)")
+    assert discover.base_name("하기스 밴드형 2단계 (174매)") != discover.base_name("하기스 밴드형 3단계 (150매)")
+    assert discover.base_name("HP 옴니북 3 (SSD 512GB)") != discover.base_name("HP 옴니북 3 (SSD 1TB)")
+
+    search = ('<a href="https://www.enuri.com/detail.jsp?modelno=147083787">a</a> https://www.enuri.com/detail.jsp?modelno=147083799 '
+              "https://www.enuri.com/detail.jsp?modelno=31677760795")
+    assert discover.enuri_search_models(search) == ["147083787", "147083799"]
+
+    def page(item):
+        return BeautifulSoup(f'<script type="application/ld+json">{json.dumps({"@type": "Product", **item})}</script>', "html.parser")
+
+    pages = {"147083787": page(same), "147083799": page({**same, "name": "HP 옴니북 3 16-bu0020TU [SSD 1TB]"})}
+
+    class FakeSession:
+        def __init__(self):
+            self.urls = []
+
+        def fetch(self, url):
+            self.urls.append(url)
+            return BeautifulSoup(search, "html.parser") if "search?keyword=" in url else pages[url.rsplit("=", 1)[1]]
+
+    s = FakeSession()
+    assert discover.match_enuri(s, danawa) == "147083787"
+    assert s.urls[0].endswith("16-bu0020TU%20SSD%20512GB")  # 옵션까지 검색어에 넣되 괄호는 뺀다
+    pages["147083799"] = page(same)  # 같은 제품이 두 개면 어느 쪽인지 모르므로 연결하지 않는다
+    assert discover.match_enuri(FakeSession(), danawa) is None

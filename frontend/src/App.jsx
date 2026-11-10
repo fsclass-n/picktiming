@@ -18,6 +18,7 @@ const CATEGORIES = [
   { name: '패션', icon: 'shirt', caption: t("취향을 담은 선택"), photo: 'photo-1542291026-7eec264c27ff' },
   { name: '유아', icon: 'baby', caption: t("가족을 위한 쇼핑"), photo: 'photo-1515488042361-ee00e0ddd4e4' },
 ];
+const PAGE_SIZE = 24; // 상품 탐색 한 페이지 상품 수(4열 × 6줄)
 const SIGNALS = {
   BUY_NOW: { text: t("지금 사세요"), icon: 'fire-flame-curved', color: 'text-emerald-700 bg-emerald-50', stroke: '#059669', note: t("과거 가격 흐름상 구매하기 좋은 구간입니다.") },
   WAIT_A_BIT: { text: t("조금 더 지켜보세요"), icon: 'hourglass-half', color: 'text-rose-700 bg-rose-50', stroke: '#e11d48', note: t("급하지 않다면 목표가를 정하고 기다려 보세요.") },
@@ -86,8 +87,14 @@ function PriceChange({ value }) {
   return <span className={`numeric inline-flex items-center gap-1 text-sm ${value < 0 ? 'text-emerald-600' : value > 0 ? 'text-rose-600' : 'text-slate-500'}`}>
     <Icon name={value < 0 ? 'arrow-down' : value > 0 ? 'arrow-up' : 'minus'} />{percent(Math.abs(value))}</span>;
 }
+function imageSource(url) {
+  // 이미지 출처 표시: 제조사 공식 이미지를 우선 등록하고, 찾지 못한 상품만 가격 비교 사이트(다나와·에누리) 상품 이미지를 쓴다
+  const host = (() => { try { return new URL(url).hostname; } catch { return ''; } })();
+  // 다나와·에누리는 같은 회사(커넥트웨이브)가 운영하며 이미지 서버(img.danuri.io)도 함께 쓴다
+  return /(^|\.)(danawa\.com|danuri\.io|enuri\.(com|info))$/.test(host) ? t("이미지: 다나와·에누리") : t("제조사 이미지");
+}
 function Photo({ product, className = '', caption = true }) {
-  // 실제 사진은 직접 확인해 등록한 제조사 공식 이미지(image_url)만 쓴다. 없거나 깨지면 카테고리 아이콘(판매처 이미지는 저장·표시하지 않음)
+  // 실제 사진은 catalog.json에 등록한 image_url만 쓴다(제조사 공식 우선, 없으면 다나와·에누리). 없거나 깨지면 카테고리 아이콘
   const [failed, setFailed] = useState(false);
   const icon = (CATEGORIES.find((c) => c.name === product.category) || { icon: 'box-open' }).icon;
   const official = product.image_url && !failed;
@@ -95,7 +102,7 @@ function Photo({ product, className = '', caption = true }) {
     {official ? <img src={product.image_url} alt={product.name || t("상품")} width="700" height="525" loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(true)} style={{ objectFit: 'contain' }} />
       : <div className="flex h-full min-h-32 flex-col items-center justify-center gap-2 text-slate-400" role="img" aria-label={t("{c} 카테고리", { x: '', c: t(product.category || "상품") })}>
           <Icon name={icon} className="text-4xl" /><span className="text-xs">{t(product.category || "상품")}</span></div>}
-    {caption && official && <span className="absolute bottom-2 right-2 whitespace-nowrap rounded bg-white/90 px-1.5 py-0.5 text-[10px] text-slate-600">{t("제조사 이미지")}</span>}</div>;
+    {caption && official && <span className="absolute bottom-2 right-2 whitespace-nowrap rounded bg-white/90 px-1.5 py-0.5 text-[10px] text-slate-600">{imageSource(product.image_url)}</span>}</div>;
 }
 function Dialog({ open, title, onClose, drawer = false, children }) {
   const ref = useRef(null);
@@ -233,10 +240,18 @@ function CompareTable({ data, compact = false }) {
   return <div className="relative overflow-x-auto" tabIndex={0} role="region" aria-label={t("판매처 가격 비교 표")}><table className="table-x"><caption className="sr-only">{t("쇼핑몰별 판매가, 배송비, 실구매가 비교")}</caption>
     <thead><tr><th scope="col">{t("판매처")}</th>{!compact && <><th scope="col" className="text-right">{t("판매가")}</th><th scope="col" className="text-right">{t("배송비")}</th></>}<th scope="col" className="text-right">{t("실구매가")}</th>{!compact && <th scope="col"><span className="sr-only">{t("구매 링크")}</span></th>}</tr></thead>
     <tbody>{data.items.slice(0, compact ? 3 : undefined).map((i) => <tr key={i.mall_id ?? i.mall} className={i.is_lowest ? 'bg-emerald-50/50' : ''}>
-      <td><span className="font-medium">{i.mall}</span>{i.is_lowest && <span className="ml-2 text-[11px] text-emerald-700">{t("최저")}</span>}{!i.in_stock && <span className="ml-2 text-xs text-slate-500">{t("품절")}</span>}</td>
+      <td><span className="font-medium">{i.mall}</span>{i.is_lowest && <span className="ml-2 text-[11px] text-emerald-700">{t("최저")}</span>}{!i.in_stock && <span className="ml-2 text-xs text-slate-500">{t("품절")}</span>}
+        {!compact && <MallStats item={i} />}</td>
       {!compact && <><td className="numeric whitespace-nowrap text-right">{won(i.price)}</td><td className="whitespace-nowrap text-right">{i.shipping_fee ? won(i.shipping_fee) : t("무료")}</td></>}
       <td className={`numeric whitespace-nowrap text-right ${i.is_lowest ? 'text-emerald-700' : ''}`}>{won(i.total_price)}</td>
       {!compact && <td>{i.in_stock && safeUrl(i.url) ? <a href={i.url} className="btn-outline px-3" target="_blank" rel="noopener noreferrer" aria-label={t("{x} 구매 페이지 새 창", { x: i.mall })}>{t("구매하기")}<Icon name="arrow-up-right-from-square" /></a> : '—'}</td>}</tr>)}</tbody></table></div>;
+}
+function MallStats({ item }) {
+  // 가격 비교 사이트가 집계한 값(다나와·에누리): 입점 판매처 수 · 최고가 · 평점. 직접 판매처는 값이 없어 표시하지 않는다
+  const parts = [item.offer_count > 0 && t("판매처 {n}곳", { n: item.offer_count.toLocaleString('ko-KR') }),
+    item.high_price > 0 && t("최고 {x}", { x: won(item.high_price) }),
+    item.rating > 0 && `★ ${item.rating.toFixed(1)}${item.review_count ? ` (${t("리뷰 {n}", { n: item.review_count.toLocaleString('ko-KR') })})` : ''}`].filter(Boolean);
+  return parts.length ? <p className="mt-0.5 text-[11px] text-slate-500">{parts.join(' · ')}</p> : null;
 }
 function PriceSpotlight({ product }) {
   const { user } = useAuth();
@@ -291,9 +306,16 @@ function Explore() {
     if (Array.isArray(saved)) interests = saved.filter((s) => CATEGORIES.some((c) => c.name === s));
   } catch { /* 저장된 취향이 손상되면 전체 상품 탐색을 제공한다. */ }
   const [version, setVersion] = useState(0); const [register, setRegister] = useState(false);
-  const result = useApi(`/products/search?q=${encodeURIComponent(q)}`, version);
-  const items = [...(result.data?.items || [])].filter((p) => (category === '전체' || p.category === category) && (!onlyBuy || p.label === 'BUY_NOW') && (!personalOnly || interests.includes(p.category)))
-    .sort((a, b) => sort === 'price' ? (priceOf(a) ?? Infinity) - (priceOf(b) ?? Infinity) : (b.score ?? -1) - (a.score ?? -1));
+  // 분류·정렬·필터는 서버가 전체 상품에 적용하고 PAGE_SIZE씩 나눠 준다(상품이 늘어도 빠지는 상품이 없게)
+  const page = Math.max(1, Number(params.get('page')) || 1);
+  const cats = personalOnly ? (category === '전체' ? interests : interests.filter((c) => c === category)) : (category === '전체' ? [] : [category]);
+  const query = new URLSearchParams({ q, sort, page: String(page), size: String(PAGE_SIZE), ...(cats.length ? { category: cats.join(',') } : {}), ...(onlyBuy ? { buy_only: 'true' } : {}) });
+  const noMatch = personalOnly && !cats.length;
+  const result = useApi(noMatch ? null : `/products/search?${query}`, version);
+  const items = noMatch ? [] : result.data?.items || [];
+  const total = noMatch ? 0 : result.data?.total ?? items.length; const pages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const goPage = (n) => { setParams({ ...(q ? { q } : {}), ...(category !== '전체' ? { category } : {}), ...(n > 1 ? { page: String(n) } : {}) }); window.scrollTo({ top: 0 }); };
+  const resetPage = (fn) => (e) => { fn(e); if (page > 1) goPage(1); };
   return <div className="container-x py-10">
     <div className="flex flex-wrap items-end justify-between gap-3"><div><h1 className="section-title">{t("상품 탐색")}</h1><p className="section-note">{t("같은 상품, 다른 가격. 배송비까지 비교하고 구매 시점을 살펴보세요.")}</p></div>
       <button className="btn-outline" onClick={() => setRegister(true)}><Icon name="link" />{t("상품 URL 등록")}</button></div>
@@ -301,12 +323,16 @@ function Explore() {
     <div className="mt-6 flex flex-wrap gap-2" aria-label="검색 카테고리">{['전체', ...CATEGORIES.map((c) => c.name)].map((c) => <button key={c} className="filter-chip" aria-pressed={category === c}
       onClick={() => setParams({ ...(q ? { q } : {}), ...(c !== '전체' ? { category: c } : {}) })}>{t(c)}</button>)}</div>
     <div className="my-6 flex flex-wrap items-center justify-between gap-4 border-y border-slate-200 py-4">
-      <p className="text-sm text-slate-600">{q && <span className="text-slate-900">‘{q}’ </span>}{t("검색 결과")}{" "}<span className="numeric text-brand-700">{items.length}</span>{t("개")}</p>
-      <div className="flex flex-wrap items-center gap-4 text-sm"><label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={onlyBuy} onChange={(e) => setOnlyBuy(e.target.checked)} />{t("지금 구매 추천만")}</label>
-        {!!interests.length && <label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={personalOnly} onChange={(e) => setPersonalOnly(e.target.checked)} />{t("내 관심 카테고리")}</label>}
-        <select aria-label={t("상품 정렬")} className="min-h-11 rounded-lg bg-slate-50 px-3" value={sort} onChange={(e) => setSort(e.target.value)}><option value="score">{t("적기 점수순")}</option><option value="price">{t("낮은 가격순")}</option></select></div></div>
+      <p className="text-sm text-slate-600">{q && <span className="text-slate-900">‘{q}’ </span>}{t("검색 결과")}{" "}<span className="numeric text-brand-700">{total}</span>{t("개")}</p>
+      <div className="flex flex-wrap items-center gap-4 text-sm"><label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={onlyBuy} onChange={resetPage((e) => setOnlyBuy(e.target.checked))} />{t("지금 구매 추천만")}</label>
+        {!!interests.length && <label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={personalOnly} onChange={resetPage((e) => setPersonalOnly(e.target.checked))} />{t("내 관심 카테고리")}</label>}
+        <select aria-label={t("상품 정렬")} className="min-h-11 rounded-lg bg-slate-50 px-3" value={sort} onChange={resetPage((e) => setSort(e.target.value))}><option value="score">{t("적기 점수순")}</option><option value="price">{t("낮은 가격순")}</option></select></div></div>
     {result.loading ? <Loading /> : result.error ? <Notice error={result.error} retry={() => setVersion((v) => v + 1)} /> : items.length
-      ? <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{items.map((p) => <ProductCard key={p.id} product={p} />)}</div>
+      ? <><div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{items.map((p) => <ProductCard key={p.id} product={p} />)}</div>
+        {pages > 1 && <nav className="mt-8 flex items-center justify-center gap-2" aria-label={t("검색 결과 페이지")}>
+          <button className="btn-outline" disabled={page <= 1} onClick={() => goPage(page - 1)}>{t("이전")}</button>
+          <span className="numeric px-2 text-sm" aria-current="page">{page} / {pages}</span>
+          <button className="btn-outline" disabled={page >= pages} onClick={() => goPage(page + 1)}>{t("다음")}</button></nav>}</>
       : <Empty title={t("조건에 맞는 상품이 없어요")}><p>{t("다른 검색어나 카테고리를 선택해 보세요.")}</p><button className="btn-outline mt-4" onClick={() => { setParams({}); setOnlyBuy(false); setPersonalOnly(false); }}>{t("검색 조건 초기화")}</button></Empty>}
     <RegisterProduct open={register} onClose={() => setRegister(false)} onSaved={() => setVersion((v) => v + 1)} />
   </div>;
@@ -377,8 +403,12 @@ function ProductDetail() {
       <div className="overflow-hidden rounded-3xl"><Photo product={p} /></div>
       <section className="flex flex-col justify-center"><p className="text-sm text-slate-500">{p.brand} · {p.model_no}</p><h1 className="mt-2 text-3xl leading-snug sm:text-4xl">{p.name}</h1>
         <div className="mt-4 flex flex-wrap gap-2"><Signal product={p} />{atLow && <span className="badge bg-emerald-600 text-white"><Icon name="medal" />{t("역대 최저가")}</span>}</div>
+        {p.spec_summary && <div className="mt-5"><p className="text-xs text-slate-500">{t("주요 사양")}</p>
+          <ul className="mt-2 flex flex-wrap gap-1.5" aria-label={t("주요 사양")}>{p.spec_summary.split(' / ').filter(Boolean).slice(0, 12).map((s, n) => <li key={n} className="rounded-md bg-slate-100 px-2 py-1 text-xs text-slate-700">{s}</li>)}</ul></div>}
         <p className="mt-7 text-xs text-slate-500">{t("배송비 포함 현재 최저가")}</p><p className="numeric mt-1 text-4xl">{won(p.current_price ?? compare.data?.lowest_total)}</p>
-        <div className="mt-5 flex flex-wrap gap-8 text-sm"><div><p className="text-slate-500">{t("기록된 역대 최저가")}</p><p className="numeric mt-1 text-emerald-700">{won(history.data?.all_time_min?.price)}</p></div><div><p className="text-slate-500">{t("최근 수집")}</p><p className="mt-1 text-xs">{dateText(compare.data?.collected_at)}</p></div></div>
+        <div className="mt-5 flex flex-wrap gap-8 text-sm"><div><p className="text-slate-500">{t("기록된 역대 최저가")}</p><p className="numeric mt-1 text-emerald-700">{won(history.data?.all_time_min?.price)}</p></div><div><p className="text-slate-500">{t("최근 수집")}</p><p className="mt-1 text-xs">{dateText(compare.data?.collected_at)}</p></div>
+          {p.offline_price && <div><p className="text-slate-500">{t("오프라인 최저가 (참가격)")}</p><p className="numeric mt-1">{won(p.offline_price.price)}</p>
+            <p className="mt-0.5 text-[11px] text-slate-500">{[p.offline_price.store_type, t("{d} 조사", { d: p.offline_price.survey_date })].filter(Boolean).join(' · ')}</p></div>}</div>
         <div className="mt-7 flex flex-wrap gap-3"><button className="btn-primary flex-1" onClick={() => openWatch(p)}><Icon name="bell" />{t("목표가 알림")}</button><Link to={`/chat/${id}`} className="btn-outline flex-1"><Icon name="wand-magic-sparkles" />{t("AI와 상담하기")}</Link></div>
       </section>
     </div>
@@ -476,7 +506,7 @@ function Signup() {
   const [step, setStep] = useState(1); const [agreements, setAgreements] = useState({ terms: false, privacy: false });
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' }); const [categories, setCategories] = useState([]);
   const [busy, setBusy] = useState(false); const [error, setError] = useState(null); const [created, setCreated] = useState(false); const [alertSaved, setAlertSaved] = useState(false);
-  const recommendations = useApi(step === 3 ? '/products/search?q=' : null);
+  const recommendations = useApi(step === 3 ? `/products/search?sort=score&size=12${categories.length ? `&category=${encodeURIComponent(categories.join(','))}` : ''}` : null);
   const stepHeading = useRef(null);
   useEffect(() => { if (step > 1) stepHeading.current?.focus(); }, [step]);
   const set = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));

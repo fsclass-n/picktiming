@@ -13,8 +13,8 @@ const MALLS = [
 ];
 
 const PRODUCTS = [
-  { id: 1, name: '무선 이어폰 X2', brand: 'SoundOne', model_no: 'X2-ANC', category: '디지털', base: 139000, days: 120, phase: 'sale' },
-  { id: 2, name: '노이즈캔슬링 헤드폰 H7', brand: 'SoundOne', model_no: 'H7', category: '디지털', base: 329000, days: 120, phase: 'before' },
+  { id: 1, name: '무선 이어폰 X2', brand: 'SoundOne', model_no: 'X2-ANC', category: '디지털', base: 139000, days: 120, phase: 'sale', spec: '커널형 / 블루투스 5.3 / 액티브노이즈캔슬링 / 최대재생: 30시간 / 무게: 5g' },
+  { id: 2, name: '노이즈캔슬링 헤드폰 H7', brand: 'SoundOne', model_no: 'H7', category: '디지털', base: 329000, days: 120, phase: 'before', spec: '오버이어 / 블루투스 5.3 / 액티브노이즈캔슬링 / 최대재생: 40시간 / 무게: 250g' },
   { id: 3, name: '14인치 노트북 Air', brand: 'Bitbook', model_no: 'BA14-2026', category: '디지털', base: 1190000, days: 120 },
   { id: 4, name: '스마트워치 S5', brand: 'Tickr', model_no: 'S5-44', category: '디지털', base: 259000, days: 21 },
   { id: 5, name: '로봇청소기 R9', brand: 'CleanBot', model_no: 'R9', category: '가전', base: 489000, days: 120 },
@@ -154,6 +154,13 @@ function chatAnswer(p, a, question) {
   return '제공된 가격 데이터로는 답하기 어려운 질문입니다. 가격 추이나 구매 시점에 대해 질문해 주세요.';
 }
 
+// 참가격(오프라인 판매점 조사가) 시연값: 생필품만, 조사일은 2주 전 금요일(실제 조사는 격주 금요일·약 1주 뒤 공개)
+function offlinePrice(p) {
+  if (p.category !== '생필품') return null;
+  const d = new Date(); d.setDate(d.getDate() - ((d.getDay() + 2) % 7) - 14);
+  return { price: roundPrice(p.base * 1.06, p.base), store_type: '대형마트', survey_date: d.toISOString().slice(0, 10) };
+}
+
 function compare(p) {
   const rows = series(p);
   if (!rows.length) return { product_id: p.id, collected_at: null, lowest_total: null, items: [] };
@@ -165,6 +172,8 @@ function compare(p) {
     items: last.malls.map((m) => ({
       mall_id: m.mall_id, mall: MALLS[m.mall_id - 1].name, price: m.price, shipping_fee: m.shipping_fee, total_price: m.total_price,
       in_stock: m.in_stock, is_lowest: m.in_stock && m.total_price === lowest, url: `https://example.com/mall-${m.mall_id}/products/${p.model_no}`,
+      // 가격 비교 사이트(다나와·에누리)만 주는 값. 시연 쇼핑몰은 직접 판매처라 비어 있다(API와 같은 형식)
+      offer_count: null, high_price: null, rating: null, review_count: null,
     })).sort((x, y) => (y.in_stock - x.in_stock) || (x.total_price - y.total_price)),
   };
 }
@@ -298,10 +307,17 @@ const routes = [
   }],
   ['GET', /^\/users\/me$/, (m, b, token) => ok(JSON.parse(localStorage.getItem('pt_user') || 'null') || { id: 2, email: 'demo@timepick.demo', name: 'demo', role: token === 'demo-admin' ? 'ADMIN' : 'USER' })],
   ['GET', /^\/products\/search$/, (m, b, t, query) => {
+    // 서버(GET /products/search)와 같은 규칙: 분류(쉼표 여러 개)·지금 구매·정렬을 전체에 적용한 뒤 page 단위로 자른다
     const q = (query.get('q') || '').trim().toLowerCase();
-    const items = allProducts().filter((p) => !q || `${p.name} ${p.brand} ${p.category} ${p.model_no}`.toLowerCase().includes(q))
-      .map((p) => { const a = analyze(p); return { ...publicProduct(p), lowest_price: a.current_price, score: a.score, label: a.label }; });
-    return ok({ items });
+    const cats = (query.get('category') || '').split(',').map((c) => c.trim()).filter(Boolean);
+    const sort = ['score', 'price'].includes(query.get('sort')) ? query.get('sort') : 'id';
+    const size = Math.min(100, Math.max(1, Number(query.get('size')) || 50)); const page = Math.max(1, Number(query.get('page')) || 1);
+    const items = allProducts().filter((p) => (!q || `${p.name} ${p.brand} ${p.category} ${p.model_no}`.toLowerCase().includes(q)) && (!cats.length || cats.includes(p.category)))
+      .map((p) => { const a = analyze(p); return { ...publicProduct(p), lowest_price: a.current_price, score: a.score, label: a.label }; })
+      .filter((p) => query.get('buy_only') !== 'true' || p.label === 'BUY_NOW')
+      .sort((a, b) => sort === 'score' ? (b.score ?? -1) - (a.score ?? -1) || a.id - b.id
+        : sort === 'price' ? (a.lowest_price ?? Infinity) - (b.lowest_price ?? Infinity) || a.id - b.id : a.id - b.id);
+    return ok({ items: items.slice((page - 1) * size, page * size), total: items.length, page, size });
   }],
   ['POST', /^\/products$/, (m, body) => {
     const url = (body.url || '').trim();
@@ -313,7 +329,7 @@ const routes = [
   }],
   ['GET', /^\/products\/(\d+)$/, (m) => {
     const p = findProduct(m[1]);
-    return p ? ok({ ...publicProduct(p), listings_count: p.days ? MALLS.length : 0 }) : fail(404, 'PRODUCT_NOT_FOUND', '상품을 찾을 수 없습니다.');
+    return p ? ok({ ...publicProduct(p), listings_count: p.days ? MALLS.length : 0, spec_summary: p.spec || null, offline_price: offlinePrice(p) }) : fail(404, 'PRODUCT_NOT_FOUND', '상품을 찾을 수 없습니다.');
   }],
   ['GET', /^\/products\/(\d+)\/compare$/, (m) => { const p = findProduct(m[1]); return p ? ok(compare(p)) : fail(404, 'PRODUCT_NOT_FOUND', '상품을 찾을 수 없습니다.'); }],
   ['GET', /^\/products\/(\d+)\/prices$/, (m, b, t, query) => {

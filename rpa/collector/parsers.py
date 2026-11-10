@@ -37,7 +37,7 @@ def parse_product(soup: BeautifulSoup, rule: dict) -> dict:
     return {"price": price or 0, "shipping_fee": shipping or 0, "in_stock": not sold_out}
 
 
-def _jsonld_items(soup: BeautifulSoup):
+def jsonld_items(soup: BeautifulSoup):
     for tag in soup.select('script[type="application/ld+json"]'):
         try:
             data = json.loads(tag.string or "")
@@ -49,13 +49,40 @@ def _jsonld_items(soup: BeautifulSoup):
                 yield item
 
 
+def _int(value) -> int | None:
+    try:
+        n = int(float(str(value).replace(",", "").strip()))
+    except ValueError:
+        return None
+    return n if n >= 0 else None
+
+
+def parse_jsonld_meta(soup: BeautifulSoup, spec: bool = False) -> dict:
+    """가격 비교 상품 페이지의 부가 정보(값이 있는 것만): 판매처 수·최고가·평점(5점 환산)·리뷰 수, spec=True면 사양 요약(description)"""
+    item = next((i for i in jsonld_items(soup) if i.get("@type") == "Product"), None)
+    if item is None:
+        return {}
+    offer = item.get("offers") or {}
+    offer = (offer[0] if offer else {}) if isinstance(offer, list) else offer
+    rating = item.get("aggregateRating") or {}
+    out = {"offer_count": _int(offer.get("offerCount")), "high_price": _int(offer.get("highPrice")), "review_count": _int(rating.get("reviewCount"))}
+    try:
+        value, best = float(rating.get("ratingValue")), float(rating.get("bestRating") or 5)
+        out["rating"] = round(min(5.0, max(0.0, value / best * 5)), 2) if best > 0 else None
+    except (TypeError, ValueError):
+        out["rating"] = None
+    if spec and (text := " ".join(str(item.get("description") or "").split())):
+        out["spec"] = text[:500]
+    return {k: v for k, v in out.items() if v is not None}
+
+
 def parse_jsonld_offer(soup: BeautifulSoup) -> dict:
     """가격 비교 상품 페이지의 최저가(AggregateOffer.lowPrice, 단일 Offer는 price).
 
     비교 사이트 최저가는 판매처마다 배송비 포함 여부가 달라 shipping_fee=0으로 저장한다(사이트 표시 최저가 기준).
     판매처 0곳·가격 없음·JSON-LD 없음(차단 화면, 구조 변경)은 품절로 처리해 0원이 저장되지 않게 한다.
     """
-    for item in _jsonld_items(soup):
+    for item in jsonld_items(soup):
         if item.get("@type") != "Product":
             continue
         offer = item.get("offers") or {}

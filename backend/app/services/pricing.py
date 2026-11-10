@@ -58,7 +58,8 @@ def compare(db: Session, product_id: int) -> dict:
     items = [{
         "mall_id": mall.id, "mall": mall.name, "price": ph.price, "shipping_fee": ph.shipping_fee,
         "total_price": ph.total_price, "in_stock": ph.in_stock, "is_lowest": ph.in_stock and ph.total_price == lowest,
-        "url": listing.url,
+        "url": listing.url, "offer_count": listing.offer_count, "high_price": listing.high_price,
+        "rating": listing.rating, "review_count": listing.review_count,
     } for ph, listing, mall in rows]
     items.sort(key=lambda i: (not i["in_stock"], i["total_price"]))
     collected = max((ph.collected_at for ph, _, _ in rows), default=None)

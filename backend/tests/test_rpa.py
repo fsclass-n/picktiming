@@ -55,6 +55,20 @@ def test_bulk_prices_skip_same_hour(client):
     assert (second["inserted"], second["duplicate"]) == (0, 1)
 
 
+def test_bulk_prices_store_comparison_site_details(client, user_h):
+    """판매처 수·최고가·평점·리뷰 수는 판매처에, 사양 요약은 상품에 저장되어 비교 표·상세 화면에 나온다. 빠진 값은 지우지 않는다"""
+    listing = next(i for i in client.get(f"{API}/listings", headers=RPA).json()["items"] if i["model_no"] == "W2L12")
+    meta = {"offer_count": 116, "high_price": 12900, "rating": 4.6, "review_count": 31, "spec": "생수 / 2L / 12개"}
+    client.post(f"{API}/prices/bulk", headers=RPA, json={"collected_at": _at(4), "items": [{"listing_id": listing["listing_id"], "price": 8800, **meta}]})
+    client.post(f"{API}/prices/bulk", headers=RPA, json={"collected_at": _at(5), "items": [{"listing_id": listing["listing_id"], "price": 8700}]})
+    pid = listing["product_id"]
+    row = next(i for i in client.get(f"/api/v1/products/{pid}/compare", headers=user_h).json()["items"] if i["mall_id"] == listing["mall_id"])
+    assert (row["offer_count"], row["high_price"], row["rating"], row["review_count"]) == (116, 12900, 4.6, 31)
+    assert client.get(f"/api/v1/products/{pid}", headers=user_h).json()["spec_summary"] == "생수 / 2L / 12개"
+    bad = {"listing_id": listing["listing_id"], "price": 1, "rating": 9}
+    assert client.post(f"{API}/prices/bulk", headers=RPA, json={"items": [bad]}).status_code == 422
+
+
 def test_public_prices_and_logs(client):
     r = client.put(f"{API}/public-prices", headers=RPA, json={"items": [
         {"model_no": "W2L12", "good_id": "G1", "price": 8800, "survey_date": "2026-10-20"},
@@ -63,6 +77,19 @@ def test_public_prices_and_logs(client):
     log = client.post(f"{API}/logs", headers=RPA, json={"job_name": "collect_prices", "status": "SUCCESS", "collected": 3,
                                                        "failed": 0, "started_at": "2026-10-21T10:00:00"})
     assert log.status_code == 201
+
+
+def test_product_detail_shows_latest_offline_lowest_price(client, user_h):
+    """상세 화면용: 가장 최근 조사일의 참가격 최저가. 참가격이 없는 상품은 null"""
+    client.put(f"{API}/public-prices", headers=RPA, json={"items": [
+        {"model_no": "W2L12", "good_id": "G1", "price": 9100, "store_type": "편의점", "survey_date": "2026-10-09"},
+        {"model_no": "W2L12", "good_id": "G1", "price": 8600, "store_type": "대형마트", "survey_date": "2026-10-23"},
+        {"model_no": "W2L12", "good_id": "G9", "price": 8900, "store_type": "슈퍼마켓", "survey_date": "2026-10-23"}]})
+    listing = next(i for i in client.get(f"{API}/listings", headers=RPA).json()["items"] if i["model_no"] == "W2L12")
+    body = client.get(f"/api/v1/products/{listing['product_id']}", headers=user_h).json()
+    assert body["offline_price"] == {"price": 8600, "store_type": "대형마트", "survey_date": "2026-10-23"}
+    other = next(i for i in client.get(f"{API}/listings", headers=RPA).json()["items"] if i["model_no"] != "W2L12")
+    assert client.get(f"/api/v1/products/{other['product_id']}", headers=user_h).json()["offline_price"] is None
 
 
 def test_model_upload_and_weekly_report(client):

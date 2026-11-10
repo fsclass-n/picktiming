@@ -50,7 +50,16 @@ def prices_bulk(body: PriceBulkIn, db: Session = Depends(get_db)):
     if at.tzinfo is not None:
         at = at.astimezone(ZoneInfo(get_settings().tz)).replace(tzinfo=None)
     ids = [i.listing_id for i in body.items]
-    valid = {lid: pid for lid, pid in db.execute(select(ProductListing.id, ProductListing.product_id).where(ProductListing.id.in_(ids)))}
+    listings = {l.id: l for l in db.execute(select(ProductListing).where(ProductListing.id.in_(ids))).scalars()}
+    valid = {lid: l.product_id for lid, l in listings.items()}
+    for i in body.items:  # 판매처 수·최고가·평점·사양 요약: 값이 온 것만 최신 값으로 덮어쓴다(같은 시간대 중복 가격이어도 갱신)
+        if (l := listings.get(i.listing_id)) is None:
+            continue
+        for key in ("offer_count", "high_price", "rating", "review_count"):
+            if (value := getattr(i, key)) is not None:
+                setattr(l, key, value)
+        if i.spec and l.product.spec_summary != i.spec:
+            l.product.spec_summary = i.spec
     hour = at.replace(minute=0, second=0, microsecond=0)
     seen = set(db.execute(select(PriceHistory.listing_id).where(
         PriceHistory.listing_id.in_(ids), PriceHistory.collected_at >= hour, PriceHistory.collected_at < hour + timedelta(hours=1))).scalars())
@@ -189,22 +198,29 @@ def sync_catalog(body: CatalogIn, db: Session = Depends(get_db)):
     db.flush()
 
     stats = {"products_created": 0, "products_updated": 0, "listings_created": 0, "listings_updated": 0}
+    # 상품 수백 개를 매 수집마다 맞추므로 기존 상품·판매처를 쿼리 2번으로 미리 읽는다(Render ↔ TiDB 왕복 수 최소화)
+    existing: dict[str, Product] = {}
+    for prod in db.execute(select(Product).where(Product.model_no.in_([p.model_no for p in body.products])).order_by(Product.id.desc())).scalars():
+        existing[prod.model_no] = prod  # 같은 model_no가 여럿이면 가장 먼저 만든 상품(id가 작은 것)
+    have = {(l.product_id, l.mall_id): l for l in db.execute(
+        select(ProductListing).where(ProductListing.product_id.in_([prod.id for prod in existing.values()]))).scalars()} if existing else {}
     for p in body.products:
-        product = db.execute(select(Product).where(Product.model_no == p.model_no).order_by(Product.id)).scalars().first()
+        product = existing.get(p.model_no)
         if product is None:
             product = Product(model_no=p.model_no, name=p.name, brand=p.brand, category=p.category, priority=p.priority, image_url=p.image_url)
             db.add(product)
             db.flush()
+            existing[p.model_no] = product
             stats["products_created"] += 1
         elif (product.name, product.brand, product.category, product.priority, product.image_url) != (p.name, p.brand, p.category, p.priority, p.image_url):
             product.name, product.brand, product.category, product.priority, product.image_url = p.name, p.brand, p.category, p.priority, p.image_url
             stats["products_updated"] += 1
         for item in p.listings:
             mall = malls[item.mall]
-            listing = db.execute(select(ProductListing).where(ProductListing.product_id == product.id,
-                                                              ProductListing.mall_id == mall.id)).scalar_one_or_none()
+            listing = have.get((product.id, mall.id))
             if listing is None:
-                db.add(ProductListing(product_id=product.id, mall_id=mall.id, url=item.url))
+                have[(product.id, mall.id)] = listing = ProductListing(product_id=product.id, mall_id=mall.id, url=item.url)
+                db.add(listing)
                 stats["listings_created"] += 1
             elif listing.url != item.url or not listing.is_active:
                 listing.url, listing.is_active = item.url, True

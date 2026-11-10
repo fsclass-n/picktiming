@@ -19,16 +19,22 @@
 | 다나와 | `https://prod.danawa.com/info/?pcode=<번호>` | 허용 (`/api/`, `/info/ajax/`, `/list/ajax/`는 금지 → 사용 안 함) | JSON-LD `AggregateOffer.lowPrice` |
 | 에누리 | `https://www.enuri.com/detail.jsp?modelno=<번호>` | 허용 | JSON-LD `AggregateOffer.lowPrice` |
 
-- 상품 목록: [`rpa/catalog.json`](../../rpa/catalog.json) — 실제 제품 43종(기본 13종 + 인기 상품 후보 30종 `DANAWA-<pcode>`). 모든 상품이 다나와·에누리 두 곳에 연결됩니다.
-  두 사이트 상품 페이지의 상품명으로 같은 제품(정품·같은 용량·같은 구성)임을 확인한 코드만 넣었습니다.
-  인기 상품 30종의 에누리 코드는 2026-11-10 에누리 검색(`price.enuri.com/search`, robots 허용·3초 간격)으로 찾은 뒤
-  상세 페이지 JSON-LD의 상품명·사양(SSD 용량, 색상, 스탠드 구성 등 다나와 옵션)이 같은 것만 골랐습니다.
+- 상품 목록: [`rpa/catalog.json`](../../rpa/catalog.json) — 실제 제품 약 220종. 기본 13종 + 인기 상품 `DANAWA-<pcode>`
+  (세부 카테고리 8개: 노트북·모니터·무선이어폰·TV·공기청정기·생수·롤화장지·기저귀, 각 다나와 목록 첫 페이지 인기순).
+  다나와는 모든 상품에 있고, 에누리는 같은 제품이 확인된 상품에만 연결합니다(약 90%).
+- 에누리 대조(`collector.discover.match_enuri`): 에누리 검색(`price.enuri.com/search`, robots 허용·3초 간격) 상위 3개의 상세 페이지 JSON-LD에서
+  ① 상품명이 옵션(SSD 용량·색상·스탠드 등)까지 같고 ② 제품 종류(사양 첫 항목)가 같으며 ③ 에누리 사양 항목의 80% 이상이 다나와 사양에도 있고
+  ④ 그런 상품이 정확히 하나일 때만 연결합니다. 중고·해외구매·리퍼·렌탈 항목은 후보에서 빼고, 포장 수량만 다른 같은 제품은 순위가 가장 높은 1개만 남깁니다.
   `DANAWA-` model_no는 가격 이력이 이어지도록 그대로 둡니다(바꾸면 새 상품이 생김).
 - `image_url`: 제조사 공식 사이트 상품 페이지에 모델명과 그 이미지가 함께 있는 것만 넣습니다(2026-11-10 확인, 43종 중 22종: 삼성·LG·로지텍·필립스·쿠쿠·알파스캔·크로스오버존·사운드코어·PALIT).
-  다나와·에누리 이미지는 쓰지 않습니다. 공식 페이지를 찾지 못했거나 단종(애플 등), robots.txt 금지·접근 거부(소니·MSI·ZOTAC 403)로
-  확인할 수 없는 상품은 비워 두며, 화면에는 카테고리 아이콘이 나옵니다.
-- `rpa/catalog.json` 자체 검증: `backend/tests/test_catalog.py::test_real_catalog_file_is_accepted_and_uses_only_maker_images`
-  (API 형식 통과, 모든 상품 다나와·에누리 연결, 이미지가 다나와·에누리 주소가 아님).
+  인기 상품 중 LG전자 제품은 공식 상품 페이지(`lge.co.kr/product/<분류>/<모델명>`, 제목에 모델명이 있을 때만)의 대표 이미지를 씁니다.
+  공식 이미지를 찾지 못한 상품(단종·robots 금지·접근 거부: 애플·소니·MSI·ZOTAC 등, 공식 페이지 없음)은 **다나와 상품 페이지의 대표 이미지**
+  (`og:image`, `img.danuri.io`, 500px; 없으면 에누리 JSON-LD 이미지)를 씁니다. 2026-11-10 기준 218종 모두 이미지가 있고
+  제조사 공식 74종(기존 22 + LG전자 52) · 다나와·에누리 144종입니다. 화면 사진 아래 출처를 "제조사 이미지" / "이미지: 다나와·에누리"로 구분해 표시합니다.
+- `rpa/catalog.json` 자체 검증: `backend/tests/test_catalog.py::test_real_catalog_file_is_accepted`
+  (API 형식 통과, 모든 상품 다나와 포함, 상품 400개 이하, 이미지 https).
+- 부가 정보: 수집 때 JSON-LD의 판매처 수(`offerCount`)·최고가(`highPrice`)·평점·리뷰 수를 판매처별로, 다나와 사양 요약(`description`,
+  `malls.json`의 `spec: true`)을 상품에 저장합니다 → 가격 비교 표와 상품 상세의 "주요 사양"에 표시. 추가 요청은 없습니다.
 - 두 사이트는 **같은 회사(커넥트웨이브)** 가 운영해 최저가가 같은 경우가 많습니다. 판매처별 최저가는 각 사이트가 집계한 값입니다.
 - 비교 사이트 최저가는 판매처마다 배송비 포함 여부가 달라 `shipping_fee=0`(사이트 표시 최저가)으로 저장합니다.
 - 제외한 사이트와 이유: 11번가·SSG·롯데ON(robots.txt가 일반 봇 금지), G마켓(봇 이름으로 접속 시 403 → 거부로 보고 우회하지 않음),
@@ -70,6 +76,9 @@ Netlify 데모 모드(브라우저 목업)는 영향이 없습니다.
   매일 최근 6주 금요일을 상품마다 조회하고(같은 날은 서버가 덮어씀), 같은 조사일의 판매점 가격 중 **최저가**와 그 판매점 업태(대형마트 등)를 저장합니다.
 - [`rpa/public_price_map.json`](../../rpa/public_price_map.json): `goodId → {"model_no", "qty"}`. `qty`는 포장 수량 환산 배수입니다
   (참가격 `삼다수(2L*6개)` × 2 = 서비스 상품 `제주 삼다수 그린 2L × 12개`). 개수만 다른 같은 제품만 넣고, 용량·단계·길이가 다른 제품은 넣지 않습니다.
+  현재 6종: 삼다수, 크리넥스 데코앤소프트·울트라클린 30m 30롤, 잘풀리는집 데코 30m 30롤, 모나리자 프레시티지 40m 30롤, 하기스 매직컴포트 팬티형 5단계(42매 × 2).
+  화장지·하기스 5종은 참가격과 같은 제품을 다나와 검색(`search.danawa.com`, Crawl-delay 10초)으로 찾아 카탈로그에 추가했습니다.
+- 상품 상세 화면에 가장 최근 조사일의 최저가를 "오프라인 최저가 (참가격)"로 판매점 업태·조사일과 함께 보여 줍니다(`GET /products/{id}`의 `offline_price`).
 - 오류 문구의 요청 주소에 들어 있는 인증키는 `***`로 지운 뒤 수집 로그에 남깁니다. 공공데이터포털은 연결 시간 초과가 잦아 연결 오류만 3회 재시도합니다.
 
 수동 실행: GitHub → Actions → **Collect (Render)** → Run workflow → 작업 선택. 로컬은 `cd rpa && python -m collector.jobs collect`
@@ -113,6 +122,7 @@ Playwright 실행기([`browser.py`](../../rpa/collector/browser.py))
 | `COLLECT_ENABLED` | true | `true` | **`false`**(compose 기본값) |
 | `SIMULATE_MALLS` | true | **`false`** | 수집하지 않으므로 무관 |
 | `REQUEST_INTERVAL_SEC` | 3 | 기본값 | 기본값 |
+| `COLLECT_MAX_PRODUCTS`, `COLLECT_ROTATE_REST` | 100, true | 기본값 | 수집하지 않으므로 무관 |
 | `CATALOG`, `MALL_CONFIG` | `rpa/catalog.json`, `rpa/malls.json` | 기본값 | 기본값 |
 | `KCA_API_URL`, `DATA_GO_KR_KEY` | (없음) | Variable / Secret (선택) | `.env` (선택) |
 
@@ -130,6 +140,12 @@ API는 `hmac.compare_digest`로 비교합니다. 값이 다르면 401(`INVALID_R
 
 ## 8. 인기 상품 후보 찾기와 TiDB 무료 한도
 
-- `python -m collector.discover`(Actions: 월요일 04시, 수동 `discover`): robots.txt가 허용하는 다나와 카테고리 목록에서 상위 10개씩 후보를 찾아 `reports/discovered.json`에 저장합니다(에누리 연결 확인 후 `catalog.json`에 수동 추가).
-- 수집은 `priority` 높은 순으로 1회 최대 `COLLECT_MAX_PRODUCTS`(기본 100)개.
+- `python -m collector.discover`(Actions: 월요일 04시, 수동 `discover`): robots.txt가 허용하는 다나와 세부 카테고리 8개 목록 첫 페이지에서
+  상위 40개씩(다음 페이지는 금지 경로 `/list/ajax/`라 쓰지 않음) 카탈로그에 없는 후보를 찾고 에누리를 자동 대조해 `reports/discovered.json`에 저장합니다.
+  카탈로그 반영은 사람이 결과를 보고 합니다. 처음 전체 탐색은 약 1시간 30분(로컬 실행), 매주 실행은 새로 순위에 든 상품만 확인합니다.
+- 단계별 수집: 매 구간(하루 4회) `priority` 상위 `COLLECT_MAX_PRODUCTS`(기본 100)개 + 나머지 상품 중 `product_id % 4 == 구간 번호`인 것
+  (`COLLECT_ROTATE_REST`, 기본 true) → 모든 상품이 하루 한 번 이상 수집됩니다. 상품 220개 기준 1회 약 130개(판매처 약 250곳, 7~8분),
+  하루 요청은 사이트당 약 500건입니다(전체를 하루 4회 수집하면 약 870건). 적기 점수는 하루 최저가로 계산하므로 하위 상품의 하루 1회 수집으로 판정이 달라지지 않습니다.
+- 가격은 50곳씩 나눠 `POST /rpa/prices/bulk`로 보냅니다(서버가 상품마다 판정을 다시 계산하므로 요청 1회를 짧게 유지).
+- `priority`: 인기 순위 기준 `(40 - 순위 + 1) × 10`. 기본 13종은 0이라 하루 1회 수집됩니다.
 - TiDB Starter 무료: 인스턴스당 행 저장 5 GiB, 월 5,000만 RU. 프로젝트마다 인스턴스 1개를 쓰고, 연결은 `DB_POOL_SIZE`=3, `DB_MAX_OVERFLOW`=2.

@@ -26,7 +26,7 @@ from . import storage
 from .api_client import ApiClient
 from .config import Config
 from .http import CollectError, PoliteSession
-from .parsers import parse_jsonld_offer, parse_product
+from .parsers import parse_jsonld_meta, parse_jsonld_offer, parse_product
 
 log = logging.getLogger("collector")
 OUTLIER_RATIO = 0.5  # 직전 가격 대비 ±50% 초과 변동은 이상치로 제외
@@ -65,20 +65,31 @@ def slot_start(at: datetime) -> datetime:
     return at.replace(hour=at.hour - at.hour % SLOT_HOURS, minute=0, second=0, microsecond=0)
 
 
-def limit_products(items: list[dict], limit: int) -> list[dict]:
-    """서버가 우선순위 높은 순으로 준 판매처 목록에서 상품 기준 상위 limit개만 남긴다(실행 시간·상대 사이트 부담 상한)"""
+SLOTS_PER_DAY = 24 // SLOT_HOURS
+POST_CHUNK = 50  # 가격 일괄 등록 1회 판매처 수(서버가 상품마다 판정을 다시 계산하므로 Render 무료 플랜 요청 시간을 짧게 유지)
+
+
+def limit_products(items: list[dict], limit: int, slot: int | None = None) -> list[dict]:
+    """서버가 우선순위 높은 순으로 준 판매처 목록에서 상품 기준 상위 limit개는 매회 수집한다.
+
+    slot(이번 6시간 구간 번호 0~3)을 주면 나머지 상품도 product_id % 4 == slot인 것을 함께 수집한다 → 하루 한 번씩 돌아가며 전부 수집.
+    적기 점수는 하루 최저가로 계산하므로 하위 상품은 하루 1회로 충분하고, 상대 사이트 요청은 전체 4회 대비 절반 이하로 줄어든다.
+    """
     key = lambda l: l.get("product_id", ("listing", l["listing_id"]))  # noqa: E731
-    keep: list = []
-    for l in items:
-        if key(l) not in keep and len(keep) < limit:
-            keep.append(key(l))
-    return [l for l in items if key(l) in keep]
+    top = set(list(dict.fromkeys(key(l) for l in items))[:limit])
+    rotated = lambda k: slot is not None and isinstance(k, int) and k % SLOTS_PER_DAY == slot  # noqa: E731
+    return [l for l in items if key(l) in top or rotated(key(l))]
 
 
 def scrape(session: PoliteSession, url: str, rule: dict) -> dict:
     """규칙(malls.json)대로 한 판매처의 가격을 읽는다. render=playwright면 브라우저로 화면을 그린 뒤 읽는다"""
     soup = session.fetch(url, render=rule.get("render") == "playwright", wait_for=rule.get("wait_for") or rule.get("price"))
-    return parse_jsonld_offer(soup) if rule.get("parser") == "jsonld" else parse_product(soup, rule)
+    if rule.get("parser") == "jsonld":  # 판매처 수·최고가·평점도 함께 읽는다(spec=true인 쇼핑몰만 사양 요약)
+        return {**parse_jsonld_offer(soup), **parse_jsonld_meta(soup, spec=bool(rule.get("spec")))}
+    return parse_product(soup, rule)
+
+
+META_KEYS = ("spec", "offer_count", "high_price", "rating", "review_count")
 
 
 def collect(cfg: Config, api: ApiClient) -> dict:
@@ -92,7 +103,8 @@ def collect(cfg: Config, api: ApiClient) -> dict:
     catalog = cfg.catalog()
     if catalog and hasattr(api, "sync_catalog"):
         log.info("카탈로그 동기화: %s", api.sync_catalog(catalog))  # 수집 대상 상품·판매처를 DB에 맞춤(여러 번 호출해도 같음)
-    listings = {l["listing_id"]: l for l in limit_products(api.listings(), cfg.max_products)}
+    slot = slot_start(started).hour // SLOT_HOURS if cfg.rotate_rest else None
+    listings = {l["listing_id"]: l for l in limit_products(api.listings(), cfg.max_products, slot)}
     rules = cfg.mall_rules()
     rows, failed, skipped, errors = [], 0, 0, []
     with PoliteSession(cfg.user_agent, cfg.request_interval_sec) as session:
@@ -118,11 +130,16 @@ def collect(cfg: Config, api: ApiClient) -> dict:
         errors.append(f"가격을 읽지 못한 판매처 {len(missing)}곳(구조 변경·차단 확인 필요): {missing[:10]}")
         log.warning(errors[-1])
         rows = [r for r in rows if r["price"] > 0]
+    meta = {r["listing_id"]: {k: r[k] for k in META_KEYS if k in r} for r in rows}  # 가격 정제(pandas)와 따로 두었다가 다시 붙인다
     df = clean(rows, listings)
     if len(df):
         storage.upload(cfg.s3_bucket, f"{cfg.s3_prefix}/raw/{started:%Y/%m/%d/%H%M}.json", df.to_json(orient="records", force_ascii=False).encode(),
                        "application/json", cfg.aws_region)
-    result = api.post_prices(df.to_dict("records"), started) if len(df) else {"inserted": 0}
+    records = [{**r, **meta.get(r["listing_id"], {})} for r in df.to_dict("records")]
+    result: dict = {"inserted": 0}
+    for n in range(0, len(records), POST_CHUNK):
+        for k, v in api.post_prices(records[n:n + POST_CHUNK], started).items():
+            result[k] = result.get(k, 0) + v if isinstance(v, int) else v
     status = "SUCCESS" if failed == 0 else ("PARTIAL" if len(df) else "FAIL")
     msg = f"수집 {len(df)}건, 실패 {failed}건, 건너뜀 {skipped}건" + (f" / {errors[0]}" if errors else "")
     api.log("collect_prices", status, started, now(cfg), collected=int(result.get("inserted", 0)), failed=failed, message=msg)

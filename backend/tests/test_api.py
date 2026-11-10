@@ -26,6 +26,26 @@ def test_requires_auth(client):
     assert r.status_code == 401 and r.json()["code"] == "UNAUTHORIZED"
 
 
+def test_search_pages_filters_and_sorts(client, user_h):
+    """상품이 많아도 빠짐없이 볼 수 있게 page·size로 나누고, 분류·정렬·'지금 구매' 필터는 서버가 전체에 적용한다"""
+    def get(qs):
+        return client.get(f"{API}/products/search?{qs}", headers=user_h).json()
+
+    every = get("size=100")
+    assert every["total"] == len(every["items"]) and every["total"] > 3
+    first, second = get("size=2&page=1&sort=price"), get("size=2&page=2&sort=price")
+    assert first["total"] == every["total"] and (first["page"], first["size"]) == (1, 2) and len(first["items"]) == 2
+    assert not {i["id"] for i in first["items"]} & {i["id"] for i in second["items"]}
+    prices = [i["lowest_price"] for i in get("size=100&sort=price")["items"] if i["lowest_price"] is not None]
+    assert prices == sorted(prices)
+    scores = [i["score"] for i in get("size=100&sort=score")["items"] if i["score"] is not None]
+    assert scores == sorted(scores, reverse=True)
+    cats = {i["category"] for i in get("size=100&category=가전,유아")["items"]}
+    assert cats and cats <= {"가전", "유아"}
+    assert all(i["label"] == "BUY_NOW" for i in get("size=100&buy_only=true")["items"])
+    assert client.get(f"{API}/products/search?size=101", headers=user_h).status_code == 422
+
+
 def test_search_and_compare(client, user_h):
     items = client.get(f"{API}/products/search?q=이어폰", headers=user_h).json()["items"]
     assert len(items) == 1 and items[0]["label"] in {"BUY_NOW", "WAIT_A_BIT", "WAIT"}

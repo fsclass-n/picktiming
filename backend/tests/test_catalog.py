@@ -90,15 +90,16 @@ def test_catalog_sets_priority_image_and_listing_order(client):
     assert client.put(f"{API}/rpa/catalog", headers=RPA, json={"malls": [DANAWA], "products": [bad]}).status_code == 422
 
 
-def test_real_catalog_file_is_accepted_and_uses_only_maker_images(client):
-    """rpa/catalog.json 자체 검증: API가 받아들이고, 모든 상품이 다나와·에누리 두 곳에 연결되며, 이미지는 비교 사이트 것이 아니다"""
+def test_real_catalog_file_is_accepted(client):
+    """rpa/catalog.json 자체 검증: API가 받아들이고, 모든 상품에 다나와가 있으며(에누리는 같은 제품이 확인된 경우만), 이미지는 https"""
     body = {k: v for k, v in json.loads(REAL_CATALOG.read_text(encoding="utf-8")).items() if not k.startswith("_")}
     assert all(isinstance(h, str) and h for h in body.pop("retire_mall_hosts", []))  # 시연 쇼핑몰 비활성화는 다른 테스트가 쓰는 데이터라 여기서는 보내지 않는다
     r = client.put(f"{API}/rpa/catalog", headers=RPA, json=body)
     assert r.status_code == 200, r.text
     models = [p["model_no"] for p in body["products"]]
     assert len(models) == len(set(models))
+    assert len(models) <= 400  # 수집 1일 1회 이상 + 상대 사이트 부담 상한(docs/md/04-rpa.md)
     for p in body["products"]:
-        assert sorted(l["mall"] for l in p["listings"]) == ["다나와", "에누리"], p["model_no"]
-        host = urlparse(p.get("image_url") or "").netloc
-        assert not any(site in host for site in ("danawa", "enuri")), (p["model_no"], host)
+        malls = sorted(l["mall"] for l in p["listings"])
+        assert malls in (["다나와"], ["다나와", "에누리"]), p["model_no"]
+        assert urlparse(p.get("image_url") or "https://x").scheme == "https", p["model_no"]

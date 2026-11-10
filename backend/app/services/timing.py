@@ -2,7 +2,7 @@
 from datetime import timedelta
 
 import pandas as pd
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from ..config import now_local
@@ -72,6 +72,20 @@ def cached_or_analyze(db: Session, product: Product, max_age_hours: int = 2) -> 
     save_prediction(db, a)
     db.commit()
     return a
+
+
+def cached_many(db: Session, products: list[Product], max_age_hours: int = 2) -> dict[int, dict]:
+    """여러 상품의 판정을 한 번에: 최신 판정을 쿼리 1번으로 읽고, 없거나 오래된 상품만 계산한다(상품 수백 개 검색용)"""
+    ids = [p.id for p in products]
+    latest = select(func.max(TimingPrediction.id)).where(TimingPrediction.product_id.in_(ids)).group_by(TimingPrediction.product_id)
+    found = {tp.product_id: tp for tp in db.execute(select(TimingPrediction).where(TimingPrediction.id.in_(latest))).scalars()} if ids else {}
+    since = now_local() - timedelta(hours=max_age_hours)
+    out = {}
+    for p in products:
+        tp = found.get(p.id)
+        out[p.id] = ({"product_id": p.id, "current_price": tp.current_price, "score": tp.score, "label": tp.label}
+                     if tp and tp.created_at >= since else cached_or_analyze(db, p, max_age_hours))
+    return out
 
 
 def public_view(a: dict) -> dict:

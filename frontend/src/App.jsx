@@ -461,7 +461,7 @@ function Login() {
         <button key={key} disabled={busy || !providers.data?.[key]} className={`btn-outline flex-col gap-1 py-3 ${bg}`} title={providers.data?.[key] ? t("{x} 로그인", { x: name }) : t("아직 연결되지 않은 로그인 방식")}
           onClick={() => { window.location.assign(oauthStartUrl(key, next)); }}><i className={icon} aria-hidden="true" />{name}<span className="text-[10px] text-slate-500">{providers.data?.[key] ? t("로그인") : t("준비 중")}</span></button>)}</div>
       <Notice error={providers.error} />
-      {providers.data?.demo_login && <div className="mt-7 rounded-2xl border border-dashed border-slate-300 p-4"><p className="mb-3 text-xs text-slate-500">{t("가입 전에 먼저 둘러보세요. 관리자 체험은 조회 전용입니다.")}</p>
+      {providers.data?.demo_login && <div className="mt-7 rounded-2xl border border-dashed border-slate-300 p-4"><p className="mb-3 text-xs text-slate-500">{t("테스트 계정 · 가입 전에 둘러보세요. 테스트 관리자는 조회 전용이며, 실제 관리자는 위 이메일·비밀번호로 로그인합니다.")}</p>
         <div className="grid grid-cols-2 gap-2"><button className="btn-ghost bg-slate-50 text-xs" disabled={busy} onClick={() => run(() => demoLogin('user'))}><Icon name="user" />{t("일반 사용자 테스트")}</button>
           <button className="btn-ghost bg-slate-50 text-xs" disabled={busy} onClick={() => run(() => demoLogin('admin'))}><Icon name="user-shield" />{t("관리자 테스트")}</button></div></div>}
     </section></div>;

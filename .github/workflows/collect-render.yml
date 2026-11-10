@@ -73,7 +73,7 @@ jobs:
     env:
       RPA_TARGET_API: ${{ vars.RENDER_URL }}
       RPA_API_KEY: ${{ secrets.RENDER_RPA_API_KEY }}
-      KCA_API_URL: ${{ vars.KCA_API_URL }}
+      KCA_API_URL: ${{ vars.KCA_API_URL || secrets.KCA_API_URL }}   # Variable 또는 Secret 어느 쪽에 등록해도 동작
       DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
       SIMULATE_MALLS: "false"     # 시연용 쇼핑몰 모의 가격을 만들지 않는다(실제 수집만)
       COLLECT_ENABLED: "true"

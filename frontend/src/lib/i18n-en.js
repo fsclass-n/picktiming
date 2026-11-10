@@ -184,6 +184,14 @@ export default {
   '테스트 계정 로그인이 비활성화되어 있습니다.': 'Test account login is disabled.', '테스트 계정이 없습니다. 서버에서 python -m app.seed를 실행해 주세요.': 'No test accounts. Run python -m app.seed on the server.',
   '지원하지 않는 로그인 방식입니다.': 'Unsupported login method.', 'days는 7, 30, 90 중 하나여야 합니다.': 'days must be 7, 30 or 90.',
   'artifact_b64가 올바른 base64 형식이 아닙니다.': 'artifact_b64 is not valid base64.',
+  '수동 수집': 'Manual collection', '다나와·에누리 가격을 지금 수집합니다(10분에 한 번).': 'Collect Danawa and Enuri prices now (once every 10 minutes).',
+  '마지막 요청': 'Last request', '요청 중…': 'Requesting…', '지금 수집': 'Collect now',
+  '테스트 관리자 계정은 조회만 가능합니다. 실제 관리자 계정으로 로그인해 주세요.': 'The test admin is read-only. Log in with a real admin account.',
+  '수동 수집이 설정되지 않았습니다. Render에 GITHUB_DISPATCH_TOKEN을 등록해 주세요.': 'Manual collection is not configured. Add GITHUB_DISPATCH_TOKEN on Render.',
+  '수동 수집은 10분에 한 번만 요청할 수 있습니다. 잠시 후 다시 시도해 주세요.': 'Manual collection can run once every 10 minutes. Please try again shortly.',
+  '수집을 요청했습니다. 1~2분 뒤 수집 현황에서 결과를 확인하세요.': 'Collection requested. Check results in Collection in 1–2 minutes.',
+  '테스트 계정 · 가입 전에 둘러보세요. 테스트 관리자는 조회 전용이며, 실제 관리자는 위 이메일·비밀번호로 로그인합니다.':
+    'Test accounts · Look around before signing up. The test admin is read-only; real admins log in with email and password above.',
   // 테마·언어 전환
   '테마': 'Theme', '다크 모드로 전환': 'Switch to dark mode', '라이트 모드로 전환': 'Switch to light mode', '언어': 'Language', 'English로 보기': '한국어로 보기',
 };

@@ -1,10 +1,32 @@
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '../lib/api.js';
 import { dt, pct } from '../lib/format.js';
-import { ErrorBox, Plot, Spinner, StatCard } from '../components/ui.jsx';
+import { ErrorBox, Icon, Plot, Spinner, StatCard } from '../components/ui.jsx';
 import { t } from '../lib/i18n.js';
 
 const STATUS = { SUCCESS: 'bg-emerald-100 text-emerald-700', PARTIAL: 'bg-amber-100 text-amber-700', FAIL: 'bg-rose-100 text-rose-700', RUNNING: 'bg-sky-100 text-sky-700' };
+
+/** 지금 수집: 실제 관리자만 GitHub Actions 수집을 실행한다(서버가 권한·10분 간격을 다시 확인) */
+function CollectPanel() {
+  const [state, setState] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState('');
+  useEffect(() => { api.get('/admin/collect').then(setState).catch(() => setState({ allowed: false, configured: false, reason: '' })); }, []);
+  if (!state) return null;
+  const run = async () => {
+    setBusy(true); setMessage('');
+    try { setMessage(t((await api.post('/admin/collect')).message)); } catch (e) { setMessage(e.message); } finally { setBusy(false); }
+  };
+  const disabled = busy || !state.allowed || !state.configured;
+  return <section className="card mt-6 flex flex-wrap items-center justify-between gap-4 p-5" aria-labelledby="collect-title">
+    <div><h2 id="collect-title" className="text-lg">{t('수동 수집')}</h2>
+      <p className="mt-1 text-sm text-slate-500">{!state.allowed ? t(state.reason) : !state.configured ? t('수동 수집이 설정되지 않았습니다. Render에 GITHUB_DISPATCH_TOKEN을 등록해 주세요.') : t('다나와·에누리 가격을 지금 수집합니다(10분에 한 번).')}
+        {state.last_requested_at && <> {t('마지막 요청')} {dt(state.last_requested_at)}</>}</p>
+      {message && <p className="mt-2 text-sm text-brand-700" role="status">{message}</p>}</div>
+    <button type="button" className="btn-primary" onClick={run} disabled={disabled} aria-disabled={disabled}>
+      <Icon name={busy ? 'circle-notch' : 'rotate'} className={busy ? 'animate-spin' : ''} />{busy ? t('요청 중…') : t('지금 수집')}</button>
+  </section>;
+}
 
 export default function Admin() {
   const [d, setD] = useState(null);
@@ -22,6 +44,7 @@ export default function Admin() {
   return (
     <>
       <h1 className="text-3xl">{t("관리자 · 수집·모델")}</h1>
+      <CollectPanel />
       <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard label={t("오늘 수집 실행")} value={t("{n}회", { n: d.summary.runs_today })} icon="fa-play" />
         <StatCard label={t("7일 수집 성공률")} value={pct(d.summary.success_rate, 1)} icon="fa-circle-check" />

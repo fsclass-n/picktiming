@@ -1,5 +1,6 @@
 from datetime import datetime, time, timedelta
 
+import httpx
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
@@ -115,3 +116,43 @@ def change_role(user_id: int, body: RoleIn, db: Session = Depends(get_db), actor
     target.role = body.role
     db.commit()
     return _user_view(target)
+
+
+# ---------------------------------------------------------------- 수동 수집(실제 관리자 전용)
+COLLECT_COOLDOWN = timedelta(minutes=10)
+
+
+def _collect_state(db: Session, user: User) -> dict:
+    s = get_settings()
+    last = db.execute(select(func.max(RpaJobLog.started_at)).where(RpaJobLog.job_name == "manual_collect")).scalar_one_or_none()
+    allowed = user.email not in DEMO_ADMINS
+    reason = "" if allowed else "테스트 관리자 계정은 조회만 가능합니다. 실제 관리자 계정으로 로그인해 주세요."
+    return {"allowed": allowed, "configured": bool(s.github_dispatch_token), "reason": reason,
+            "last_requested_at": last.isoformat() if last else None}
+
+
+@router.get("/collect")
+def collect_state(db: Session = Depends(get_db), user: User = Depends(admin_user)):
+    return _collect_state(db, user)
+
+
+@router.post("/collect", status_code=202)
+def trigger_collect(db: Session = Depends(get_db), user: User = Depends(admin_user)):
+    """GitHub Actions의 Collect 워크플로(job=collect)를 실행한다. 수집 자체는 Actions에서 돌고 결과는 수집 현황 로그에 남는다"""
+    state = _collect_state(db, user)
+    if not state["allowed"]:
+        raise ApiError(403, "DEMO_READ_ONLY", state["reason"])
+    s = get_settings()
+    if not state["configured"]:
+        raise ApiError(503, "COLLECT_NOT_CONFIGURED", "수동 수집이 설정되지 않았습니다. Render에 GITHUB_DISPATCH_TOKEN을 등록해 주세요.")
+    if state["last_requested_at"] and now_local() - datetime.fromisoformat(state["last_requested_at"]) < COLLECT_COOLDOWN:
+        raise ApiError(429, "COLLECT_TOO_SOON", "수동 수집은 10분에 한 번만 요청할 수 있습니다. 잠시 후 다시 시도해 주세요.")
+    r = httpx.post(f"https://api.github.com/repos/{s.github_repo}/actions/workflows/collect-render.yml/dispatches",
+                   json={"ref": "main", "inputs": {"job": "collect"}}, timeout=15,
+                   headers={"Authorization": f"Bearer {s.github_dispatch_token}", "Accept": "application/vnd.github+json",
+                            "X-GitHub-Api-Version": "2022-11-28"})
+    if r.status_code != 204:
+        raise ApiError(502, "COLLECT_DISPATCH_FAILED", f"GitHub Actions 실행 요청에 실패했습니다(HTTP {r.status_code}). 토큰 권한을 확인해 주세요.")
+    db.add(RpaJobLog(job_name="manual_collect", status="SUCCESS", message=f"수동 수집 요청: {user.email}", started_at=now_local(), ended_at=now_local()))
+    db.commit()
+    return {"status": "REQUESTED", "message": "수집을 요청했습니다. 1~2분 뒤 수집 현황에서 결과를 확인하세요."}

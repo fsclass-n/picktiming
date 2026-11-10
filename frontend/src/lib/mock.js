@@ -371,6 +371,8 @@ const routes = [
     }).sort((x, y) => x.change_7d - y.change_7d).slice(0, 6);
     return ok({ timing, drops });
   }],
+  ['GET', /^\/admin\/collect$/, (m, b, token) => (token === 'demo-admin' ? ok({ allowed: false, configured: false, reason: '테스트 관리자 계정은 조회만 가능합니다. 실제 관리자 계정으로 로그인해 주세요.', last_requested_at: null }) : fail(403, 'FORBIDDEN', '관리자 권한이 필요합니다.'))],
+  ['POST', /^\/admin\/collect$/, () => fail(403, 'DEMO_READ_ONLY', '테스트 관리자 계정은 조회만 가능합니다. 실제 관리자 계정으로 로그인해 주세요.')],
   ['GET', /^\/admin\/rpa-logs$/, (m, b, token) => (token === 'demo-admin' ? ok(rpaLogs()) : fail(403, 'FORBIDDEN', '관리자 권한이 필요합니다.'))],
   ['GET', /^\/admin\/ai-metrics$/, (m, b, token) => (token === 'demo-admin' ? ok(aiMetrics()) : fail(403, 'FORBIDDEN', '관리자 권한이 필요합니다.'))],
   ['GET', /^\/admin\/users$/, (m, b, token, query) => {

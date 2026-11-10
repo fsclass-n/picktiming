@@ -16,6 +16,9 @@ class Settings(BaseSettings):
     database_url: str = "sqlite:///./timepick.db"
     db_ssl_ca: str | None = None  # 값이 있으면 TLS 접속(TiDB 필수). 파일이 없는 환경(Windows 로컬)은 certifi/OS 인증서로 검증
 
+    # DB 연결 풀(TiDB Starter 무료: 프로젝트마다 인스턴스 1개 권장). Render 무료 인스턴스 1대 기준 최대 5개 연결
+    db_pool_size: int = 3
+    db_max_overflow: int = 2
     jwt_secret: str = "change-me"
     jwt_expire_minutes: int = 60
     rpa_api_key: str = "change-me-rpa"

@@ -37,7 +37,11 @@ def connect_args(s: Settings) -> dict:
 
 def _engine():
     s = get_settings()
-    return create_engine(s.database_url, pool_pre_ping=True, pool_recycle=280, connect_args=connect_args(s))
+    if s.database_url.startswith("sqlite"):
+        return create_engine(s.database_url, pool_pre_ping=True, connect_args=connect_args(s))
+    # 연결 수를 작게 유지하고(무료 한도의 RU·연결 보호), 서버가 끊기 전에 교체하며, 끊긴 연결은 자동 재연결한다
+    return create_engine(s.database_url, pool_size=s.db_pool_size, max_overflow=s.db_max_overflow, pool_timeout=10,
+                         pool_pre_ping=True, pool_recycle=280, connect_args=connect_args(s))
 
 
 engine = _engine()

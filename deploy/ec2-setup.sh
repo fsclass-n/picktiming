@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # AWS EC2(Ubuntu 22.04/24.04) 최초 1회 설정: Docker 설치 → 저장소 클론 → .env 작성 안내
 # 사용: curl 등으로 내려받지 말고, 저장소를 확인한 뒤 EC2에서 직접 실행하세요.
-#   bash deploy/ec2-setup.sh https://github.com/<조 Organization>/picktiming.git
+#   bash deploy/ec2-setup.sh https://github.com/<조 Organization>/timepick.git
 set -euo pipefail
 
 REPO_URL="${1:?저장소 URL을 인자로 주세요}"
-APP_DIR="${APP_DIR:-$HOME/picktiming}"
+APP_DIR="${APP_DIR:-$HOME/timepick}"
 
 if ! command -v docker >/dev/null 2>&1; then
   sudo apt-get update

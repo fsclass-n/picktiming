@@ -25,7 +25,7 @@
 ## 3. 폴더 구조
 
 ```
-picktiming/
+timepick/
 ├── frontend/                 # Vite가 빌드하는 React SPA
 │   ├── src/App.jsx           # 고객 화면·검색·차트·모달·가입 상태
 │   ├── src/index.css         # Tailwind v4 테마·반응형·키보드 포커스
@@ -57,7 +57,7 @@ picktiming/
 │   └── Dockerfile
 ├── deploy/                   # nginx.conf, config.same-origin.js, ec2-setup.sh
 ├── docker-compose.yml        # EC2: web(nginx) + api + rpa (DB는 TiDB)
-├── render.yaml               # Render Blueprint (서비스 이름 picktiming, Dockerfile)
+├── render.yaml               # Render Blueprint (서비스 이름 timepick, Dockerfile)
 ├── Dockerfile                # Render 풀스택: React 빌드 + FastAPI
 ├── requirements.txt          # Python 통합 의존성
 ├── .dockerignore             # 이미지에 불필요한 문서·로컬 파일 제외
@@ -92,7 +92,7 @@ Netlify(picktiming.netlify.app): 데모 모드 — 브라우저 목업 데이터
 | 00·06·12·18시 | 가격 수집(`collect`, GitHub Actions) | `price_history` 추가, 판정·알림 갱신 |
 | 매일 03시 | 모델 재학습(`train`) | 성능이 같거나 좋으면 새 모델을 활성화(`model_versions`) |
 | 매일 06시 | 참가격 공공데이터(`public`) | `public_prices` 갱신 (키가 없으면 건너뜀) |
-| 매주 월 07시 | 주간 리포트(`report`) | EC2: `~/picktiming/reports/`, Render: Actions 아티팩트(30일 보관) |
+| 매주 월 07시 | 주간 리포트(`report`) | EC2: `~/timepick/reports/`, Render: Actions 아티팩트(30일 보관) |
 
 ## 5. 환경별 차이 한눈에 보기
 
@@ -104,7 +104,7 @@ Netlify(picktiming.netlify.app): 데모 모드 — 브라우저 목업 데이터
 | API 주소(프런트) | 같은 도메인(`/`) | 없음(데모 모드) | 같은 도메인(`/`) | 같은 도메인(`/`) |
 | 실행 방식 | `uvicorn` | 정적 호스팅 | `Dockerfile(저장소 루트)` (컨텍스트: 저장소 루트) | `backend/Dockerfile`, `rpa/Dockerfile` (compose) |
 | RPA | 수동 실행 | 없음 | GitHub Actions 예약 실행 | 컨테이너 상주 |
-| 설정 값 | 루트 `.env` | 없음 | **같은 `.env`** 를 Environment에 붙여 넣기 | **같은 `.env`** 를 `~/picktiming/.env`로 복사 |
+| 설정 값 | 루트 `.env` | 없음 | **같은 `.env`** 를 Environment에 붙여 넣기 | **같은 `.env`** 를 `~/timepick/.env`로 복사 |
 | 배포 | — | Netlify Git 연동 | 커밋 → CI 통과 → Render Auto-Deploy | 커밋 → CI 통과 → GitHub Actions SSH |
 
 다음 문서: [02. 백엔드](02-backend.md)

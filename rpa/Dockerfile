@@ -1,5 +1,5 @@
 # RPA 수집기 이미지 (EC2 docker compose의 rpa 서비스). 빌드 컨텍스트 = 저장소 루트
-#   docker build -f rpa/Dockerfile -t picktiming-rpa .
+#   docker build -f rpa/Dockerfile -t timepick-rpa .
 FROM python:3.11.9-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \

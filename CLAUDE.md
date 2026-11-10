@@ -1,4 +1,4 @@
-# CLAUDE.md — 픽타이밍(PickTiming) 운영 매뉴얼
+# CLAUDE.md — 타임픽(TimePick) 운영 매뉴얼
 
 Claude는 이 저장소에서 작업을 시작하기 전에 이 문서를 먼저 읽는다.
 이 문서의 규칙이 `.claude/rules/ecc/`(ECC 공통 규칙)와 충돌하면 **이 문서를 우선**한다.
@@ -8,7 +8,7 @@ Claude는 이 저장소에서 작업을 시작하기 전에 이 문서를 먼저
 RPA가 실제 제품(`rpa/catalog.json`)의 다나와·에누리 가격을 하루 4회 수집(GitHub Actions) → FastAPI 백엔드가 저장·분석(scikit-learn) → Gemini가 "지금 사도 되는가"를 설명 → 정적 프런트엔드가 보여준다.
 Final-Project 3조 팀 저장소이며 `main`에 push하면 **실제 운영 환경(Netlify · Render · AWS EC2)에 자동 배포**된다.
 
-운영 구성: **Netlify = 프런트엔드 데모 모드(API 연결 없음)**, **Render = Static Site(`timepick`) + API Web Service(`picktiming`, 기존 주소) 분리**,
+운영 구성: **Netlify = 프런트엔드 데모 모드(API 연결 없음)**, **Render = Static Site(`timepick`) + API Web Service(`timepick`, 기존 주소) 분리**,
 **EC2 = nginx 같은 도메인 풀스택**(Render와 EC2는 서로 호출하지 않음),
 **DB = TiDB 하나를 로컬·Render·EC2가 공유**(MySQL 8은 CI 호환성 테스트 전용), **설정 = `.env` 하나**(로컬 작성 → EC2 `scp` → Render "Add from .env").
 Render 배포는 Auto-Deploy "After CI Checks Pass", EC2 배포는 `deploy.yml`. 실제 가격 수집은 GitHub Actions(`collect-render.yml`) 한 곳에서만 하고, EC2 rpa 컨테이너는 `COLLECT_ENABLED=false`로 재학습·리포트만 한다.
@@ -67,6 +67,7 @@ CHANGED_FILES="backend/app/main.py" EVENT=push bash .github/scripts/detect-chang
    EC2(nginx)·로컬 풀스택(FastAPI)은 `/js/config.js`를 같은 도메인 설정(`"/"`)으로 바꿔 응답한다.
    Render Static Site는 빌드 시 `VITE_API_URL`(백엔드 주소)을 주입하고, 백엔드는 `FRONTEND_URL`로 CORS·소셜 로그인 복귀를 맞춘다.
    두 값은 Render 전용이라 `.env`에 넣지 않는다(docs/md/07-deploy-render.md).
+   화면 문구는 `t('한국어 원문')`으로 쓰고 영어는 `src/lib/i18n-en.js`에 넣는다(`npm run i18n:check`). 색은 slate·brand 유틸리티를 써야 다크 테마가 자동 적용된다(docs/md/03-frontend.md 3절).
    Netlify에 `API_BASE_URL`을 등록하지 않는다(데모 모드 유지 결정).
 6. **프런트엔드 빌드 체계 유지**: 사용자가 요청한 React(Vite) + Tailwind CSS v4를 사용한다. `npm ci && npm run build`로 검증한다.
    고객 UI와 상호작용은 `frontend/src/App.jsx`, 디자인 토큰은 `src/index.css`에 있다. 관리자 페이지는 필요 시 지연 로드한다.
@@ -74,7 +75,7 @@ CHANGED_FILES="backend/app/main.py" EVENT=push bash .github/scripts/detect-chang
 7. **DB 호환성**: 로컬·Render·EC2 모두 TiDB(MySQL 호환), CI는 SQLite와 MySQL 8 둘 다 테스트한다.
    한쪽 DB에서만 동작하는 SQL·타입(PostgreSQL 전용 문법 등)을 쓰지 않는다.
 8. **데이터 삭제 금지**: 로컬도 운영 TiDB를 쓴다. `python -m app.seed --reset`, `TEST_DATABASE_URL=<TiDB>` 테스트는 운영 데이터를 지우므로 실행하지 않는다.
-   DB 구조를 바꾸는 실험은 사용자 승인 후 별도 DB(예: `picktiming_dev`)에서 한다.
+   DB 구조를 바꾸는 실험은 사용자 승인 후 별도 DB(예: `timepick_dev`)에서 한다.
 9. **RPA 수집 원칙**: robots.txt 확인, 같은 사이트 요청 간격(기본 3초, robots `Crawl-delay` 우선) 유지, `rpa/malls.json`에 등록된(약관상 허용된) 쇼핑몰만 수집한다.
    차단(403·429·CAPTCHA)을 우회하지 않는다: User-Agent 위장·IP 교체·CAPTCHA 풀이 금지. 수집 위치는 GitHub Actions 한 곳(이중 접속 금지).
 10. **Render 무료 플랜**: 콜드 스타트와 메모리 제한이 있다. 무거운 의존성·상주 작업을 API 컨테이너에 추가하지 않는다.

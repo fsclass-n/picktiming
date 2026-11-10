@@ -1,5 +1,5 @@
 # FastAPI API 이미지 (EC2 compose의 api, CI). 빌드 컨텍스트 = 저장소 루트
-#   docker build -f backend/Dockerfile -t picktiming-api .
+#   docker build -f backend/Dockerfile -t timepick-api .
 FROM python:3.11.9-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \

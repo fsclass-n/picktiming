@@ -18,7 +18,7 @@ https://picktiming.netlify.app 은 **프런트엔드 시연용**으로 유지합
 
 ## 2. 배포 방식
 
-- Netlify → Site configuration → Build & deploy → Continuous deployment에 저장소 `fsclass-n/picktiming`이 연결되어 있으면
+- Netlify → Site configuration → Build & deploy → Continuous deployment에 저장소 `fsclass-n/timepick`이 연결되어 있으면
   **Git 연동**입니다. `frontend/`가 바뀐 커밋이 `main`에 올라오면 Netlify가 [`netlify.toml`](../../netlify.toml)대로
   (`base = "frontend"`, `command = "npm ci && npm run build"`, `publish = "dist"`) 다시 빌드합니다.
   Node는 22를 사용하며 커밋된 `public/js/config.js`의 빈 API 주소가 데모 모드를 결정합니다.
@@ -32,7 +32,7 @@ https://picktiming.netlify.app 은 **프런트엔드 시연용**으로 유지합
 
 ## 4. 저장소·도메인 변경 후 이전 화면이 남을 때
 
-1. 연결 저장소가 `fsclass-n/picktiming`인지, Netlify 앱의 저장소 접근 권한이 있는지 확인합니다.
+1. 연결 저장소가 `fsclass-n/timepick`인지, Netlify 앱의 저장소 접근 권한이 있는지 확인합니다.
 2. Deploys에서 대상 커밋의 빌드·게시 상태와 게시 잠금을 확인합니다.
 3. Base는 `frontend`, 명령은 `npm ci && npm run build`, Publish는 base 기준 `dist`인지 확인합니다.
 4. 필요하면 Clear cache and deploy site를 사용하고 새 JS 자산·서비스명·로고가 반영되는지 확인합니다.

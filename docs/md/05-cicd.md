@@ -55,7 +55,7 @@ CHANGED_FILES="backend/app/main.py" EVENT=push bash .github/scripts/detect-chang
 | 대상 | 방식 | 필요한 값 (없으면 그 대상만 건너뜀) |
 |---|---|---|
 | Render | **Render Auto-Deploy "After CI Checks Pass"**: GitHub 검사 통과 후 직접 배포(Build Filter: `backend/**`, `frontend/**`, `Dockerfile`, `requirements.txt`, `render.yaml`, `.dockerignore`). `deploy.yml`의 Render 작업은 Hook이 없으면 건너뜀 | Render 대시보드 설정(07 문서). `RENDER_DEPLOY_HOOK_URL`은 등록하지 않음(Auto-Deploy Off일 때만 사용) |
-| EC2 | SSH 접속 → `git pull --ff-only origin main` → 바뀐 서비스만 `docker compose up -d --build` → `http://localhost/health` 확인 | Secrets `EC2_HOST`, `EC2_USER`, `EC2_SSH_KEY`, Variable `EC2_APP_DIR`(기본 `~/picktiming`) |
+| EC2 | SSH 접속 → `git pull --ff-only origin main` → 바뀐 서비스만 `docker compose up -d --build` → `http://localhost/health` 확인 | Secrets `EC2_HOST`, `EC2_USER`, `EC2_SSH_KEY`, Variable `EC2_APP_DIR`(기본 `~/timepick`) |
 | Netlify | (Actions 방식) React 빌드 결과 `frontend/dist`를 zip으로 Netlify API에 업로드 | Secrets `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID` |
 
 > Netlify는 **Git 연동(Netlify가 저장소를 직접 빌드)과 Actions 방식 중 하나만** 씁니다. 이미 Git 연동으로 배포했다면
@@ -77,7 +77,7 @@ CHANGED_FILES="backend/app/main.py" EVENT=push bash .github/scripts/detect-chang
 
 ## 6. 최근 확인과 결과 해석
 
-기준 커밋 `279a4ce`, [Deploy 41947934806](https://github.com/fsclass-n/picktiming/actions/runs/41947934806)의
+기준 커밋 `279a4ce`, [Deploy 41947934806](https://github.com/fsclass-n/timepick/actions/runs/41947934806)의
 React·백엔드 SQLite/MySQL·RPA·Docker 검사가 통과했습니다.
 브라우저 9개 시나리오는 별도 로컬 검사이며 CI에 자동 연결되어 있다고 표현하지 않습니다.
 

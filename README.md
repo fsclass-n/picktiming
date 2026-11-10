@@ -1,4 +1,4 @@
-# PickTiming · 실시간 가격 비교 & 구매 타이밍 추천 서비스
+# TimePick · 실시간 가격 비교 & 구매 타이밍 추천 서비스
 
 > **“어디서 가장 싸게 살까?”에서 “지금 사도 될까?”까지.**
 >
@@ -10,12 +10,12 @@
 ![Playwright](https://img.shields.io/badge/Playwright-선택적_렌더링-2EAD33)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?logo=scikitlearn&logoColor=white)
 
-[![Build](https://github.com/fsclass-n/picktiming/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/fsclass-n/picktiming/actions/workflows/deploy.yml)
-[![Issues](https://img.shields.io/github/issues/fsclass-n/picktiming)](https://github.com/fsclass-n/picktiming/issues)
-![Repository size](https://img.shields.io/github/repo-size/fsclass-n/picktiming)
+[![Build](https://github.com/fsclass-n/timepick/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/fsclass-n/timepick/actions/workflows/deploy.yml)
+[![Issues](https://img.shields.io/github/issues/fsclass-n/timepick)](https://github.com/fsclass-n/timepick/issues)
+![Repository size](https://img.shields.io/github/repo-size/fsclass-n/timepick)
 [![License](https://img.shields.io/badge/License-Not_specified-lightgrey)](#license)
 
-**[포트폴리오 · 발표·시연 영상 보기](https://fsclass-n.github.io/picktiming/)**
+**[포트폴리오 · 발표·시연 영상 보기](https://fsclass-n.github.io/timepick/)**
 
 [서비스 체험](https://picktiming.netlify.app) · [운영 API 문서](https://timepick-ai.onrender.com/docs) · [발표자료 PDF](docs/pdf/프로젝트_발표자료.pdf)
 
@@ -184,7 +184,7 @@ flowchart LR
 ## Directory Structure
 
 ```text
-picktiming/
+timepick/
 ├── index.html                 # GitHub Pages 포트폴리오
 ├── backend/
 │   ├── app/

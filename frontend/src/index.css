@@ -83,3 +83,41 @@
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ---------------------------------------------------------------- 다크 테마
+   html[data-theme="dark"]: slate 팔레트를 뒤집어 배경(50~200)은 어둡게, 글자(500~900)는 밝게 만든다.
+   .keep-dark(푸터·데모 배너·토스트)는 원래부터 어두운 영역이라 원래 팔레트를 그대로 쓴다. 대비는 WCAG AA(4.5:1)를 기준으로 골랐다. */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --color-slate-50: #172133; --color-slate-100: #1e2a3d; --color-slate-200: #2c3a50; --color-slate-300: #3d4b62;
+  --color-slate-400: #8995a9; --color-slate-500: #a3aec0; --color-slate-600: #bac4d2; --color-slate-700: #d0d8e3;
+  --color-slate-800: #e3e8ef; --color-slate-900: #f1f5f9; --color-slate-950: #f8fafc;
+  --color-brand-50: #221a3d; --color-brand-100: #2e2453; --color-brand-500: #a184f4; --color-brand-700: #c3b0f8; --color-brand-900: #ede9fe;
+  --color-emerald-50: #0e2a22; --color-emerald-100: #123629; --color-emerald-700: #6ee7b7; --color-emerald-800: #a7f3d0;
+  --color-amber-100: #3b2d10; --color-amber-700: #fcd34d;
+  --color-rose-50: #3a1621; --color-rose-100: #47192b; --color-rose-700: #fda4af; --color-rose-800: #fecdd3;
+  --color-sky-100: #0c2d40; --color-sky-700: #7dd3fc;
+  --surface: #0f1726; --page: #0b1220;
+}
+html[data-theme="dark"] .keep-dark {
+  --color-slate-50: #f8fafc; --color-slate-100: #f1f5f9; --color-slate-200: #e2e8f0; --color-slate-300: #cbd5e1; --color-slate-400: #94a3b8;
+  --color-slate-500: #526278; --color-slate-600: #475569; --color-slate-700: #334155; --color-slate-800: #1e293b; --color-slate-900: #0f172a;
+}
+html[data-theme="dark"] body { background-color: var(--page); }
+html[data-theme="dark"] :is(.bg-white, .card, .input, .btn-outline, .step-chip > span:first-child) { background-color: var(--surface); }
+html[data-theme="dark"] .bg-white\/85 { background-color: rgb(15 23 38 / 85%); }
+html[data-theme="dark"] .bg-white\/95 { background-color: rgb(15 23 38 / 95%); }
+html[data-theme="dark"] .text-brand-600 { color: #b39cf7; }
+html[data-theme="dark"] .text-rose-600 { color: #fb7185; }
+html[data-theme="dark"] .text-emerald-600 { color: #34d399; }
+html[data-theme="dark"] .hero-surface { background: linear-gradient(115deg, #1b1633 0%, #111a2b 55%, #0f2622 100%); }
+html[data-theme="dark"] .product-photo { background: #1e2a3d; }
+html[data-theme="dark"] .product-photo img { filter: brightness(0.9); }
+html[data-theme="dark"] .product-photo::after { border-color: rgb(255 255 255 / 6%); }
+html[data-theme="dark"] .chart-grid { stroke: #2c3a50; }
+html[data-theme="dark"] .chart-text { fill: #a3aec0; }
+html[data-theme="dark"] .modal { color: var(--color-slate-800); background: var(--surface); box-shadow: 0 24px 80px #00000080; }
+html[data-theme="dark"] .modal::backdrop { background: rgb(0 0 0 / 60%); }
+html[data-theme="dark"] .skip-link { background: var(--surface); color: var(--color-slate-900); }
+html[data-theme="dark"] ::selection { background: #2e2453; color: #ede9fe; }
+html[data-theme="dark"] :focus-visible { outline-color: #a184f4; }

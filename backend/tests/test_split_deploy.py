@@ -54,7 +54,7 @@ def test_api_only_keeps_api_docs_and_health(api_only):
 def test_api_only_without_frontend_url_returns_service_info(tmp_path):
     """EC2 api 컨테이너: 화면은 nginx가 제공하므로 API 안내만 응답"""
     c = TestClient(create_app(Settings(frontend_dir=str(tmp_path / "missing"), frontend_url="")))
-    assert c.get("/", follow_redirects=False).json() == {"service": "PickTiming API", "docs": "/docs", "health": "/health"}
+    assert c.get("/", follow_redirects=False).json() == {"service": "TimePick API", "docs": "/docs", "health": "/health"}
     assert c.get("/login").status_code == 404
 
 

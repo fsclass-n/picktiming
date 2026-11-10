@@ -7,7 +7,7 @@
 이 동작합니다. 값을 등록하지 않은 대상·작업은 자동으로 건너뜁니다.
 Render 배포는 GitHub가 요청하지 않고, Render의 Auto-Deploy(**After CI Checks Pass**)가 CI 통과를 보고 직접 배포합니다(07 문서 3단계).
 
-등록 위치: GitHub `fsclass-n/picktiming` → **Settings → Secrets and variables → Actions** (저장소 관리자 권한 필요)
+등록 위치: GitHub `fsclass-n/timepick` → **Settings → Secrets and variables → Actions** (저장소 관리자 권한 필요)
 
 ## 1. Secrets (암호화 저장)
 
@@ -31,7 +31,7 @@ Render 배포는 GitHub가 요청하지 않고, Render의 Auto-Deploy(**After CI
 | Name | 값 | 비고 |
 |---|---|---|
 | `RENDER_URL` | `https://timepick-ai.onrender.com` | Render 가격 수집 대상 (끝에 `/` 없이) |
-| `EC2_APP_DIR` | `~/picktiming` | 기본값과 같으면 생략 가능 |
+| `EC2_APP_DIR` | `~/timepick` | 기본값과 같으면 생략 가능 |
 | `EC2_MODE` | `full` | 기본값과 같으면 생략 가능 (`rpa-only`로 두지 않음) |
 | `KCA_API_URL` | `.env`의 같은 이름 값 (선택) | Render 참가격 수집 |
 

@@ -33,7 +33,7 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_DATABASE: picktiming_test
+          MYSQL_DATABASE: timepick_test
           MYSQL_USER: ci
           MYSQL_PASSWORD: ci-password
           MYSQL_ROOT_PASSWORD: ci-root-password
@@ -42,7 +42,7 @@ jobs:
           --health-cmd="mysqladmin ping -h localhost"
           --health-interval=10s --health-timeout=5s --health-retries=10
     env:
-      TEST_DATABASE_URL: mysql+pymysql://ci:ci-password@127.0.0.1:3306/picktiming_test?charset=utf8mb4
+      TEST_DATABASE_URL: mysql+pymysql://ci:ci-password@127.0.0.1:3306/timepick_test?charset=utf8mb4
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -83,6 +83,7 @@ jobs:
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci --no-audit --no-fund
+      - run: npm run i18n:check   # 화면 문구의 영어 번역 누락 검사
       - run: npm run build
       - name: "빌드 결과 확인 (데모 모드 config.js, SPA 진입점)"
         run: "test -f dist/index.html && grep -q API_BASE_URL dist/js/config.js"
@@ -100,18 +101,18 @@ jobs:
     needs: [backend, rpa]
     steps:
       - uses: actions/checkout@v4
-      - run: docker build -f backend/Dockerfile -t picktiming-api:ci .
-      - run: docker build -f rpa/Dockerfile -t picktiming-rpa:ci .
+      - run: docker build -f backend/Dockerfile -t timepick-api:ci .
+      - run: docker build -f rpa/Dockerfile -t timepick-rpa:ci .
       - name: API 컨테이너 헬스 체크
         run: |
-          docker run -d --name api -p 8000:8000 -e DATABASE_URL=sqlite:////app/data/ci.db picktiming-api:ci
+          docker run -d --name api -p 8000:8000 -e DATABASE_URL=sqlite:////app/data/ci.db timepick-api:ci
           for i in $(seq 1 30); do curl -fsS http://localhost:8000/health && exit 0; sleep 2; done
           docker logs api; exit 1
       - name: Render 백엔드 구성 확인 (API 전용 + FRONTEND_URL 리다이렉트·CORS)
         run: |
           WEB=https://timepick.onrender.com
           docker run -d --name split -p 8002:8000 -e DATABASE_URL=sqlite:////app/data/ci.db \
-            -e FRONTEND_URL=$WEB -e ALLOWED_ORIGINS=http://localhost:5173 picktiming-api:ci
+            -e FRONTEND_URL=$WEB -e ALLOWED_ORIGINS=http://localhost:5173 timepick-api:ci
           for i in $(seq 1 30); do curl -fsS http://localhost:8002/health && break; sleep 2; done
           curl -sS -o /dev/null -w '%{http_code} %{redirect_url}\n' http://localhost:8002/product/1 | grep -qx "302 $WEB/product/1" \
             && curl -sS -o /dev/null -w '%{http_code}' http://localhost:8002/api/v1/no-such-endpoint | grep -qx 404 \
@@ -121,8 +122,8 @@ jobs:
             || { docker logs split; exit 1; }
       - name: 이전 통합 이미지(저장소 루트 Dockerfile, 롤백용) 빌드·확인
         run: |
-          docker build -t picktiming-render:ci .
-          docker run -d --name render -p 8001:10000 -e PORT=10000 -e DATABASE_URL=sqlite:////app/data/ci.db picktiming-render:ci
+          docker build -t timepick-render:ci .
+          docker run -d --name render -p 8001:10000 -e PORT=10000 -e DATABASE_URL=sqlite:////app/data/ci.db timepick-render:ci
           for i in $(seq 1 30); do curl -fsS http://localhost:8001/health && break; sleep 2; done
           curl -fsS http://localhost:8001/login | grep -q "js/config.js" \
             && curl -fsS http://localhost:8001/js/config.js | grep -q 'API_BASE_URL: "/"' \

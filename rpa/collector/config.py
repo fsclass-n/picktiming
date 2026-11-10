@@ -19,7 +19,7 @@ class Config:
     api_base_url: str = field(default_factory=lambda: os.getenv("RPA_TARGET_API", "http://localhost:8000").rstrip("/"))
     rpa_api_key: str = field(default_factory=lambda: os.getenv("RPA_API_KEY", ""))
     request_interval_sec: float = field(default_factory=lambda: float(os.getenv("REQUEST_INTERVAL_SEC", "3")))
-    user_agent: str = field(default_factory=lambda: os.getenv("COLLECTOR_USER_AGENT", "PickTimingBot/1.0 (+contact: team3@picktiming.example)"))
+    user_agent: str = field(default_factory=lambda: os.getenv("COLLECTOR_USER_AGENT", "TimePickBot/1.0 (+contact: team3@timepick.example)"))
     # 시연용 쇼핑몰(*.example.com) 모의 가격. 실제 수집 환경(GitHub Actions)은 false
     simulate: bool = field(default_factory=lambda: _flag("SIMULATE_MALLS", "true"))
     # 외부 사이트 가격 수집 여부. 실제 수집은 GitHub Actions 한 곳만 하고 EC2 rpa 컨테이너는 false(docker-compose.yml)
@@ -34,7 +34,7 @@ class Config:
     tz: str = field(default_factory=lambda: os.getenv("TZ", "Asia/Seoul"))
     # AWS S3 (선택) — 값이 있으면 수집 원본·주간 리포트를 업로드
     s3_bucket: str = field(default_factory=lambda: os.getenv("S3_BUCKET", ""))
-    s3_prefix: str = field(default_factory=lambda: os.getenv("S3_PREFIX", "picktiming").strip("/"))
+    s3_prefix: str = field(default_factory=lambda: os.getenv("S3_PREFIX", "timepick").strip("/"))
     aws_region: str = field(default_factory=lambda: os.getenv("AWS_REGION", "ap-northeast-2"))
 
     @staticmethod

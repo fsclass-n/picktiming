@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=(".env", "../.env"), env_file_encoding="utf-8", extra="ignore")
 
     app_env: str = "development"
-    database_url: str = "sqlite:///./picktiming.db"
+    database_url: str = "sqlite:///./timepick.db"
     db_ssl_ca: str | None = None  # 값이 있으면 TLS 접속(TiDB 필수). 파일이 없는 환경(Windows 로컬)은 certifi/OS 인증서로 검증
 
     jwt_secret: str = "change-me"
@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-2.5-flash"
     ai_daily_limit: int = 20
 
-    # 테스트 계정 간편 로그인(시드의 demo@·admin@picktiming.demo). 시연용 — 실제 운영에서는 false
+    # 테스트 계정 간편 로그인(시드의 demo@·admin@timepick.demo). 시연용 — 실제 운영에서는 false
     demo_login_enabled: bool = False
 
     # 소셜 로그인(OAuth). 값이 있는 제공자만 버튼이 활성화된다. 콜백 주소: <서비스 주소>/api/v1/auth/oauth/<provider>/callback

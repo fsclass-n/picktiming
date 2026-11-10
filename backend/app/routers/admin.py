@@ -11,7 +11,7 @@ from ..models import AiAdviceLog, ModelVersion, Product, RpaJobLog, User, Watchl
 from ..schemas import RoleIn
 from ..security import admin_user
 
-DEMO_ADMINS = {"admin@picktiming.demo", "admin@buytiming.demo"}  # 이전 이름(BuyTiming)으로 시드된 테스트 관리자 포함
+DEMO_ADMINS = {"admin@timepick.demo", "admin@picktiming.demo", "admin@buytiming.demo"}  # 이전 이름(BuyTiming·PickTiming)으로 시드된 테스트 관리자 포함
 
 router = APIRouter(prefix="/admin", tags=["관리자"])
 

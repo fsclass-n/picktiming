@@ -76,7 +76,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             raise RuntimeError(describe_db_error(exc, settings.database_url)) from exc
         yield
 
-    app = FastAPI(title="PickTiming API", version="1.2.0", description="실시간 가격 비교 & 구매 적기 추천 API", lifespan=lifespan)
+    app = FastAPI(title="TimePick API", version="1.2.0", description="실시간 가격 비교 & 구매 적기 추천 API", lifespan=lifespan)
     # 토큰은 Authorization 헤더로 보내므로 쿠키(credentials)는 허용하지 않는다. FRONTEND_URL의 출처는 settings.origins에 자동 포함
     app.add_middleware(CORSMiddleware, allow_origins=settings.origins, allow_methods=CORS_METHODS, allow_headers=CORS_HEADERS,
                        allow_credentials=False, max_age=600)
@@ -103,7 +103,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     else:
         @app.get("/", include_in_schema=False)
         def root():
-            return {"service": "PickTiming API", "docs": "/docs", "health": "/health"}
+            return {"service": "TimePick API", "docs": "/docs", "health": "/health"}
 
     return app
 

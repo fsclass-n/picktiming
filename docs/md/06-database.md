@@ -29,7 +29,7 @@
 3. 접근 허용 IP(IP Access List / Firewall 규칙)가 보이면 허용합니다: 개발 PC 공인 IP, EC2 Elastic IP, Render(고정 IP 없음 → Render 대시보드 Connect → Outbound의 IP 범위, 또는 전체 허용)
 4. **SQL Editor**에서 DB 생성 (기본 DB는 `test`이므로 반드시 만듦)
    ```sql
-   CREATE DATABASE picktiming;
+   CREATE DATABASE timepick;
    ```
    테이블은 API가 처음 기동할 때 자동 생성됩니다.
 
@@ -52,7 +52,7 @@ DB_SSL_CA=/etc/ssl/certs/ca-certificates.crt
 로컬 `.env`가 TiDB를 가리키므로 **로컬 PC에서 바로** 넣을 수 있습니다. 데이터가 이미 있으면 자동으로 건너뜁니다.
 
 ```powershell
-cd E:\wi\git\picktiming
+cd E:\wi\git\timepick
 .venv\Scripts\activate
 cd backend
 python -m app.seed          # 데모·관리자 계정 비밀번호가 화면에 출력됨 (.env의 SEED_* 값이 있으면 그 값)
@@ -70,7 +70,7 @@ EC2에서 넣을 때: `docker compose exec api python -m app.seed`
 
 - 그냥 `pytest`를 실행하는 것은 안전합니다. 테스트 설정([`conftest.py`](../../backend/tests/conftest.py))이 `DATABASE_URL`을 임시 SQLite로 덮어씁니다.
 - 로컬에서 수집기(`python -m collector.jobs collect`)를 돌리면 운영 DB에 가격이 저장됩니다. 같은 시간대 중복은 API가 건너뜁니다.
-- 실험용 DB가 필요하면 같은 TiDB 인스턴스에 `CREATE DATABASE picktiming_dev;`를 만들고, 로컬 `.env`의 주소 끝만 `/picktiming_dev`로 바꿔 씁니다.
+- 실험용 DB가 필요하면 같은 TiDB 인스턴스에 `CREATE DATABASE timepick_dev;`를 만들고, 로컬 `.env`의 주소 끝만 `/timepick_dev`로 바꿔 씁니다.
 
 ## 6. TiDB 사용 시 코드 작성 주의
 
@@ -87,23 +87,23 @@ TiDB·MySQL은 `ALTER DATABASE ... RENAME`을 지원하지 않는다(문법 오�
 데이터는 복사되지 않고 이동만 하므로 빠르고, 행·인덱스·AUTO_INCREMENT 값이 그대로 유지된다.
 
 ```sql
-CREATE DATABASE IF NOT EXISTS picktiming;
-RENAME TABLE buytiming.users TO picktiming.users;
-RENAME TABLE buytiming.products TO picktiming.products;
-RENAME TABLE buytiming.malls TO picktiming.malls;
-RENAME TABLE buytiming.product_listings TO picktiming.product_listings;
-RENAME TABLE buytiming.price_history TO picktiming.price_history;
-RENAME TABLE buytiming.public_prices TO picktiming.public_prices;
-RENAME TABLE buytiming.watchlist TO picktiming.watchlist;
-RENAME TABLE buytiming.alerts TO picktiming.alerts;
-RENAME TABLE buytiming.timing_predictions TO picktiming.timing_predictions;
-RENAME TABLE buytiming.ai_advice_logs TO picktiming.ai_advice_logs;
-RENAME TABLE buytiming.model_versions TO picktiming.model_versions;
-RENAME TABLE buytiming.rpa_job_logs TO picktiming.rpa_job_logs;
+CREATE DATABASE IF NOT EXISTS timepick;
+RENAME TABLE buytiming.users TO timepick.users;
+RENAME TABLE buytiming.products TO timepick.products;
+RENAME TABLE buytiming.malls TO timepick.malls;
+RENAME TABLE buytiming.product_listings TO timepick.product_listings;
+RENAME TABLE buytiming.price_history TO timepick.price_history;
+RENAME TABLE buytiming.public_prices TO timepick.public_prices;
+RENAME TABLE buytiming.watchlist TO timepick.watchlist;
+RENAME TABLE buytiming.alerts TO timepick.alerts;
+RENAME TABLE buytiming.timing_predictions TO timepick.timing_predictions;
+RENAME TABLE buytiming.ai_advice_logs TO timepick.ai_advice_logs;
+RENAME TABLE buytiming.model_versions TO timepick.model_versions;
+RENAME TABLE buytiming.rpa_job_logs TO timepick.rpa_job_logs;
 ```
 
-- 확인: `SHOW TABLES FROM buytiming;`이 비어 있고 `SELECT COUNT(*) FROM picktiming.users;`가 이전과 같아야 한다.
-- 이어서 `DATABASE_URL` 끝의 DB 이름을 `picktiming`으로 바꾼다: 로컬 `.env` → Render Environment → EC2 `.env`.
+- 확인: `SHOW TABLES FROM buytiming;`이 비어 있고 `SELECT COUNT(*) FROM timepick.users;`가 이전과 같아야 한다.
+- 이어서 `DATABASE_URL` 끝의 DB 이름을 `timepick`으로 바꾼다: 로컬 `.env` → Render Environment → EC2 `.env`.
   Render가 이전 주소로 다시 시작하면 서버 시작 시 `buytiming`에 빈 테이블을 새로 만들 수 있으니 Render 값을 바로 바꾼다.
 - 빈 `buytiming`은 위 확인 후에만 `DROP DATABASE buytiming;`으로 지운다(되돌릴 수 없음).
 

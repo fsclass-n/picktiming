@@ -9,7 +9,7 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
-    image: picktiming-api:latest
+    image: timepick-api:latest
     env_file: .env
     environment:
       PORT: "8000"
@@ -27,7 +27,7 @@ services:
     build:
       context: .
       dockerfile: rpa/Dockerfile
-    image: picktiming-rpa:latest
+    image: timepick-rpa:latest
     env_file: .env
     environment:
       # 기본: 같은 EC2의 api 컨테이너(.env에 RPA_TARGET_API를 넣지 않음)
@@ -46,7 +46,7 @@ services:
     build:
       context: .
       dockerfile: deploy/web.Dockerfile   # React 빌드 + nginx
-    image: picktiming-web:latest
+    image: timepick-web:latest
     ports:
       - "80:80"
     depends_on:

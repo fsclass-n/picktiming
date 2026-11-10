@@ -1,6 +1,6 @@
 """로컬 데모 UI 회귀 검사. 실행 중인 Vite preview와 Playwright가 필요하다.
 
-PICKTIMING_UI_URL=http://localhost:4173 python frontend/tests/ui_smoke.py
+TIMEPICK_UI_URL=http://localhost:4173 python frontend/tests/ui_smoke.py
 Windows: PLAYWRIGHT_CHANNEL=msedge. 운영 도메인과 운영 DB에는 접근하지 않는다.
 """
 import os
@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 
 from playwright.sync_api import expect, sync_playwright
 
-BASE = os.getenv("PICKTIMING_UI_URL", "http://127.0.0.1:4173")
+BASE = os.getenv("TIMEPICK_UI_URL", "http://127.0.0.1:4173")
 if urlparse(BASE).hostname not in {"localhost", "127.0.0.1"}:
     raise RuntimeError("UI 검사는 로컬 preview에서만 실행하세요.")
 
@@ -38,6 +38,21 @@ class PlatformUI(unittest.TestCase):
 
     def tearDown(self):
         self.context.close()
+        self.assertEqual(self.errors, [])
+
+    def test_theme_and_language_preferences(self):
+        """다크/라이트 전환은 즉시 적용·저장되고, 영어 전환 후 메뉴가 영어로 보이며 한국어로 돌아올 수 있다"""
+        self.page.get_by_role("button", name=re.compile("모드로 전환")).first.click()
+        first = self.page.evaluate("document.documentElement.dataset.theme")
+        self.page.reload()
+        self.assertEqual(self.page.evaluate("document.documentElement.dataset.theme"), first)
+        self.page.get_by_role("button", name="English로 보기").click()
+        self.page.wait_for_load_state("networkidle")
+        self.assertEqual(self.page.evaluate("document.documentElement.lang"), "en")
+        expect(self.page.get_by_role("navigation", name="Main menu").get_by_role("link", name=re.compile("Compare prices"))).to_be_visible()
+        self.page.get_by_role("button", name="한국어로 보기").click()
+        self.page.wait_for_load_state("networkidle")
+        self.assertEqual(self.page.evaluate("document.documentElement.lang"), "ko")
         self.assertEqual(self.errors, [])
 
     def test_search_and_price_range(self):

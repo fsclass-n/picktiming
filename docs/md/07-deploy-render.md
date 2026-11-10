@@ -55,7 +55,7 @@ Render의 `onrender.com` 주소는 **서비스를 만들 때의 이름**으로 �
 
 ## 2. 프런트엔드 — Static Site 만들기
 
-Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/picktiming`
+Render 대시보드 → **New → Static Site** → 저장소 `fsclass-n/timepick`
 
 | 항목 | 값 |
 |---|---|

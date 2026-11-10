@@ -4,15 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#182c37">
-  <meta name="description" content="가격 비교를 넘어 구매 타이밍까지. PickTiming의 발표 영상, 실제 서비스 시연과 설계·문제 해결 과정을 담은 기술 포트폴리오입니다.">
-  <meta property="og:title" content="PickTiming — 가격을 넘어, 구매의 순간까지">
+  <meta name="description" content="가격 비교를 넘어 구매 타이밍까지. TimePick의 발표 영상, 실제 서비스 시연과 설계·문제 해결 과정을 담은 기술 포트폴리오입니다.">
+  <meta property="og:title" content="TimePick — 가격을 넘어, 구매의 순간까지">
   <meta property="og:description" content="10분 발표와 60초 하이라이트로 살펴보는 AI·RPA 기반 구매 타이밍 추천 서비스.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://fsclass-n.github.io/picktiming/">
-  <meta property="og:image" content="https://fsclass-n.github.io/picktiming/docs/video/video-thumbnail.png">
-  <link rel="canonical" href="https://fsclass-n.github.io/picktiming/">
+  <meta property="og:url" content="https://fsclass-n.github.io/timepick/">
+  <meta property="og:image" content="https://fsclass-n.github.io/timepick/docs/video/video-thumbnail.png">
+  <link rel="canonical" href="https://fsclass-n.github.io/timepick/">
   <link rel="icon" href="./frontend/public/favicon.svg" type="image/svg+xml">
-  <title>PickTiming — 프로젝트 포트폴리오</title>
+  <title>TimePick — 프로젝트 포트폴리오</title>
   <style>
     /* 외부 폰트·라이브러리 요청 없이 로컬 한글 글꼴을 사용합니다. */
     :root {
@@ -260,15 +260,15 @@
   <a class="skip" href="#main">본문으로 건너뛰기</a>
   <header class="site-header">
     <div class="wrap header-inner">
-      <a class="brand" href="#main" aria-label="PickTiming 포트폴리오 처음으로">
+      <a class="brand" href="#main" aria-label="TimePick 포트폴리오 처음으로">
         <img src="./frontend/public/favicon.svg" alt="" width="34" height="34">
-        PickTiming
+        TimePick
       </a>
       <nav class="nav" aria-label="주요 메뉴">
         <a href="#films">발표·시연</a>
         <a href="#engineering">설계 이야기</a>
         <a href="#resources">프로젝트 자료</a>
-        <a class="source-link" href="https://github.com/fsclass-n/picktiming">GitHub
+        <a class="source-link" href="https://github.com/fsclass-n/timepick">GitHub
           <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>
         </a>
       </nav>
@@ -304,7 +304,7 @@
         </div>
         <div class="hero-footnote">
           <span>실제 서비스 화면 녹화 · 한국어 자막 포함 · 합성 음성 내레이션</span>
-          <a href="https://github.com/fsclass-n/picktiming/blob/main/docs/video/영상_대본_및_연출가이드.md">영상 대본 읽기</a>
+          <a href="https://github.com/fsclass-n/timepick/blob/main/docs/video/영상_대본_및_연출가이드.md">영상 대본 읽기</a>
         </div>
       </div>
     </section>
@@ -357,7 +357,7 @@
             <figcaption>
               <h3>왜 지금 사야 할까?</h3>
               <p>분석 결과를 쉬운 말로 설명하고, 이어지는 질문은 상품 맥락을 유지한 채 상담합니다.</p>
-              <a class="text-link" href="https://github.com/fsclass-n/picktiming/blob/main/backend/app/ai/gemini.py">AI 답변 검증 코드</a>
+              <a class="text-link" href="https://github.com/fsclass-n/timepick/blob/main/backend/app/ai/gemini.py">AI 답변 검증 코드</a>
             </figcaption>
           </figure>
           <figure>
@@ -383,7 +383,7 @@
             <li><span class="step">3</span><div><strong>판단</strong><small>scikit-learn · 가격 위치와 하락 가능성으로 점수 계산</small></div></li>
             <li><span class="step">4</span><div><strong>설명과 알림</strong><small>Gemini 답변 검증 · 목표가 알림 · React 화면</small></div></li>
           </ol>
-          <a class="text-link" href="https://github.com/fsclass-n/picktiming/tree/main/docs/md">아키텍처·운영 문서 읽기</a>
+          <a class="text-link" href="https://github.com/fsclass-n/timepick/tree/main/docs/md">아키텍처·운영 문서 읽기</a>
         </div>
         <div>
           <div class="decisions">
@@ -391,21 +391,21 @@
               <summary>AI가 만든 숫자를 그대로 믿지 않기</summary>
               <div class="decision-body">
                 AI에는 분석된 사실을 전달하고, 응답의 숫자를 입력과 대조합니다. 검증에 실패하면 다시 요청하고, 반복 실패 시 정해진 설명으로 대체합니다.
-                <br><a href="https://github.com/fsclass-n/picktiming/blob/main/backend/app/ai/gemini.py">구현 근거 보기</a>
+                <br><a href="https://github.com/fsclass-n/timepick/blob/main/backend/app/ai/gemini.py">구현 근거 보기</a>
               </div>
             </details>
             <details>
               <summary>두 수집기가 기록해도, 가격 이력은 한 번만</summary>
               <div class="decision-body">
                 Render용 예약 수집과 EC2 수집기가 같은 DB를 사용하므로, 같은 판매처·같은 시간대의 중복 적재를 막습니다. 수집 경로가 늘어도 가격 이력이 중복되지 않도록 설계했습니다.
-                <br><a href="https://github.com/fsclass-n/picktiming/blob/main/docs/md/04-rpa.md">수집 흐름과 제약 보기</a>
+                <br><a href="https://github.com/fsclass-n/timepick/blob/main/docs/md/04-rpa.md">수집 흐름과 제약 보기</a>
               </div>
             </details>
             <details>
               <summary>무료 서버의 제약을 실행 구조로 풀기</summary>
               <div class="decision-body">
                 Netlify는 서버 연결 없는 데모로, Render는 FastAPI와 화면을 함께 제공하는 서비스로 구성했습니다. Render의 가격 수집은 GitHub Actions에서 예약 실행해 상주 스케줄러를 분리했습니다.
-                <br><a href="https://github.com/fsclass-n/picktiming/blob/main/docs/md/05-cicd.md">배포·자동화 구조 보기</a>
+                <br><a href="https://github.com/fsclass-n/timepick/blob/main/docs/md/05-cicd.md">배포·자동화 구조 보기</a>
               </div>
             </details>
           </div>
@@ -428,7 +428,7 @@
         <div class="resource-links">
           <a href="./docs/pdf/프로젝트_발표자료.pdf"><span><strong>포트폴리오 PDF</strong><small>18장 · 역할, 설계, 문제 해결, 회고</small></span><span aria-hidden="true">↗</span></a>
           <a href="./docs/프로젝트_발표자료.pptx" download><span><strong>발표자료 원본</strong><small>PowerPoint · 발표자 노트 포함</small></span><span aria-hidden="true">↓</span></a>
-          <a href="https://github.com/fsclass-n/picktiming"><span><strong>소스 코드</strong><small>구현 코드 · 테스트 · 운영 문서</small></span><span aria-hidden="true">↗</span></a>
+          <a href="https://github.com/fsclass-n/timepick"><span><strong>소스 코드</strong><small>구현 코드 · 테스트 · 운영 문서</small></span><span aria-hidden="true">↗</span></a>
         </div>
         <div class="team-heading"><h3>함께 만든 사람들</h3><p>3조 팀 프로젝트 · 팀원명은 가상 인물로 표기했습니다.</p></div>
         <div class="team">
@@ -445,7 +445,7 @@
   </main>
   <footer class="site-footer">
     <div class="wrap footer-inner">
-      <p>PickTiming · 가격 비교를 넘어, 구매 타이밍까지.</p>
+      <p>TimePick · 가격 비교를 넘어, 구매 타이밍까지.</p>
       <div class="footer-links">
         <a href="https://picktiming.netlify.app">데모 서비스</a>
         <a href="https://timepick-ai.onrender.com/docs">운영 API 문서</a>
@@ -456,7 +456,7 @@
   <dialog class="presentation" id="presentation" aria-labelledby="presentation-title" aria-describedby="presentation-help">
     <div class="presentation-shell" id="presentation-screen">
       <header class="presentation-header">
-        <h2 id="presentation-title">PickTiming 발표</h2>
+        <h2 id="presentation-title">TimePick 발표</h2>
         <div class="presentation-actions">
           <button id="slide-fullscreen" type="button" aria-pressed="false">전체 화면</button>
           <button id="slide-close" type="button" autofocus>닫기</button>
@@ -491,7 +491,7 @@
     </div>
   </dialog>
   <!-- 새 영상: VIDEO_LIBRARY에 항목 추가 후 원하는 위치에 <div data-video="항목ID"></div>를 배치합니다.
-       로컬 경로는 ./로 시작해 /picktiming/ 하위에서도 동작합니다. 외부 영상은 HTTPS MP4 직접 URL을 사용합니다.
+       로컬 경로는 ./로 시작해 /timepick/ 하위에서도 동작합니다. 외부 영상은 HTTPS MP4 직접 URL을 사용합니다.
        YouTube 페이지·GitHub blob 주소는 video src로 사용할 수 없습니다. -->
   <template id="video-template">
     <div class="media">
@@ -520,7 +520,7 @@
       full: {
         src: "./docs/video/3조_final.mp4",
         poster: "./docs/video/video-thumbnail.png",
-        title: "PickTiming 발표·시연",
+        title: "TimePick 발표·시연",
         duration: "10:00"
       },
       highlight: {

@@ -19,8 +19,9 @@ from ..security import create_token, current_user, hash_password, verify_passwor
 router = APIRouter(tags=["인증"])
 log = logging.getLogger(__name__)
 
-# 시드(python -m app.seed)가 만드는 테스트 계정. 서비스 이름 변경(BuyTiming → PickTiming) 전에 시드된 DB의 이전 이메일도 찾는다
-DEMO_ACCOUNTS = {"user": ("demo@picktiming.demo", "demo@buytiming.demo"), "admin": ("admin@picktiming.demo", "admin@buytiming.demo")}
+# 시드(python -m app.seed)가 만드는 테스트 계정. 서비스 이름 변경(BuyTiming → PickTiming → TimePick) 전에 시드된 DB의 이전 이메일도 찾는다
+DEMO_ACCOUNTS = {"user": ("demo@timepick.demo", "demo@picktiming.demo", "demo@buytiming.demo"),
+                 "admin": ("admin@timepick.demo", "admin@picktiming.demo", "admin@buytiming.demo")}
 
 
 def _token_out(user: User) -> TokenOut:

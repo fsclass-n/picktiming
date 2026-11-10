@@ -1,12 +1,13 @@
 {
-  "name": "picktiming-frontend",
+  "name": "timepick-frontend",
   "private": true,
   "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "i18n:check": "node scripts/i18n-check.mjs"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "7.3.1",

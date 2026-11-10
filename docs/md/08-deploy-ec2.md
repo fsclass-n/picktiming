@@ -25,14 +25,14 @@ Render를 호출하지 않으며, DB만 **TiDB**(Render와 공유)를 씁니다.
 ## 2. 고정 IP와 DuckDNS
 
 1. EC2 → **Elastic IP** 할당 → 인스턴스에 연결 (재시작해도 IP가 바뀌지 않게)
-2. https://www.duckdns.org 로그인 → 서브도메인 `picktiming`의 **current ip**를 Elastic IP로 입력 → update ip
+2. https://www.duckdns.org 로그인 → 서브도메인 `timepick`의 **current ip**를 Elastic IP로 입력 → update ip
 3. PC에서 확인: `nslookup picktiming.duckdns.org` → Elastic IP가 나오면 성공
 4. TiDB의 허용 IP 목록이 있다면 이 Elastic IP를 추가(06 문서)
 
 ## 3. 접속
 
 ```bash
-ssh -i picktiming.pem ubuntu@picktiming.duckdns.org
+ssh -i timepick.pem ubuntu@picktiming.duckdns.org
 ```
 
 ## 4. (micro 인스턴스만) 스왑 2 GB 만들기
@@ -51,14 +51,14 @@ free -h
 
 ```bash
 sudo apt-get update && sudo apt-get install -y git
-git clone https://github.com/fsclass-n/picktiming.git ~/picktiming
+git clone https://github.com/fsclass-n/timepick.git ~/timepick
 
 # 1회차: Docker 설치 후 종료 → 로그아웃했다가 다시 SSH 접속(docker 그룹 적용)
-bash ~/picktiming/deploy/ec2-setup.sh https://github.com/fsclass-n/picktiming.git
+bash ~/timepick/deploy/ec2-setup.sh https://github.com/fsclass-n/timepick.git
 exit
 
-# 2회차: .env.example을 복사해 ~/picktiming/.env를 만들고 종료
-bash ~/picktiming/deploy/ec2-setup.sh https://github.com/fsclass-n/picktiming.git
+# 2회차: .env.example을 복사해 ~/timepick/.env를 만들고 종료
+bash ~/timepick/deploy/ec2-setup.sh https://github.com/fsclass-n/timepick.git
 ```
 
 ## 6. `.env` — 로컬 PC의 `.env`를 그대로 복사 (가장 중요)
@@ -67,12 +67,12 @@ bash ~/picktiming/deploy/ec2-setup.sh https://github.com/fsclass-n/picktiming.gi
 
 PC(PowerShell, 저장소 폴더)에서:
 ```powershell
-scp -i <키.pem 경로> .env ubuntu@picktiming.duckdns.org:~/picktiming/.env
+scp -i <키.pem 경로> .env ubuntu@picktiming.duckdns.org:~/timepick/.env
 ```
 EC2에서:
 ```bash
-chmod 600 ~/picktiming/.env
-grep -c . ~/picktiming/.env          # 줄 수 확인(빈 파일이 아닌지)
+chmod 600 ~/timepick/.env
+grep -c . ~/timepick/.env          # 줄 수 확인(빈 파일이 아닌지)
 ```
 
 - `ec2-setup.sh` 2회차가 만든 예시 `.env`는 이 복사로 덮어씁니다.
@@ -83,7 +83,7 @@ grep -c . ~/picktiming/.env          # 줄 수 확인(빈 파일이 아닌지)
 ## 7. 기동
 
 ```bash
-cd ~/picktiming
+cd ~/timepick
 docker compose config -q && echo "compose OK"      # .env 검증
 docker compose up -d --build                         # 첫 빌드는 수 분 소요
 docker compose ps                                    # api: healthy, rpa·web: running
@@ -120,7 +120,7 @@ docker compose exec rpa python -m collector.jobs collect     # 즉시 1회 수�
 | 재시작 | `docker compose restart api` |
 | 수동 업데이트 | `git pull --ff-only origin main && docker compose up -d --build` |
 | 디스크 정리 | `docker image prune -f`, 확인 `df -h` |
-| 주간 리포트 | `ls ~/picktiming/reports/` |
+| 주간 리포트 | `ls ~/timepick/reports/` |
 
 - 서버에서 저장소 파일(추적 대상)을 직접 수정하지 않습니다. 자동 배포의 `git pull --ff-only`가 실패합니다. 설정은 `.env`(Git 제외)에서만 바꿉니다.
 

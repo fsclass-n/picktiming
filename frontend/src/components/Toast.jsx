@@ -15,7 +15,7 @@ export function ToastProvider({ children }) {
       {children}
       <div className="fixed bottom-6 left-1/2 z-[70] flex -translate-x-1/2 flex-col gap-2" role="status" aria-live="polite">
         {items.map((t) => (
-          <div key={t.id} className={`${STYLE[t.type] || STYLE.dark} rounded-xl px-4 py-3 text-sm text-white shadow-lg`}>{t.message}</div>
+          <div key={t.id} className={`keep-dark ${STYLE[t.type] || STYLE.dark} rounded-xl px-4 py-3 text-sm text-white shadow-lg`}>{t.message}</div>
         ))}
       </div>
     </ToastContext.Provider>

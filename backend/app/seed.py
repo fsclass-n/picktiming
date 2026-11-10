@@ -96,14 +96,14 @@ def seed(reset: bool = False) -> None:
 
         pw = {}
         admins = get_settings().admin_email_set
-        for email, name, env in (("demo@picktiming.demo", "데모 사용자", "SEED_DEMO_PASSWORD"),
-                                 ("admin@picktiming.demo", "관리자", "SEED_ADMIN_PASSWORD")):
+        for email, name, env in (("demo@timepick.demo", "데모 사용자", "SEED_DEMO_PASSWORD"),
+                                 ("admin@timepick.demo", "관리자", "SEED_ADMIN_PASSWORD")):
             pw[email] = os.getenv(env) or secrets.token_urlsafe(9)
             role = "ADMIN" if email.startswith("admin") or email in admins else "USER"
             db.add(User(email=email, name=name, role=role, password_hash=hash_password(pw[email])))
         db.commit()
 
-        demo = db.execute(select(User).where(User.email == "demo@picktiming.demo")).scalar_one()
+        demo = db.execute(select(User).where(User.email == "demo@timepick.demo")).scalar_one()
         targets = {"X2-ANC": 130000, "AF55": 85000, "MF800-3": 80000}
         for p in db.execute(select(Product).where(Product.model_no.in_(targets))).scalars():
             db.add(Watchlist(user_id=demo.id, product_id=p.id, target_price=targets[p.model_no]))

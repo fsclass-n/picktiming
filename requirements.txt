@@ -1,4 +1,4 @@
-# PickTiming - single Python dependency list (backend, rpa, tests). Install: pip install -r requirements.txt
+# TimePick - single Python dependency list (backend, rpa, tests). Install: pip install -r requirements.txt
 # Used by every Docker image (Dockerfile for Render, backend/Dockerfile, rpa/Dockerfile).
 # Keep this file ASCII-only: pip on Korean Windows reads it with the cp949 locale encoding.
 

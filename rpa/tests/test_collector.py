@@ -124,7 +124,7 @@ def test_parse_jsonld_marks_missing_or_empty_offers_as_unavailable():
 def test_robots_crawl_delay_is_respected_per_host():
     from collector.http import PoliteSession
 
-    s = PoliteSession("PickTimingBot/1.0", interval_sec=3)
+    s = PoliteSession("TimePickBot/1.0", interval_sec=3)
     for root, lines in {"https://search.example.org": ["User-agent: *", "Crawl-delay: 10"], "https://prod.example.org": ["User-agent: *", "Allow: /"]}.items():
         import urllib.robotparser
 
@@ -140,7 +140,7 @@ def test_requests_to_different_hosts_do_not_wait_for_each_other(monkeypatch):
 
     slept = []
     monkeypatch.setattr(http.time, "sleep", slept.append)
-    s = http.PoliteSession("PickTimingBot/1.0", interval_sec=3)
+    s = http.PoliteSession("TimePickBot/1.0", interval_sec=3)
     s.wait("https://a.example.org/1")
     s.wait("https://b.example.org/1")
     assert slept == []  # 다른 사이트는 바로 요청
@@ -206,7 +206,7 @@ def test_browser_blocks_heavy_and_disallowed_requests():
     """Playwright 렌더링: 이미지·폰트·미디어, 다른 사이트의 XHR, robots.txt 금지 경로(예: 다나와 /info/ajax/) 호출을 보내지 않는다"""
     from collector.browser import BrowserSession
 
-    b = BrowserSession("PickTimingBot/1.0", allowed=lambda url: "/info/ajax/" not in url)
+    b = BrowserSession("TimePickBot/1.0", allowed=lambda url: "/info/ajax/" not in url)
     b._page_host = "prod.danawa.com"
     cases = {("https://img.danawa.com/a.jpg", "image"): "abort", ("https://prod.danawa.com/font.woff2", "font"): "abort",
              ("https://prod.danawa.com/info/ajax/getPrice.php", "xhr"): "abort", ("https://ads.example.net/track", "fetch"): "abort",

@@ -2,7 +2,7 @@
 # Render는 이제 분리 배포한다(render.yaml): 백엔드 = backend/Dockerfile(API 전용), 프런트엔드 = Static Site.
 # 이 파일은 대시보드 Dockerfile Path를 ./backend/Dockerfile로 바꾸기 전까지의 전환 기간과, 문제 시 되돌리기(Dockerfile Path → ./Dockerfile)에만 쓴다.
 # 분리 배포가 안정되면 삭제해도 된다(CI의 '이전 통합 이미지' 단계와 함께). 빌드 컨텍스트는 저장소 루트(.).
-#   docker build -t picktiming-render .
+#   docker build -t timepick-render .
 # 1단계: React 빌드
 FROM node:22-alpine AS web
 WORKDIR /src

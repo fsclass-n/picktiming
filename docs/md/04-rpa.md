@@ -51,7 +51,7 @@ Netlify 데모 모드(브라우저 목업)는 영향이 없습니다.
 | `collect` | 00·06·12·18시 (Actions) | 카탈로그 동기화 → 수집 대상 목록 → 상품 페이지 수집 → 가격 없는 판매처는 실패 처리 → pandas 정제 → 일괄 저장 → 로그 | `PUT /rpa/catalog`, `GET /rpa/listings`, `POST /rpa/prices/bulk`, `POST /rpa/logs` |
 | `train` | 매일 03:00 | 모델 재학습 요청(API가 백그라운드로 학습) | `POST /rpa/train` |
 | `public` | 매일 06:00 | 한국소비자원 참가격 (`KCA_API_URL`, `DATA_GO_KR_KEY` 없으면 건너뜀) | `PUT /rpa/public-prices` |
-| `report` | 매주 월 07:00 | 주간 가격 리포트(엑셀) → Actions 아티팩트(30일), EC2는 `~/picktiming/reports/` | `GET /rpa/reports/weekly` |
+| `report` | 매주 월 07:00 | 주간 가격 리포트(엑셀) → Actions 아티팩트(30일), EC2는 `~/timepick/reports/` | `GET /rpa/reports/weekly` |
 
 수동 실행: GitHub → Actions → **Collect (Render)** → Run workflow → 작업 선택. 로컬은 `cd rpa && python -m collector.jobs collect`
 (`RPA_TARGET_API`를 로컬 API로 지정. 로컬 `.env`가 운영 TiDB를 가리키면 운영 데이터가 바뀝니다).
@@ -78,7 +78,7 @@ Playwright 실행기([`browser.py`](../../rpa/collector/browser.py))
 
 - 사이트마다 `robots.txt`를 확인하고, 확인할 수 없으면 수집하지 않습니다.
 - **같은 사이트끼리** 요청 간격 3초 이상, robots.txt에 `Crawl-delay`가 있으면 그 값을 따릅니다(다른 사이트끼리는 기다리지 않음).
-- 봇 이름 `PickTimingBot/1.0 (+contact: …)`를 그대로 밝힙니다. User-Agent 위장·IP 교체·CAPTCHA 풀이를 하지 않습니다.
+- 봇 이름 `TimePickBot/1.0 (+contact: …)`를 그대로 밝힙니다. User-Agent 위장·IP 교체·CAPTCHA 풀이를 하지 않습니다.
 - 401·403·404·410·429는 같은 실행에서 다시 요청하지 않고 실패로 기록합니다. 그 밖의 오류는 3회 재시도(3·6·12초).
 - 가격을 읽지 못한 판매처(JSON-LD 없음: 차단 화면·구조 변경, 판매처 0곳)는 0원을 저장하지 않고 **실패**로 기록 → 관리자 수집 현황에 표시됩니다.
 - 직전 가격 대비 ±50%를 넘는 값은 이상치로 제외합니다.

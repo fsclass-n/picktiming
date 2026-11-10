@@ -1,4 +1,5 @@
 import { handleMock } from './mock.js';
+import { t } from './i18n.js';
 
 // API 주소: 서버가 응답한 /js/config.js(EC2·로컬 풀스택 = "/") → 빌드 시 주입한 VITE_API_URL(Render Static Site) 순서로 사용
 const BASE = (window.APP_CONFIG?.API_BASE_URL || import.meta.env.VITE_API_URL || '').trim();
@@ -42,7 +43,7 @@ async function request(method, path, body) {
   const token = auth.token();
   if (DEMO) {
     const res = await handleMock(method, path, body, token);
-    if (res.status >= 400) throw new ApiError(res.status, res.body.code, res.body.message);
+    if (res.status >= 400) throw new ApiError(res.status, res.body.code, t(res.body.message));
     return res.body;
   }
   let resp;
@@ -53,7 +54,7 @@ async function request(method, path, body) {
       body: body === undefined ? undefined : JSON.stringify(body),
     });
   } catch {
-    throw new ApiError(0, 'NETWORK_ERROR', 'API 서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요.');
+    throw new ApiError(0, 'NETWORK_ERROR', t("API 서버에 연결할 수 없습니다. 잠시 후 다시 시도해 주세요."));
   }
   const data = resp.status === 204 ? null : await resp.json().catch(() => ({}));
   if (resp.status === 401 && !path.startsWith('/auth/')) {
@@ -62,7 +63,7 @@ async function request(method, path, body) {
   }
   if (!resp.ok) {
     const detail = typeof data?.detail === 'string' ? data.detail : null;
-    throw new ApiError(resp.status, data?.code, data?.message || detail || (resp.status === 422 ? '입력 형식을 확인해 주세요.' : `요청 실패 (${resp.status})`));
+    throw new ApiError(resp.status, data?.code, t(data?.message || detail || '') || (resp.status === 422 ? t("입력 형식을 확인해 주세요.") : t("요청 실패 ({n})", { n: resp.status })));
   }
   return data;
 }

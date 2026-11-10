@@ -42,7 +42,7 @@ Docker 실행 명령은 `uvicorn app.main:app --port ${PORT:-8000}` 입니다. R
 | 변수 | 코드 기본값 | `.env` 값 (세 환경 공용) | 설명 |
 |---|---|---|---|
 | `APP_ENV` | development | `production` | `production`이면 `JWT_SECRET`·`RPA_API_KEY`가 비어 있을 때 기동 거부 |
-| `DATABASE_URL` | sqlite:///./picktiming.db | TiDB 접속 문자열 | DB (로컬 포함 모두 TiDB) |
+| `DATABASE_URL` | sqlite:///./timepick.db | TiDB 접속 문자열 | DB (로컬 포함 모두 TiDB) |
 | `DB_SSL_CA` | (없음) | `/etc/ssl/certs/ca-certificates.crt` | 값이 있으면 TLS. 파일이 없는 Windows 로컬은 certifi 사용 |
 | `JWT_SECRET` | change-me | 생성한 무작위 값 | 로그인 토큰 서명 키 |
 | `RPA_API_KEY` | change-me-rpa | 생성한 무작위 값 | RPA 전용 API 인증 키. GitHub Secret `RENDER_RPA_API_KEY`에도 같은 값 |
@@ -105,7 +105,7 @@ Docker 실행 명령은 `uvicorn app.main:app --port ${PORT:-8000}` 입니다. R
 [`seed.py`](../../backend/app/seed.py): 시연 쇼핑몰 3곳(`*.example.com`), 상품 12종, 가격 이력 120일, 데모 계정 2개, 초기 모델 학습.
 
 - 데이터가 이미 있으면 아무것도 하지 않습니다(운영 DB에 다시 실행해도 안전).
-- 계정: `demo@picktiming.demo`, `admin@picktiming.demo` — 비밀번호는 `SEED_DEMO_PASSWORD` / `SEED_ADMIN_PASSWORD`, 없으면 무작위 생성 후 화면에 출력.
+- 계정: `demo@timepick.demo`, `admin@timepick.demo` — 비밀번호는 `SEED_DEMO_PASSWORD` / `SEED_ADMIN_PASSWORD`, 없으면 무작위 생성 후 화면에 출력.
 - `--reset`은 **모든 테이블을 삭제**합니다. 운영 TiDB에서 절대 사용하지 않습니다.
 
 ## 7. 테스트

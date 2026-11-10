@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="실시간 가격 비교와 AI 구매 적기 판단 서비스">
-  <title>픽타이밍 · 지금 사도 될까요?</title>
+  <title>타임픽 · 지금 사도 될까요?</title>
+  <meta name="color-scheme" content="light dark">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <!-- 제목·가격: Spoqa Han Sans Neo(500), 본문·폼: Noto Sans KR -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,6 +14,16 @@
   <link rel="stylesheet" href="https://spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css">
   <!-- API 주소: EC2=같은 도메인("/")으로 서버가 바꿔 응답, Render Static Site=빌드 시 VITE_API_URL, Netlify=데모 모드("") -->
   <script src="/js/config.js"></script>
+  <!-- 테마·언어: 첫 화면을 그리기 전에 적용해 깜박임을 막는다(src/lib/theme.js·i18n.js와 같은 저장 키) -->
+  <script>
+    (function () {
+      var d = document.documentElement, theme = null, lang = null;
+      try { theme = localStorage.getItem('tp_theme'); lang = localStorage.getItem('tp_lang'); } catch (e) {}
+      if (theme !== 'dark' && theme !== 'light') theme = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      d.dataset.theme = theme; d.style.colorScheme = theme;
+      if (lang === 'en') d.lang = 'en';
+    })();
+  </script>
 </head>
 <body>
   <div id="root"></div>

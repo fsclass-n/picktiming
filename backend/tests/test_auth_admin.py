@@ -26,7 +26,7 @@ def test_providers_hide_secrets(client):
 def test_demo_login_user_and_admin(client):
     u = client.post(f"{API}/auth/demo-login", json={"kind": "user"}).json()
     a = client.post(f"{API}/auth/demo-login", json={"kind": "admin"}).json()
-    assert u["user"]["email"] == "demo@picktiming.demo" and u["user"]["role"] == "USER"
+    assert u["user"]["email"] == "demo@timepick.demo" and u["user"]["role"] == "USER"
     assert a["user"]["role"] == "ADMIN" and a["access_token"]
 
 
@@ -74,7 +74,7 @@ def test_oauth_profile_normalize():
 
 
 def _real_admin(client):
-    """테스트 관리자(admin@picktiming.demo)는 조회만 가능하므로 ADMIN_EMAILS로 실제 관리자를 만든다"""
+    """테스트 관리자(admin@timepick.demo)는 조회만 가능하므로 ADMIN_EMAILS로 실제 관리자를 만든다"""
     s = get_settings()
     s.__dict__["admin_emails"] = "boss@test.com"
     body = {"email": "boss@test.com", "password": "Boss!2345", "name": "관리자"}
@@ -86,7 +86,7 @@ def _real_admin(client):
 def test_admin_users_list_and_role_change(client, user_h, admin_h):
     assert client.get(f"{API}/admin/users", headers=user_h).status_code == 403
     d = client.get(f"{API}/admin/users?q=demo", headers=admin_h).json()
-    demo = next(u for u in d["items"] if u["email"] == "demo@picktiming.demo")
+    demo = next(u for u in d["items"] if u["email"] == "demo@timepick.demo")
     assert d["total"] >= 1 and d["summary"]["admins"] >= 1 and demo["watch_count"] >= 1
 
     ro = client.patch(f"{API}/admin/users/{demo['id']}/role", headers=admin_h, json={"role": "ADMIN"})
@@ -103,19 +103,26 @@ def test_admin_users_list_and_role_change(client, user_h, admin_h):
     assert client.get(f"{API}/admin/users?role=ADMIN", headers=admin_h).json()["items"][0]["role"] == "ADMIN"
 
 
-def test_demo_login_finds_accounts_seeded_before_rename(client, db_session=None):
-    """이름 변경(BuyTiming → PickTiming) 전 시드된 DB: demo@buytiming.demo 계정으로도 간편 로그인된다"""
+@pytest.mark.parametrize("legacy", ["demo@picktiming.demo", "demo@buytiming.demo"])
+def test_demo_login_finds_accounts_seeded_before_rename(client, legacy):
+    """이름 변경(BuyTiming → PickTiming → TimePick) 전 시드된 운영 DB: 이전 이메일의 테스트 계정으로도 간편 로그인된다"""
     from app.database import SessionLocal
     from app.models import User
 
     with SessionLocal() as db:
-        u = db.query(User).filter(User.email == "demo@picktiming.demo").one()
-        u.email = "demo@buytiming.demo"
+        u = db.query(User).filter(User.email == "demo@timepick.demo").one()
+        u.email = legacy
         db.commit()
     try:
         r = client.post(f"{API}/auth/demo-login", json={"kind": "user"})
-        assert r.status_code == 200 and r.json()["user"]["email"] == "demo@buytiming.demo"
+        assert r.status_code == 200 and r.json()["user"]["email"] == legacy
     finally:
         with SessionLocal() as db:
-            db.query(User).filter(User.email == "demo@buytiming.demo").one().email = "demo@picktiming.demo"
+            db.query(User).filter(User.email == legacy).one().email = "demo@timepick.demo"
             db.commit()
+
+
+def test_legacy_test_admin_stays_read_only(client):
+    from app.routers.admin import DEMO_ADMINS
+
+    assert {"admin@timepick.demo", "admin@picktiming.demo"} <= DEMO_ADMINS

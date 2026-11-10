@@ -11,10 +11,12 @@
 import json
 import logging
 import random
+import re
 import sys
+import time
 import xml.etree.ElementTree as ET
-from datetime import datetime
-from urllib.parse import urlparse
+from datetime import date, datetime, timedelta
+from urllib.parse import quote, urlparse
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -127,43 +129,117 @@ def collect(cfg: Config, api: ApiClient) -> dict:
     return {"status": status, **result, "failed": failed, "skipped": skipped}
 
 
-def parse_public(payload: str, mapping: dict) -> list[dict]:
-    """참가격 응답(JSON 또는 XML) → [{model_no, good_id, price, survey_date}]. 필드명은 공공데이터포털 명세에 맞게 mapping으로 지정"""
-    f = mapping.get("_fields", {"good_id": "goodId", "price": "goodPrice", "date": "goodInspectDay", "store": "entpName"})
-    items: list[dict] = []
-    try:
-        data = json.loads(payload)
-        found = data.get("response", {}).get("body", {}).get("items", data.get("items", []))
-        records = found.get("item", found) if isinstance(found, dict) else found
-    except json.JSONDecodeError:
-        records = [{c.tag: (c.text or "").strip() for c in it} for it in ET.fromstring(payload).iter("item")]
-    for r in records if isinstance(records, list) else [records]:
-        good_id = str(r.get(f["good_id"], ""))
-        model_no = mapping.get(good_id)
-        if not model_no:
-            continue
-        day = str(r.get(f["date"], ""))[:8]
-        items.append({"model_no": model_no, "good_id": good_id, "price": int(float(r.get(f["price"], 0))),
-                      "store_type": r.get(f["store"]), "survey_date": f"{day[:4]}-{day[4:6]}-{day[6:8]}"})
-    return items
+# 한국소비자원 참가격(공공데이터포털 B551919/ProductPriceInfoService, XML). 2026-11-10 실제 호출로 확인한 오퍼레이션 이름(.do 유무가 서로 다르다)
+KCA_PRICE_OP = "getProductPriceInfoSvc"   # 가격: goodInspectDay(조사일, 금요일) + goodId 필수
+KCA_STORE_OP = "getStoreInfoSvc.do"       # 판매점: entpId → entpTypeCode(업태)
+KCA_CODE_OP = "getStandardInfoSvc.do"     # 기준 코드: classCode=BU → 업태 이름(대형마트·편의점 등)
+SURVEY_WEEKS = 6  # 조사는 격주 금요일, 공개는 약 1주 뒤 → 최근 6주 금요일을 다시 조회한다(같은 날은 서버가 덮어씀)
 
 
-def collect_public(cfg: Config, api: ApiClient) -> dict:
+def survey_days(today: date, weeks: int = SURVEY_WEEKS) -> list[str]:
+    """오늘 이전 가장 가까운 금요일부터 weeks주 전까지의 조사일(YYYYMMDD, 최신순)"""
+    friday = today - timedelta(days=(today.weekday() - 4) % 7)
+    return [f"{friday - timedelta(weeks=i):%Y%m%d}" for i in range(weeks)]
+
+
+def kca_records(payload: str) -> list[dict]:
+    """참가격 XML의 <result> 아래 레코드(iros.openapi.service.vo.goodPriceVO 등) → dict 목록. 포털·API 오류 응답은 ValueError"""
+    root = ET.fromstring(payload)
+    if root.tag == "OpenAPI_ServiceResponse":
+        raise ValueError(f"공공데이터포털 오류: {root.findtext('.//errMsg')} {root.findtext('.//returnAuthMsg') or ''}".strip())
+    if (code := root.findtext("resultCode")) not in (None, "00"):
+        raise ValueError(f"참가격 API 오류 {code}: {root.findtext('resultMsg')}")
+    result = root.find("result")
+    return [{c.tag: (c.text or "").strip() for c in rec} for rec in (result if result is not None else [])]
+
+
+def public_targets(mapping: dict) -> dict[str, tuple[str, float]]:
+    """public_price_map.json → {goodId: (model_no, qty)}. 값은 model_no 문자열 또는 {"model_no", "qty"}(참가격 가격 × qty = 우리 상품 1개)"""
+    out: dict[str, tuple[str, float]] = {}
+    for good_id, v in mapping.items():
+        if isinstance(v, str) and not good_id.startswith("_"):
+            out[good_id] = (v, 1.0)
+        elif isinstance(v, dict) and v.get("model_no"):
+            out[good_id] = (v["model_no"], float(v.get("qty", 1)))
+    return out
+
+
+def parse_public(payload: str, mapping: dict, stores: dict[str, str] | None = None) -> list[dict]:
+    """참가격 가격 응답 → 상품·조사일별 최저가 [{model_no, good_id, price, store_type, survey_date}]
+
+    같은 날 여러 판매점 가격 중 최저가(온라인 최저가와 같은 기준)를 qty배로 환산하고, 그 판매점의 업태를 store_type으로 남긴다.
+    """
+    targets, best = public_targets(mapping), {}
+    for r in kca_records(payload):
+        good_id, day, price = r.get("goodId", ""), r.get("goodInspectDay", "")[:8], int(float(r.get("goodPrice") or 0))
+        if good_id in targets and price > 0 and len(day) == 8 and ((good_id, day) not in best or price < best[(good_id, day)][0]):
+            best[(good_id, day)] = (price, r.get("entpId"))
+    return [{"model_no": targets[g][0], "good_id": g, "price": round(p * targets[g][1]), "store_type": (stores or {}).get(e),
+             "survey_date": f"{d[:4]}-{d[4:6]}-{d[6:]}"} for (g, d), (p, e) in sorted(best.items())]
+
+
+def hide_key(cfg: Config, exc: Exception) -> str:
+    """오류 문구(요청 주소 포함)에서 인증키를 지운다 — 수집 로그·Actions 로그에 키가 남지 않게"""
+    msg = str(exc)
+    for k in {cfg.public_api_key, quote(cfg.public_api_key, safe="")} - {""}:
+        msg = msg.replace(k, "***")
+    return msg[:500]
+
+
+def kca_fetch(cfg: Config):
+    """참가격 오퍼레이션 호출 함수. KCA_API_URL은 서비스 주소(…/ProductPriceInfoService), 오퍼레이션까지 넣어도 동작한다"""
+    base = re.sub(r"/get\w+(\.do)?$", "", cfg.public_api_url.rstrip("/"))
+
+    def fetch(op: str, **params) -> str:
+        for attempt in range(3):  # 공공데이터포털은 연결 시간 초과가 잦다 → 연결 오류만 재시도
+            try:
+                r = requests.get(f"{base}/{op}", params={"serviceKey": cfg.public_api_key, **params}, timeout=(15, 120))
+                break
+            except (requests.ConnectionError, requests.Timeout):
+                if attempt == 2:
+                    raise
+                time.sleep(5 * 2 ** attempt)
+        if r.status_code >= 400 and "OpenAPI_ServiceResponse" in r.text:
+            kca_records(r.text)  # 포털 오류 응답이면 이유(인증키 미등록·서비스 없음 등)가 담긴 ValueError
+        r.raise_for_status()
+        return r.text
+
+    return fetch
+
+
+def kca_store_types(fetch) -> dict[str, str]:
+    """판매점 아이디 → 업태 이름(대형마트·편의점 등)"""
+    names = {r.get("code"): r.get("codeName") for r in kca_records(fetch(KCA_CODE_OP, classCode="BU"))}
+    return {r["entpId"]: names.get(r.get("entpTypeCode")) or r.get("entpTypeCode") for r in kca_records(fetch(KCA_STORE_OP)) if r.get("entpId")}
+
+
+def collect_public(cfg: Config, api: ApiClient, fetch=None) -> dict:
     started = now(cfg)
     if not (cfg.public_api_url and cfg.public_api_key):
         api.log("collect_public_prices", "PARTIAL", started, now(cfg), message="KCA_API_URL / DATA_GO_KR_KEY 미설정으로 건너뜀")
         return {"status": "SKIPPED"}
     mapping = json.loads(cfg.public_map_path.read_text(encoding="utf-8")) if cfg.public_map_path.exists() else {}
+    if not (targets := public_targets(mapping)):
+        api.log("collect_public_prices", "PARTIAL", started, now(cfg), message="public_price_map.json에 매핑된 상품이 없어 건너뜀")
+        return {"status": "SKIPPED"}
+    fetch = fetch or kca_fetch(cfg)
     try:
-        r = requests.get(cfg.public_api_url, params={"serviceKey": cfg.public_api_key}, timeout=30)
-        r.raise_for_status()
-        items = parse_public(r.text, mapping)
+        payloads = [fetch(KCA_PRICE_OP, goodInspectDay=d, goodId=g) for g in targets for d in survey_days(started.date())]
+        stores: dict[str, str] = {}
+        if any("<goodPrice>" in p for p in payloads):
+            try:
+                stores = kca_store_types(fetch)
+            except (requests.RequestException, ET.ParseError, ValueError) as exc:  # 업태는 부가 정보라 실패해도 가격은 저장
+                log.warning("참가격 판매점 업태 조회 실패: %s", hide_key(cfg, exc))
+        items = [i for p in payloads for i in parse_public(p, mapping, stores)]
         res = api.put_public_prices(items) if items else {"saved": 0}
-        api.log("collect_public_prices", "SUCCESS", started, now(cfg), collected=res.get("saved", 0), message="참가격 데이터 갱신")
+        api.log("collect_public_prices", "SUCCESS", started, now(cfg), collected=res.get("saved", 0),
+                message=f"참가격 데이터 갱신: 상품 {len(targets)}개 × 최근 {SURVEY_WEEKS}주 조사일, 저장 {res.get('saved', 0)}건")
         return {"status": "SUCCESS", **res}
     except (requests.RequestException, ET.ParseError, ValueError) as exc:
-        api.log("collect_public_prices", "FAIL", started, now(cfg), failed=1, message=str(exc))
-        return {"status": "FAIL", "error": str(exc)}
+        msg = hide_key(cfg, exc)
+        api.log("collect_public_prices", "FAIL", started, now(cfg), failed=1, message=msg)
+        return {"status": "FAIL", "error": msg}
 
 
 def train(cfg: Config, api: ApiClient) -> dict:

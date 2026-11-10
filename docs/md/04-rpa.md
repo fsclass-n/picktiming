@@ -58,8 +58,19 @@ Netlify 데모 모드(브라우저 목업)는 영향이 없습니다.
 |---|---|---|---|
 | `collect` | 00·06·12·18시 (Actions) | 카탈로그 동기화 → 수집 대상 목록 → 상품 페이지 수집 → 가격 없는 판매처는 실패 처리 → pandas 정제 → 일괄 저장 → 로그 | `PUT /rpa/catalog`, `GET /rpa/listings`, `POST /rpa/prices/bulk`, `POST /rpa/logs` |
 | `train` | 매일 03:00 | 모델 재학습 요청(API가 백그라운드로 학습) | `POST /rpa/train` |
-| `public` | 매일 06:00 | 한국소비자원 참가격 (`KCA_API_URL`, `DATA_GO_KR_KEY` 없으면 건너뜀) | `PUT /rpa/public-prices` |
+| `public` | 매일 06:00 | 한국소비자원 참가격 (`KCA_API_URL`, `DATA_GO_KR_KEY` 없으면 건너뜀, 아래 참가격 절) | `PUT /rpa/public-prices` |
 | `report` | 매주 월 07:00 | 주간 가격 리포트(엑셀) → Actions 아티팩트(30일), EC2는 `~/timepick/reports/` | `GET /rpa/reports/weekly` |
+
+### 참가격(`public`) — 2026-11-10 실제 응답으로 확인
+
+- 서비스 주소 `KCA_API_URL=https://apis.data.go.kr/B551919/ProductPriceInfoService`, 응답은 XML(`<response><result><iros.openapi.service.vo.…VO>`).
+  오퍼레이션 이름은 공공데이터포털 등록 그대로 `.do` 유무가 다릅니다: 가격 `getProductPriceInfoSvc`, 판매점 `getStoreInfoSvc.do`,
+  기준 코드 `getStandardInfoSvc.do`, 상품 목록 `getProductInfoSvc.do`(604개). 잘못된 이름은 `NO_OPENAPI_SERVICE_ERROR`(HTTP 400).
+- 가격 조회는 `goodInspectDay`(조사일, 금요일)와 `goodId`가 필요합니다. 조사는 격주 금요일, 공개는 약 1주 뒤라
+  매일 최근 6주 금요일을 상품마다 조회하고(같은 날은 서버가 덮어씀), 같은 조사일의 판매점 가격 중 **최저가**와 그 판매점 업태(대형마트 등)를 저장합니다.
+- [`rpa/public_price_map.json`](../../rpa/public_price_map.json): `goodId → {"model_no", "qty"}`. `qty`는 포장 수량 환산 배수입니다
+  (참가격 `삼다수(2L*6개)` × 2 = 서비스 상품 `제주 삼다수 그린 2L × 12개`). 개수만 다른 같은 제품만 넣고, 용량·단계·길이가 다른 제품은 넣지 않습니다.
+- 오류 문구의 요청 주소에 들어 있는 인증키는 `***`로 지운 뒤 수집 로그에 남깁니다. 공공데이터포털은 연결 시간 초과가 잦아 연결 오류만 3회 재시도합니다.
 
 수동 실행: GitHub → Actions → **Collect (Render)** → Run workflow → 작업 선택. 로컬은 `cd rpa && python -m collector.jobs collect`
 (`RPA_TARGET_API`를 로컬 API로 지정. 로컬 `.env`가 운영 TiDB를 가리키면 운영 데이터가 바뀝니다).

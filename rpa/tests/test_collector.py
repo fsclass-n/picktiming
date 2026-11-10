@@ -50,13 +50,132 @@ def test_due_jobs():
     assert due_jobs(datetime(2026, 12, 8, 6, 30)) == []
 
 
-def test_parse_public_json_and_xml():
-    mapping = {"G1": "W2L12"}
-    js = '{"response": {"body": {"items": {"item": [{"goodId": "G1", "goodPrice": "8800", "goodInspectDay": "20261020"}]}}}}'
-    assert jobs.parse_public(js, mapping) == [{"model_no": "W2L12", "good_id": "G1", "price": 8800, "store_type": None,
-                                               "survey_date": "2026-10-20"}]
-    xml = "<response><body><items><item><goodId>G1</goodId><goodPrice>8700</goodPrice><goodInspectDay>20261021</goodInspectDay></item></items></body></response>"
-    assert jobs.parse_public(xml, mapping)[0]["price"] == 8700
+# ---------------------------------------------------------------- 참가격(공공데이터포털 XML, 2026-11-10 실제 응답 형식)
+def _kca_prices(*rows: tuple[str, str, str, str]) -> str:
+    vo = "".join(f"<iros.openapi.service.vo.goodPriceVO><goodInspectDay>{d}</goodInspectDay><entpId>{e}</entpId><goodId>{g}</goodId>"
+                 f"<goodPrice>{p}</goodPrice><inputDttm>2026-10-29 13:10:20</inputDttm></iros.openapi.service.vo.goodPriceVO>" for d, e, g, p in rows)
+    return f'<?xml version="1.0" encoding="UTF-8"?><response><result>{vo}</result><resultCode>00</resultCode><resultMsg>ok</resultMsg></response>'
+
+
+KCA_EMPTY = '<?xml version="1.0" encoding="UTF-8"?><response><result/><resultCode>00</resultCode><resultMsg>ok</resultMsg></response>'
+KCA_NO_SERVICE = ("<OpenAPI_ServiceResponse><cmmMsgHeader><errMsg>NO_OPENAPI_SERVICE_ERROR</errMsg>"
+                  "<returnAuthMsg>해당 오픈API 서비스가 없거나 폐기됨</returnAuthMsg><returnReasonCode>12</returnReasonCode></cmmMsgHeader></OpenAPI_ServiceResponse>")
+
+
+def test_parse_public_takes_daily_lowest_and_converts_pack_size():
+    """같은 조사일 여러 판매점 중 최저가 × qty(2L×6 → 2L×12). 매핑 없는 상품·0원은 버린다"""
+    mapping = {"_comment": "설명", "1343": {"model_no": "SAMDASOO-GREEN-2L-12", "qty": 2}, "874": "W2L"}
+    xml = _kca_prices(("20261023", "83", "1343", "6480"), ("20261023", "88", "1343", "7140"), ("20261009", "88", "1343", "6990"),
+                      ("20261023", "1", "999", "100"), ("20261023", "2", "874", "0"))
+    assert jobs.parse_public(xml, mapping, {"83": "대형마트"}) == [
+        {"model_no": "SAMDASOO-GREEN-2L-12", "good_id": "1343", "price": 13980, "store_type": None, "survey_date": "2026-10-09"},
+        {"model_no": "SAMDASOO-GREEN-2L-12", "good_id": "1343", "price": 12960, "store_type": "대형마트", "survey_date": "2026-10-23"}]
+    assert jobs.parse_public(KCA_EMPTY, mapping) == []
+    assert jobs.public_targets(mapping) == {"1343": ("SAMDASOO-GREEN-2L-12", 2.0), "874": ("W2L", 1.0)}
+
+
+def test_kca_errors_are_raised_with_reason():
+    import pytest
+
+    with pytest.raises(ValueError, match="NO_OPENAPI_SERVICE_ERROR"):
+        jobs.kca_records(KCA_NO_SERVICE)
+    with pytest.raises(ValueError, match="99"):
+        jobs.kca_records("<response><resultCode>99</resultCode><resultMsg>bad</resultMsg></response>")
+
+
+def test_survey_days_are_recent_fridays():
+    from datetime import date
+
+    assert jobs.survey_days(date(2026, 11, 10), 3) == ["20261106", "20261030", "20261023"]  # 화요일 → 직전 금요일부터
+    assert jobs.survey_days(date(2026, 11, 6), 1) == ["20261106"]  # 금요일 당일 포함
+
+
+class PublicApi:
+    def __init__(self):
+        self.public, self.logs = None, []
+
+    def log(self, *a, **kw):
+        self.logs.append((a, kw))
+
+    def put_public_prices(self, items):
+        self.public = items
+        return {"saved": len(items)}
+
+
+def _public_cfg(monkeypatch, tmp_path, mapping):
+    import json
+
+    path = tmp_path / "map.json"
+    path.write_text(json.dumps(mapping, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setenv("PUBLIC_PRICE_MAP", str(path))
+    monkeypatch.setenv("KCA_API_URL", "https://apis.data.go.kr/B551919/ProductPriceInfoService")
+    monkeypatch.setenv("DATA_GO_KR_KEY", "secret-key-123")
+    monkeypatch.setattr(jobs, "now", lambda cfg: datetime(2026, 11, 10, 6, 0))
+    return Config()
+
+
+def test_collect_public_requests_recent_survey_days_per_product(monkeypatch, tmp_path):
+    cfg = _public_cfg(monkeypatch, tmp_path, {"1343": {"model_no": "SAMDASOO-GREEN-2L-12", "qty": 2}})
+    calls = []
+    vo = "iros.openapi.service.vo"
+    standard = f"<response><result><{vo}.stdInfoVO><code>LM</code><codeName>대형마트</codeName></{vo}.stdInfoVO></result></response>"
+    stores = f"<response><result><{vo}.entpInfoVO><entpId>83</entpId><entpTypeCode>LM</entpTypeCode></{vo}.entpInfoVO></result></response>"
+
+    def fetch(op, **params):
+        calls.append((op, params))
+        if op == jobs.KCA_PRICE_OP:
+            return _kca_prices(("20261023", "83", "1343", "6480")) if params["goodInspectDay"] == "20261023" else KCA_EMPTY
+        return standard if op == jobs.KCA_CODE_OP else stores
+
+    api = PublicApi()
+    res = jobs.collect_public(cfg, api, fetch)
+    days = [p["goodInspectDay"] for op, p in calls if op == jobs.KCA_PRICE_OP]
+    assert days == jobs.survey_days(datetime(2026, 11, 10).date()) and len(days) == jobs.SURVEY_WEEKS
+    assert res["status"] == "SUCCESS" and api.public == [{"model_no": "SAMDASOO-GREEN-2L-12", "good_id": "1343", "price": 12960,
+                                                         "store_type": "대형마트", "survey_date": "2026-10-23"}]
+
+
+def test_collect_public_failure_log_never_contains_the_key(monkeypatch, tmp_path):
+    import requests
+
+    cfg = _public_cfg(monkeypatch, tmp_path, {"1343": "W2L12"})
+
+    def fetch(op, **params):
+        raise requests.ConnectionError(f"Max retries exceeded with url: /{op}?serviceKey=secret-key-123&goodId=1343")
+
+    api = PublicApi()
+    res = jobs.collect_public(cfg, api, fetch)
+    assert res["status"] == "FAIL" and "secret-key-123" not in res["error"] and "***" in res["error"]
+    assert "secret-key-123" not in api.logs[-1][1]["message"]
+
+
+def test_collect_public_skips_without_mapping(monkeypatch, tmp_path):
+    cfg = _public_cfg(monkeypatch, tmp_path, {"_comment": "비어 있음"})
+    api = PublicApi()
+    assert jobs.collect_public(cfg, api, lambda *a, **k: KCA_EMPTY) == {"status": "SKIPPED"} and api.public is None
+
+
+def test_kca_fetch_uses_service_base_and_reports_portal_errors(monkeypatch):
+    import pytest
+    import requests
+
+    seen = []
+
+    class Resp:
+        def __init__(self, status, text):
+            self.status_code, self.text = status, text
+
+        def raise_for_status(self):
+            if self.status_code >= 400:
+                raise requests.HTTPError(f"{self.status_code} for url")
+
+    monkeypatch.setenv("KCA_API_URL", "https://apis.data.go.kr/B551919/ProductPriceInfoService/getProductPriceInfoSvc")
+    monkeypatch.setenv("DATA_GO_KR_KEY", "k")
+    monkeypatch.setattr(requests, "get", lambda url, params, timeout: seen.append(url) or Resp(400, KCA_NO_SERVICE))
+    fetch = jobs.kca_fetch(Config())
+    with pytest.raises(ValueError, match="NO_OPENAPI_SERVICE_ERROR"):
+        fetch(jobs.KCA_PRICE_OP, goodInspectDay="20261023", goodId="1343")
+    assert seen == ["https://apis.data.go.kr/B551919/ProductPriceInfoService/getProductPriceInfoSvc"]
 
 
 class FakeApi:

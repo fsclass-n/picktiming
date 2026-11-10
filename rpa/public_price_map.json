@@ -1,7 +1,4 @@
 {
-  "_comment": "참가격 상품 코드(good_id) → 서비스 상품 model_no 매핑. _fields는 공공데이터포털 응답 명세의 필드명에 맞게 수정한다.",
-  "_fields": {"good_id": "goodId", "price": "goodPrice", "date": "goodInspectDay", "store": "entpName"},
-  "EXAMPLE-WATER-2L": "W2L12",
-  "EXAMPLE-DETERGENT-3L": "LD3L",
-  "EXAMPLE-TISSUE-30": "TP30"
+  "_comment": "한국소비자원 참가격 상품 아이디(goodId) → 서비스 상품 model_no. qty는 포장 수량 환산 배수(참가격 가격 × qty = 우리 상품 1개 가격). 같은 제품의 다른 포장(개수만 다른 것)만 넣고 용량·단계·길이가 다른 제품은 넣지 않는다. 2026-11-10 getProductInfoSvc.do 상품 604개 확인: 삼다수만 해당(삼다수 그린은 같은 물의 무라벨 포장). 크리넥스 데코앤소프트(참가격 30m, 우리 40m)·앱솔루트 명작(참가격 3단계, 우리 2FL 2단계)·하기스(참가격 매직컴포트, 우리 맥스드라이)·질레트 퓨전 파워(참가격 없음)는 제외.",
+  "1343": {"model_no": "SAMDASOO-GREEN-2L-12", "qty": 2, "name": "삼다수(2L*6개)"}
 }

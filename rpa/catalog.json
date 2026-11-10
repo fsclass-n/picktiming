@@ -1,49 +1,618 @@
 {
-  "_comment": "실제 수집 상품 목록. 수집 작업이 매번 PUT /api/v1/rpa/catalog로 DB와 맞춘다(여러 번 실행해도 같음). 다나와 pcode·에누리 modelno는 2026-11-09 두 사이트 상품 페이지의 JSON-LD 상품명으로 같은 제품(정품·같은 용량)임을 확인했다. 상품을 바꿀 때는 model_no를 새로 정하고 두 주소를 함께 바꾼다. retire_mall_hosts의 시연용 쇼핑몰은 삭제 없이 비활성화되어 검색·수집 대상에서 빠진다(가격 이력 보존, 목록에서 지우면 다시 켜지지는 않으므로 malls에 추가해 복구).",
-  "malls": [
-    {"name": "다나와", "base_url": "https://prod.danawa.com"},
-    {"name": "에누리", "base_url": "https://www.enuri.com"}
-  ],
-  "retire_mall_hosts": ["mall-a.example.com", "mall-b.example.com", "mall-c.example.com"],
-  "products": [
-    {"model_no": "MTJV3KH/A", "name": "에어팟 프로2 맥세이프 USB-C (정품)", "brand": "APPLE", "category": "디지털",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=28208783"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=111294300"}]},
-    {"model_no": "SM-R630N", "name": "갤럭시 버즈3 프로 (정품)", "brand": "삼성전자", "category": "디지털",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=59537216"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=126190050"}]},
-    {"model_no": "WH-1000XM5", "name": "WH-1000XM5 노이즈캔슬링 헤드폰 (정품)", "brand": "SONY", "category": "디지털",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=17229284"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=92079312"}]},
-    {"model_no": "MX-MASTER-3S-BK", "name": "MX Master 3S 무선 마우스 (정품, 블랙)", "brand": "로지텍", "category": "디지털",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=17171645"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=90177903"}]},
-    {"model_no": "CRP-P0660FD", "name": "6인용 전기압력밥솥 CRP-P0660FD", "brand": "쿠쿠전자", "category": "가전",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=8119789"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=37828455"}]},
-    {"model_no": "HD9285/93", "name": "5000시리즈 XXL 에어프라이어 HD9285/93", "brand": "필립스", "category": "가전",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=19990436"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=107895762"}]},
-    {"model_no": "AS183HWWA", "name": "퓨리케어 360˚ Hit 공기청정기 AS183HWWA", "brand": "LG전자", "category": "가전",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=19312682"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=101856762"}]},
-    {"model_no": "V12-DETECT-SLIM-GG", "name": "V12 디텍트 슬림 무선청소기 (골드/골드)", "brand": "다이슨", "category": "가전",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=27415658"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=101664679"}]},
-    {"model_no": "SAMDASOO-GREEN-2L-12", "name": "제주 삼다수 그린 2L × 12개", "brand": "광동제약", "category": "생필품",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=14740100"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=70000086"}]},
-    {"model_no": "KLEENEX-DECO-40M-30R", "name": "데코 앤 소프트 화장지 40m 30롤", "brand": "크리넥스", "category": "생필품",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=3626423"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=8622091"}]},
-    {"model_no": "GILLETTE-FUSION-POWER-8", "name": "2024 퓨전 파워 면도날 8개", "brand": "질레트", "category": "생필품",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=52159028"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=124738890"}]},
-    {"model_no": "ABSOLUTE-2FL-S2-800G-3", "name": "앱솔루트 명작 2FL 2단계 800g × 3개", "brand": "매일유업", "category": "유아",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=21229469"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=76180489"}]},
-    {"model_no": "HUGGIES-MAXDRY-P4-M208", "name": "2025 맥스드라이 팬티형 4단계 남아용 208매", "brand": "하기스", "category": "유아",
-     "listings": [{"mall": "다나와", "url": "https://prod.danawa.com/info/?pcode=98550287"},
-                  {"mall": "에누리", "url": "https://www.enuri.com/detail.jsp?modelno=138538323"}]}
-  ]
+ "_comment": "실제 수집 상품 목록. 수집 작업이 매번 PUT /api/v1/rpa/catalog로 DB와 맞춘다(여러 번 실행해도 같음). 다나와 pcode·에누리 modelno는 2026-11-09 두 사이트 상품 페이지의 JSON-LD 상품명으로 같은 제품(정품·같은 용량)임을 확인했다. 상품을 바꿀 때는 model_no를 새로 정하고 두 주소를 함께 바꾼다. retire_mall_hosts의 시연용 쇼핑몰은 삭제 없이 비활성화되어 검색·수집 대상에서 빠진다(가격 이력 보존, 목록에서 지우면 다시 켜지지는 않으므로 malls에 추가해 복구).",
+ "malls": [
+  {
+   "name": "다나와",
+   "base_url": "https://prod.danawa.com"
+  },
+  {
+   "name": "에누리",
+   "base_url": "https://www.enuri.com"
+  }
+ ],
+ "retire_mall_hosts": [
+  "mall-a.example.com",
+  "mall-b.example.com",
+  "mall-c.example.com"
+ ],
+ "products": [
+  {
+   "model_no": "MTJV3KH/A",
+   "name": "에어팟 프로2 맥세이프 USB-C (정품)",
+   "brand": "APPLE",
+   "category": "디지털",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=28208783"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=111294300"
+    }
+   ]
+  },
+  {
+   "model_no": "SM-R630N",
+   "name": "갤럭시 버즈3 프로 (정품)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=59537216"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=126190050"
+    }
+   ]
+  },
+  {
+   "model_no": "WH-1000XM5",
+   "name": "WH-1000XM5 노이즈캔슬링 헤드폰 (정품)",
+   "brand": "SONY",
+   "category": "디지털",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=17229284"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=92079312"
+    }
+   ]
+  },
+  {
+   "model_no": "MX-MASTER-3S-BK",
+   "name": "MX Master 3S 무선 마우스 (정품, 블랙)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=17171645"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=90177903"
+    }
+   ]
+  },
+  {
+   "model_no": "CRP-P0660FD",
+   "name": "6인용 전기압력밥솥 CRP-P0660FD",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=8119789"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=37828455"
+    }
+   ]
+  },
+  {
+   "model_no": "HD9285/93",
+   "name": "5000시리즈 XXL 에어프라이어 HD9285/93",
+   "brand": "필립스",
+   "category": "가전",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=19990436"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=107895762"
+    }
+   ]
+  },
+  {
+   "model_no": "AS183HWWA",
+   "name": "퓨리케어 360˚ Hit 공기청정기 AS183HWWA",
+   "brand": "LG전자",
+   "category": "가전",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=19312682"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=101856762"
+    }
+   ]
+  },
+  {
+   "model_no": "V12-DETECT-SLIM-GG",
+   "name": "V12 디텍트 슬림 무선청소기 (골드/골드)",
+   "brand": "다이슨",
+   "category": "가전",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=27415658"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=101664679"
+    }
+   ]
+  },
+  {
+   "model_no": "SAMDASOO-GREEN-2L-12",
+   "name": "제주 삼다수 그린 2L × 12개",
+   "brand": "광동제약",
+   "category": "생필품",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=14740100"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=70000086"
+    }
+   ]
+  },
+  {
+   "model_no": "KLEENEX-DECO-40M-30R",
+   "name": "데코 앤 소프트 화장지 40m 30롤",
+   "brand": "크리넥스",
+   "category": "생필품",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=3626423"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=8622091"
+    }
+   ]
+  },
+  {
+   "model_no": "GILLETTE-FUSION-POWER-8",
+   "name": "2024 퓨전 파워 면도날 8개",
+   "brand": "질레트",
+   "category": "생필품",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=52159028"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=124738890"
+    }
+   ]
+  },
+  {
+   "model_no": "ABSOLUTE-2FL-S2-800G-3",
+   "name": "앱솔루트 명작 2FL 2단계 800g × 3개",
+   "brand": "매일유업",
+   "category": "유아",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=21229469"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=76180489"
+    }
+   ]
+  },
+  {
+   "model_no": "HUGGIES-MAXDRY-P4-M208",
+   "name": "2025 맥스드라이 팬티형 4단계 남아용 208매",
+   "brand": "하기스",
+   "category": "유아",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=98550287"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=138538323"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122703498",
+   "name": "HP 옴니북 3 16-bu0020TU (SSD 512GB)",
+   "brand": "HP",
+   "category": "디지털",
+   "priority": 100,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122703498"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122691083",
+   "name": "HP 빅터스 15-fa2107TX (SSD 512GB)",
+   "brand": "HP",
+   "category": "디지털",
+   "priority": 90,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122691083"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122639417",
+   "name": "HP 옴니북 5 16-bm0011TU (SSD 512GB)",
+   "brand": "HP",
+   "category": "디지털",
+   "priority": 80,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122639417"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124075031",
+   "name": "HP 빅터스 15-fb3420AX (SSD 512GB)",
+   "brand": "HP",
+   "category": "디지털",
+   "priority": 70,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124075031"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-91766357",
+   "name": "MSI 소드 GF76 HX B14WFK-i7 QHD (SSD 512GB)",
+   "brand": "MSI",
+   "category": "디지털",
+   "priority": 60,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=91766357"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122624573",
+   "name": "LG전자 그램북 16U55U-GSOWK (SSD 256GB)",
+   "brand": "LG전자",
+   "category": "디지털",
+   "priority": 20,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122624573"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-90890663",
+   "name": "크로스오버 27QD166CM QHD iPS USB-C 화이트 Ai 멀티스탠드",
+   "brand": "크로스오버",
+   "category": "디지털",
+   "priority": 100,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=90890663"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124364850",
+   "name": "크로스오버 27LGQ188MC 4면 제로 QHD iPS TYPE-C Ai 화이트 멀티스탠드 무결점",
+   "brand": "크로스오버",
+   "category": "디지털",
+   "priority": 90,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124364850"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124101688",
+   "name": "알파스캔 AOC Q27G40HE 게이밍 210 QHD FAST IPS 지싱크 Ai HDR 무결점",
+   "brand": "알파스캔",
+   "category": "디지털",
+   "priority": 80,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124101688"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-97118564",
+   "name": "알파스캔 AOC U32V11 4K UHD 프리싱크 HDR 시력보호 무결점",
+   "brand": "알파스캔",
+   "category": "디지털",
+   "priority": 70,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=97118564"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122688356",
+   "name": "알파스캔 AOC 27B36XE 게이밍 144 IPS 시력보호 무결점",
+   "brand": "알파스캔",
+   "category": "디지털",
+   "priority": 60,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122688356"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122661560",
+   "name": "알파스캔 AOC 24B36XE 게이밍 144 IPS 시력보호 무결점",
+   "brand": "알파스캔",
+   "category": "디지털",
+   "priority": 50,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122661560"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122680594",
+   "name": "LG전자 24U411B",
+   "brand": "LG전자",
+   "category": "디지털",
+   "priority": 40,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122680594"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-74546000",
+   "name": "크로스오버 미켈란 32WQ290TM Fast-IPS 게이밍 400 TYPE-C PD90 멀티스탠드 무결점",
+   "brand": "크로스오버",
+   "category": "디지털",
+   "priority": 30,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=74546000"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-99893291",
+   "name": "삼성전자 오디세이 G5 G50F LS27FG500",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 20,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=99893291"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-103877561",
+   "name": "앱코 하이퍼뷰 27F120 IPS FHD 120 HDR 무결점",
+   "brand": "앱코",
+   "category": "디지털",
+   "priority": 10,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=103877561"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-92376488",
+   "name": "LG전자 울트라HD AI 65UA7500ENA (스탠드)",
+   "brand": "LG전자",
+   "category": "디지털",
+   "priority": 100,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=92376488"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123971786",
+   "name": "픽소라(PIXORA) 32인치 HD LED TV (스탠드)",
+   "brand": "픽소라(PIXORA)",
+   "category": "디지털",
+   "priority": 90,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123971786"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122642363",
+   "name": "ANKER Soundcore P31i D1202 (정품)",
+   "brand": "ANKER",
+   "category": "디지털",
+   "priority": 80,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122642363"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122658358",
+   "name": "SONY 알파 A7R VI 바디 (정품)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 70,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122658358"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122720341",
+   "name": "삼성전자 갤럭시Z 폴드8 256GB, 자급제 (라벤더)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 60,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122720341"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-78982952",
+   "name": "삼성전자 갤럭시탭S10 FE (램8GB,128GB)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 50,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=78982952"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122632760",
+   "name": "LG전자 스탠바이미2 Max 32LX6BPGA (이동형 스탠드)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 100,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122632760"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122616190",
+   "name": "삼성전자 Mini LED KU85MH75AFXKR (스탠드)",
+   "brand": "삼성전자",
+   "category": "가전",
+   "priority": 90,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122616190"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123605257",
+   "name": "LG전자 NANO 4K UHD AI 50NU850BXNA (스탠드)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 80,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123605257"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-98231690",
+   "name": "와이드뷰 GTWV400FHDQ11 이동형 패키지 (와이드뷰 V1)",
+   "brand": "와이드뷰",
+   "category": "가전",
+   "priority": 50,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=98231690"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-91768979",
+   "name": "PALIT 지포스 RTX 5070 Ti GAMINGPRO-S D7 16GB 이엠텍",
+   "brand": "PALIT",
+   "category": "디지털",
+   "priority": 100,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=91768979"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-96776702",
+   "name": "이엠텍 지포스 RTX 5060 Ti MIRACLE X2 WHITE D7 8GB",
+   "brand": "이엠텍",
+   "category": "디지털",
+   "priority": 70,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=96776702"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-85410707",
+   "name": "ZOTAC GAMING 지포스 RTX 5060 Ti Twin Edge OC D7 8GB",
+   "brand": "ZOTAC",
+   "category": "디지털",
+   "priority": 60,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=85410707"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-77379380",
+   "name": "MSI 지포스 RTX 5070 게이밍 트리오 OC D7 12GB 트라이프로져4",
+   "brand": "MSI",
+   "category": "디지털",
+   "priority": 50,
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=77379380"
+    }
+   ]
+  }
+ ]
 }

@@ -87,11 +87,15 @@ function PriceChange({ value }) {
     <Icon name={value < 0 ? 'arrow-down' : value > 0 ? 'arrow-up' : 'minus'} />{percent(Math.abs(value))}</span>;
 }
 function Photo({ product, className = '', caption = true }) {
+  // 실제 사진은 직접 확인해 등록한 제조사 공식 이미지(image_url)만 쓴다. 없거나 깨지면 카테고리 아이콘(판매처 이미지는 저장·표시하지 않음)
   const [failed, setFailed] = useState(false);
+  const icon = (CATEGORIES.find((c) => c.name === product.category) || { icon: 'box-open' }).icon;
+  const official = product.image_url && !failed;
   return <div className={`product-photo ${className}`}>
-    {failed ? <div className="flex h-full min-h-32 items-center justify-center text-4xl text-slate-300"><Icon name="box-open" /></div>
-      : <img src={photoUrl(productPhoto(product))} alt={t("{c} 카테고리 참고 이미지", { c: t(product.category || "상품") })} width="700" height="525" loading="lazy" decoding="async" onError={() => setFailed(true)} />}
-    {caption && <span className="absolute bottom-2 right-2 whitespace-nowrap rounded bg-white/90 px-1.5 py-0.5 text-[10px] text-slate-600">{t("참고 이미지")}</span>}</div>;
+    {official ? <img src={product.image_url} alt={product.name || t("상품")} width="700" height="525" loading="lazy" decoding="async" referrerPolicy="no-referrer" onError={() => setFailed(true)} style={{ objectFit: 'contain' }} />
+      : <div className="flex h-full min-h-32 flex-col items-center justify-center gap-2 text-slate-400" role="img" aria-label={t("{c} 카테고리", { x: '', c: t(product.category || "상품") })}>
+          <Icon name={icon} className="text-4xl" /><span className="text-xs">{t(product.category || "상품")}</span></div>}
+    {caption && official && <span className="absolute bottom-2 right-2 whitespace-nowrap rounded bg-white/90 px-1.5 py-0.5 text-[10px] text-slate-600">{t("제조사 이미지")}</span>}</div>;
 }
 function Dialog({ open, title, onClose, drawer = false, children }) {
   const ref = useRef(null);

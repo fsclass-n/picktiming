@@ -192,6 +192,7 @@ export default {
   '수집을 요청했습니다. 1~2분 뒤 수집 현황에서 결과를 확인하세요.': 'Collection requested. Check results in Collection in 1–2 minutes.',
   '테스트 계정 · 가입 전에 둘러보세요. 테스트 관리자는 조회 전용이며, 실제 관리자는 위 이메일·비밀번호로 로그인합니다.':
     'Test accounts · Look around before signing up. The test admin is read-only; real admins log in with email and password above.',
+  '제조사 이미지': 'Manufacturer image', '{c} 카테고리': '{c} category',
   // 테마·언어 전환
   '테마': 'Theme', '다크 모드로 전환': 'Switch to dark mode', '라이트 모드로 전환': 'Switch to light mode', '언어': 'Language', 'English로 보기': '한국어로 보기',
 };

@@ -28,6 +28,10 @@ class Product(Base):
     brand: Mapped[str] = mapped_column(String(100), default="-")
     model_no: Mapped[str] = mapped_column(String(100), default="-", index=True)
     category: Mapped[str] = mapped_column(String(30), default="기타")
+    # 수집 우선순위(높을수록 먼저, 인기 상품 찾기가 갱신). 수집 1회 상한(COLLECT_MAX_PRODUCTS)까지 높은 순으로 수집
+    priority: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    # 제조사 공식 이미지 주소(직접 확인해 등록한 것만). 없으면 화면은 카테고리 아이콘 + 판매처 링크를 보여 준다
+    image_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=now_local)
     listings: Mapped[list["ProductListing"]] = relationship(back_populates="product")
 

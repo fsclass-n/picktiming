@@ -73,3 +73,13 @@ def test_retired_mall_hides_products_and_stops_collection(client, user_h):
 def test_catalog_never_retires_a_mall_it_also_registers(client):
     res = client.put(f"{API}/rpa/catalog", headers=RPA, json={**_catalog(), "retire_mall_hosts": ["prod.danawa.test"]}).json()
     assert res["malls_retired"] == 0
+
+
+def test_catalog_sets_priority_image_and_listing_order(client):
+    hi = {"model_no": "PRIO-HI", "name": "우선 상품", "category": "디지털", "priority": 900, "image_url": "https://maker.example/hi.png",
+          "listings": [{"mall": DANAWA["name"], "url": "https://prod.danawa.test/info/?pcode=901"}]}
+    client.put(f"{API}/rpa/catalog", headers=RPA, json={"malls": [DANAWA], "products": [hi]})
+    first = client.get(f"{API}/rpa/listings", headers=RPA).json()["items"][0]
+    assert first["model_no"] == "PRIO-HI" and first["priority"] == 900
+    bad = {**hi, "image_url": "http://insecure.example/x.png"}
+    assert client.put(f"{API}/rpa/catalog", headers=RPA, json={"malls": [DANAWA], "products": [bad]}).status_code == 422

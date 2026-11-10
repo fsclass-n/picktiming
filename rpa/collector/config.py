@@ -26,6 +26,8 @@ class Config:
     collect_enabled: bool = field(default_factory=lambda: _flag("COLLECT_ENABLED", "true"))
     # 예약 실행용: 이번 KST 6시간 구간(0·6·12·18시 시작)에 이미 수집했으면 건너뛴다(GitHub 예약 실행이 불규칙해서)
     collect_if_due: bool = field(default_factory=lambda: _flag("COLLECT_IF_DUE", "false"))
+    # 수집 1회 상품 상한(우선순위 높은 순). 상품 100개 = 판매처 200곳 ≈ 5~6분, 상대 사이트 부담을 고려한 권장값
+    max_products: int = field(default_factory=lambda: int(os.getenv("COLLECT_MAX_PRODUCTS", "100")))
     mall_config_path: pathlib.Path = field(default_factory=lambda: pathlib.Path(os.getenv("MALL_CONFIG", ROOT / "malls.json")))
     # 실제 수집 상품 목록(다나와 pcode·에누리 modelno). 수집 전에 API(PUT /rpa/catalog)로 DB와 맞춘다
     catalog_path: pathlib.Path = field(default_factory=lambda: pathlib.Path(os.getenv("CATALOG", ROOT / "catalog.json")))

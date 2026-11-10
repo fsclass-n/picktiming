@@ -31,8 +31,9 @@ def listings(db: Session = Depends(get_db)):
                       .join(Product, Product.id == ProductListing.product_id).join(Mall, Mall.id == ProductListing.mall_id)
                       .outerjoin(latest, latest.c.listing_id == ProductListing.id)
                       .outerjoin(PriceHistory, PriceHistory.id == latest.c.pid)
-                      .where(ProductListing.is_active.is_(True), Mall.is_active.is_(True))).all()
-    return {"items": [{"listing_id": l.id, "product_id": p.id, "model_no": p.model_no, "product": p.name,
+                      .where(ProductListing.is_active.is_(True), Mall.is_active.is_(True))
+                      .order_by(Product.priority.desc(), Product.id, ProductListing.id)).all()  # 우선순위 높은 상품부터
+    return {"items": [{"listing_id": l.id, "product_id": p.id, "model_no": p.model_no, "product": p.name, "priority": p.priority,
                        "mall_id": m.id, "mall": m.name, "url": l.url,
                        "last_price": ph.price if ph else None, "last_shipping_fee": ph.shipping_fee if ph else None}
                       for l, p, m, ph in rows]}
@@ -191,12 +192,12 @@ def sync_catalog(body: CatalogIn, db: Session = Depends(get_db)):
     for p in body.products:
         product = db.execute(select(Product).where(Product.model_no == p.model_no).order_by(Product.id)).scalars().first()
         if product is None:
-            product = Product(model_no=p.model_no, name=p.name, brand=p.brand, category=p.category)
+            product = Product(model_no=p.model_no, name=p.name, brand=p.brand, category=p.category, priority=p.priority, image_url=p.image_url)
             db.add(product)
             db.flush()
             stats["products_created"] += 1
-        elif (product.name, product.brand, product.category) != (p.name, p.brand, p.category):
-            product.name, product.brand, product.category = p.name, p.brand, p.category
+        elif (product.name, product.brand, product.category, product.priority, product.image_url) != (p.name, p.brand, p.category, p.priority, p.image_url):
+            product.name, product.brand, product.category, product.priority, product.image_url = p.name, p.brand, p.category, p.priority, p.image_url
             stats["products_updated"] += 1
         for item in p.listings:
             mall = malls[item.mall]

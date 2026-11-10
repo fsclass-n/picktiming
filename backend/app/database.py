@@ -56,6 +56,23 @@ def init_db() -> None:
     from . import models  # noqa: F401  (모델 등록)
 
     Base.metadata.create_all(engine)
+    _add_missing_columns()
+
+
+# create_all은 이미 있는 테이블에 새 칸을 만들지 않는다. 데이터를 지우지 않고 칸만 추가한다(TiDB·MySQL·SQLite 공통 문법)
+NEW_COLUMNS = {"products": {"priority": "INTEGER NOT NULL DEFAULT 0", "image_url": "VARCHAR(500) NULL"}}
+
+
+def _add_missing_columns() -> None:
+    from sqlalchemy import inspect, text
+
+    insp = inspect(engine)
+    with engine.begin() as conn:
+        for table, cols in NEW_COLUMNS.items():
+            have = {c["name"] for c in insp.get_columns(table)}
+            for name, ddl in cols.items():
+                if name not in have:
+                    conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {name} {ddl}"))
 
 
 PRODUCTION_DB = "timepick"  # 운영 TiDB 데이터베이스 이름(2026-11-09 picktiming → timepick, RENAME TABLE로 이전)

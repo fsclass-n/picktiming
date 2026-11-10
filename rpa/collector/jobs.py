@@ -63,6 +63,16 @@ def slot_start(at: datetime) -> datetime:
     return at.replace(hour=at.hour - at.hour % SLOT_HOURS, minute=0, second=0, microsecond=0)
 
 
+def limit_products(items: list[dict], limit: int) -> list[dict]:
+    """서버가 우선순위 높은 순으로 준 판매처 목록에서 상품 기준 상위 limit개만 남긴다(실행 시간·상대 사이트 부담 상한)"""
+    key = lambda l: l.get("product_id", ("listing", l["listing_id"]))  # noqa: E731
+    keep: list = []
+    for l in items:
+        if key(l) not in keep and len(keep) < limit:
+            keep.append(key(l))
+    return [l for l in items if key(l) in keep]
+
+
 def scrape(session: PoliteSession, url: str, rule: dict) -> dict:
     """규칙(malls.json)대로 한 판매처의 가격을 읽는다. render=playwright면 브라우저로 화면을 그린 뒤 읽는다"""
     soup = session.fetch(url, render=rule.get("render") == "playwright", wait_for=rule.get("wait_for") or rule.get("price"))
@@ -80,7 +90,7 @@ def collect(cfg: Config, api: ApiClient) -> dict:
     catalog = cfg.catalog()
     if catalog and hasattr(api, "sync_catalog"):
         log.info("카탈로그 동기화: %s", api.sync_catalog(catalog))  # 수집 대상 상품·판매처를 DB에 맞춤(여러 번 호출해도 같음)
-    listings = {l["listing_id"]: l for l in api.listings()}
+    listings = {l["listing_id"]: l for l in limit_products(api.listings(), cfg.max_products)}
     rules = cfg.mall_rules()
     rows, failed, skipped, errors = [], 0, 0, []
     with PoliteSession(cfg.user_agent, cfg.request_interval_sec) as session:

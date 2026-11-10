@@ -228,3 +228,8 @@ def test_collect_if_due_skips_when_this_slot_is_done(monkeypatch):
     monkeypatch.setattr(jobs, "now", lambda cfg: datetime(2026, 12, 1, 18, 5))
     assert jobs.collect(Config(), api)["status"] != "SKIPPED"
     assert jobs.slot_start(datetime(2026, 12, 1, 5, 59)) == datetime(2026, 12, 1, 0, 0)
+
+
+def test_limit_products_keeps_highest_priority_first():
+    items = [{"listing_id": i, "product_id": pid} for i, pid in enumerate([9, 9, 4, 4, 7, 7])]
+    assert [l["listing_id"] for l in jobs.limit_products(items, 2)] == [0, 1, 2, 3]

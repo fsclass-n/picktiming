@@ -60,6 +60,7 @@ class ProductOut(ORM):
     brand: str
     model_no: str
     category: str
+    image_url: str | None = None
 
 
 class ProductDetailOut(ProductOut):
@@ -161,6 +162,8 @@ class CatalogProductIn(BaseModel):
     name: str = Field(min_length=1, max_length=200)
     brand: str = Field(default="-", min_length=1, max_length=100)
     category: str = Field(default="기타", min_length=1, max_length=30)
+    priority: int = Field(default=0, ge=0, le=1_000_000)
+    image_url: str | None = Field(default=None, pattern=r"^https://", max_length=500)  # 제조사 공식 이미지만
     listings: list[CatalogListingIn] = Field(min_length=1, max_length=10)
 
 

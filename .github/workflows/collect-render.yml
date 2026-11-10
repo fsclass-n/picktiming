@@ -19,7 +19,7 @@ on:
       job:
         description: 실행할 작업
         type: choice
-        options: [collect, train, public, report]
+        options: [collect, train, public, report, discover]
         default: collect
 
 permissions:
@@ -59,6 +59,7 @@ jobs:
             [ "$h" = "03" ] && jobs="$jobs train"
             [ "$h" = "06" ] && jobs="$jobs public"
             [ "$d" = "1" ] && [ "$h" = "07" ] && jobs="$jobs report"
+            [ "$d" = "1" ] && [ "$h" = "04" ] && jobs="$jobs discover"   # 월요일 04시: 인기 상품 후보 찾기
             jobs="$(echo $jobs)"
           fi
           echo "실행할 작업(KST $(date '+%F %H:%M')): ${jobs:-없음}"
@@ -107,11 +108,18 @@ jobs:
           echo "Render 헬스 체크 실패"; exit 1
       - name: 작업 실행
         working-directory: rpa
-        run: for j in $JOBS; do echo "::group::$j"; python -m collector.jobs "$j"; echo "::endgroup::"; done
+        run: for j in $JOBS; do echo "::group::$j"; if [ "$j" = discover ]; then python -m collector.discover reports/discovered.json; else python -m collector.jobs "$j"; fi; echo "::endgroup::"; done
       - name: 주간 리포트 보관
         if: contains(env.JOBS, 'report')
         uses: actions/upload-artifact@v4
         with:
           name: weekly-report-${{ github.run_id }}
           path: rpa/reports/*.xlsx
+          retention-days: 30
+      - name: 인기 상품 후보 보관
+        if: contains(env.JOBS, 'discover')
+        uses: actions/upload-artifact@v4
+        with:
+          name: discovered-${{ github.run_id }}
+          path: rpa/reports/discovered.json
           retention-days: 30

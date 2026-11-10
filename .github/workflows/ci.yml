@@ -120,13 +120,5 @@ jobs:
                  -H "Access-Control-Request-Headers: authorization,content-type" -D - -o /dev/null \
                  http://localhost:8002/api/v1/auth/login | grep -qi "access-control-allow-origin: $WEB" \
             || { docker logs split; exit 1; }
-      - name: 이전 통합 이미지(저장소 루트 Dockerfile, 롤백용) 빌드·확인
-        run: |
-          docker build -t timepick-render:ci .
-          docker run -d --name render -p 8001:10000 -e PORT=10000 -e DATABASE_URL=sqlite:////app/data/ci.db timepick-render:ci
-          for i in $(seq 1 30); do curl -fsS http://localhost:8001/health && break; sleep 2; done
-          curl -fsS http://localhost:8001/login | grep -q "js/config.js" \
-            && curl -fsS http://localhost:8001/js/config.js | grep -q 'API_BASE_URL: "/"' \
-            || { docker logs render; exit 1; }
       - name: Compose 설정 검증 (.env.example을 그대로 복사해도 동작해야 함)
         run: cp .env.example .env && docker compose config -q

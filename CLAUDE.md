@@ -20,7 +20,6 @@ Render 배포는 Auto-Deploy "After CI Checks Pass", EC2 배포는 `deploy.yml`.
 | `frontend/` | React 19 · Vite 8 · Tailwind CSS v4, `src/App.jsx` 중심 고객 UI | Netlify, Render(Static Site, `VITE_API_URL`), EC2(nginx 이미지) |
 | `netlify.toml` | Netlify 설정 (base=frontend) | Netlify |
 | `backend/` | Python 3.11 · FastAPI · SQLAlchemy, `backend/Dockerfile`(Render 백엔드·EC2·CI 공용 API 이미지) | Render(Web Service), EC2(api) |
-| `Dockerfile`(루트) | 전환·롤백용 이전 통합 이미지(React + API). 분리 배포가 안정되면 삭제 | Render(되돌릴 때만) |
 | `render.yaml`, `.dockerignore`(루트) | Render Blueprint(Static Site + Web Service), Docker 빌드 컨텍스트(저장소 루트) 필터 | Render |
 | `rpa/` | 가격 수집기(Requests · BeautifulSoup), Docker | EC2(rpa) |
 | `docker-compose.yml` | EC2 전체 스택(web + api + rpa, DB는 TiDB) | EC2 전체 재빌드 |

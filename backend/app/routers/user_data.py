@@ -10,8 +10,8 @@ from ..models import Alert, Product, User, Watchlist
 from ..schemas import ProductOut, WatchIn, WatchPatch
 from ..security import current_user
 from ..services.pricing import daily_lowest_all
-from ..services.timing import cached_or_analyze
-from .products import get_product
+from ..services.timing import cached_many, cached_or_analyze
+from .products import get_product, has_active_listing
 
 router = APIRouter(tags=["관심 상품·알림·추천"])
 
@@ -82,10 +82,20 @@ def read_all(db: Session = Depends(get_db), user: User = Depends(current_user)):
 
 @router.get("/deals/today")
 def deals_today(db: Session = Depends(get_db)):
-    """홈 화면용 공개 데이터(개인 정보 없음): 로그인 없이 조회"""
-    products = db.execute(select(Product)).scalars().all()
-    analyzed = [(p, cached_or_analyze(db, p)) for p in products]
+    """홈 화면용 공개 데이터(개인 정보 없음): 로그인 없이 조회
+
+    검색과 같이 활성 판매처가 있는 상품만 쓴다(비활성화한 시연 쇼핑몰 상품 제외). 적기 점수가 있는 상품(이력 30일 이상)이 6개보다 적으면
+    가격이 수집된 인기 상품(priority 높은 순, 이미지 있는 것 먼저)을 '판단 보류'로 채워 빈 화면이 되지 않게 한다.
+    """
+    products = db.execute(select(Product).where(has_active_listing()).order_by(Product.id)).scalars().all()
+    verdicts = cached_many(db, products, max_age_hours=25)
+    analyzed = [(p, verdicts[p.id]) for p in products]
     timing = sorted([(p, a) for p, a in analyzed if a["score"] is not None], key=lambda x: -x[1]["score"])[:6]
+    if len(timing) < 6:
+        picked = {p.id for p, _ in timing}
+        rest = sorted([(p, a) for p, a in analyzed if p.id not in picked and a["current_price"]],
+                      key=lambda x: (not x[0].image_url, -x[0].priority, x[0].id))
+        timing += rest[:6 - len(timing)]
     pv = daily_lowest_all(db, days=8)
     names = {p.id: p for p in products}
     drops = []

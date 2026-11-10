@@ -169,7 +169,7 @@ function Footer() {
         <a href="https://github.com/fsclass-n/timepick" target="_blank" rel="noreferrer" className="mt-4 inline-flex size-11 items-center justify-center rounded-full border border-slate-700 hover:bg-slate-800" aria-label="TimePick GitHub"><i className="fa-brands fa-github" aria-hidden="true" /></a></div>
       <div><h2 className="mb-4 text-sm text-white">{t("가격 탐색")}</h2><ul className="space-y-3 text-sm"><li><Link to="/search">{t("모든 상품 비교")}</Link></li><li><Link to="/?view=drops#discover">{t("최근 가격 하락")}</Link></li><li><Link to="/watchlist">{t("내 관심 상품")}</Link></li><li><Link to="/alerts">{t("목표가 알림")}</Link></li></ul></div>
       <div><h2 className="mb-4 text-sm text-white">{t("이용 안내")}</h2><ul className="space-y-3 text-sm"><li><Link to="/guide">{t("구매 타이밍 이해하기")}</Link></li><li><Link to="/privacy">{t("개인정보 처리 안내")}</Link></li><li><Link to="/terms">{t("서비스 이용 안내")}</Link></li><li><a href="https://github.com/fsclass-n/timepick/issues" target="_blank" rel="noreferrer">{t("문제 제보")}</a></li></ul></div>
-      <div><h2 className="mb-4 text-sm text-white">{t("데이터 기준")}</h2><p className="text-xs leading-6">{t("다나와·에누리 상품 페이지에서 하루 4회(0·6·12·18시) 수집합니다. 판매처 최저가를 비교하며, 최종 결제 금액은 판매처에서 확인해 주세요.")}</p><p className="mt-3 text-xs leading-6 text-slate-400">{t("상품 이미지는 Unsplash 카테고리 참고 이미지입니다. 구매 적기 예측은 참고 정보이며 미래 가격을 보장하지 않습니다.")}</p></div>
+      <div><h2 className="mb-4 text-sm text-white">{t("데이터 기준")}</h2><p className="text-xs leading-6">{t("다나와·에누리 상품 페이지에서 하루 4회(0·6·12·18시) 수집합니다. 판매처 최저가를 비교하며, 최종 결제 금액은 판매처에서 확인해 주세요.")}</p><p className="mt-3 text-xs leading-6 text-slate-400">{t("상품 이미지는 제조사 공식 이미지이며, 찾지 못한 상품은 다나와·에누리 상품 이미지를 출처와 함께 보여 줍니다. 구매 적기 예측은 참고 정보이며 미래 가격을 보장하지 않습니다.")}</p></div>
     </div>
     <div className="container-x flex flex-wrap items-center justify-between gap-4 border-t border-slate-700 py-6 text-xs text-slate-400"><span>© {new Date().getFullYear()}{" "}{t("TimePick · Final-Project 3조")}</span><span>{t("박미금 · 김모란 · 이오리 · 홍기흥")}</span>
       <button className="btn-ghost text-slate-300 hover:bg-slate-800 hover:text-white" onClick={() => window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' })}>{t("맨 위로")}<Icon name="arrow-up" /></button></div>
@@ -624,14 +624,14 @@ function InfoPage({ kind }) {
     terms: [t("서비스 이용 안내"), [
       [t("서비스 범위"), t("TimePick은 가격 비교와 구매 타이밍 분석을 제공하는 팀 프로젝트입니다. 상품 판매, 결제, 배송은 각 판매처에서 처리합니다.")],
       [t("가격·분석 정보"), t("가격은 하루 4회(0·6·12·18시) 수집하며 수집 환경에 따라 지연되거나 누락될 수 있습니다. 적기 예측과 AI 답변은 참고 정보입니다. 구매 결과나 미래 가격을 보장하지 않습니다.")],
-      [t("이미지와 데모"), t("상품 카드의 Unsplash 이미지는 카테고리를 설명하는 참고 이미지로, 해당 모델의 실제 사진과 다를 수 있습니다. 화면 상단에 체험 공간으로 표시되는 경우 가격과 계정은 데모 데이터입니다.")],
+      [t("이미지와 데모"), t("상품 사진은 제조사 공식 이미지이며, 찾지 못한 상품은 다나와·에누리 상품 이미지를 쓰고 사진 아래에 출처를 표시합니다. 사진이 없으면 카테고리 아이콘이 나옵니다. 화면 상단에 체험 공간으로 표시되는 경우 가격과 계정은 데모 데이터입니다.")],
       [t("문의"), t("프로젝트 GitHub Issues에서 오류를 제보할 수 있습니다. 비밀번호, 토큰, 이메일 등의 개인정보를 공개 이슈에 올리지 마세요.")],
     ]],
     privacy: [t("개인정보 처리 안내"), [
       [t("계정과 이용 정보"), t("운영 서비스는 이름, 이메일, 비밀번호 해시 및 계정 권한을 저장합니다. 관심 상품, 목표가, 가격 알림은 계정에 연결해 관리합니다.")],
       [t("브라우저 저장소"), t("로그인 상태는 이 브라우저의 로컬 저장소에 보관됩니다. 관심 카테고리도 계정별로 이 브라우저에 저장되며 다른 기기에 동기화되지 않습니다. 공용 기기에서는 이용 후 로그아웃해 주세요.")],
       [t("소셜 로그인"), t("선택한 제공자의 동의 화면을 거쳐 전달받은 이메일과 프로필 이름을 계정 연결에 사용합니다. 제공자의 비밀번호를 TimePick에 입력하지 않습니다.")],
-      [t("외부 서비스"), t("가격 데이터 기반 AI 조언에는 서버에서 Gemini를 사용할 수 있습니다. 상담창에 개인정보를 입력하지 마세요. 글꼴과 참고 이미지를 불러올 때 Google Fonts, Spoqa, Unsplash에 브라우저 요청이 전송됩니다.")],
+      [t("외부 서비스"), t("가격 데이터 기반 AI 조언에는 서버에서 Gemini를 사용할 수 있습니다. 상담창에 개인정보를 입력하지 마세요. 글꼴과 이미지를 불러올 때 Google Fonts, Spoqa, Unsplash(로그인 화면), 제조사·다나와·에누리 이미지 서버에 브라우저 요청이 전송됩니다.")],
       [t("문의와 데이터 요청"), t("현재 셀프서비스 계정 삭제 기능은 제공하지 않습니다. 계정과 데이터 관련 요청은 프로젝트 운영자에게 문의해 주세요. 공개 GitHub Issues에는 개인정보를 기재하지 마세요.")],
     ]],
   }[kind];

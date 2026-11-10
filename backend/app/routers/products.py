@@ -22,7 +22,7 @@ def get_product(db: Session, product_id: int) -> Product:
     return p
 
 
-def _has_active_listing():
+def has_active_listing():
     """활성 쇼핑몰의 활성 판매처가 하나라도 있는 상품만 노출한다(비활성화한 시연용 쇼핑몰 상품은 숨김, 데이터는 보존)"""
     return (select(ProductListing.id).join(Mall, Mall.id == ProductListing.mall_id)
             .where(ProductListing.product_id == Product.id, ProductListing.is_active.is_(True), Mall.is_active.is_(True)).exists())
@@ -41,7 +41,7 @@ def search(q: str = Query("", max_length=100), category: str = Query("", max_len
            page: int = Query(1, ge=1, le=1000), size: int = Query(50, ge=1, le=100),
            db: Session = Depends(get_db), _: User = Depends(current_user)):
     """상품 검색. 판정 점수·가격 정렬과 '지금 구매' 필터가 있어 전체를 판정한 뒤 page 단위로 잘라 준다(total = 조건에 맞는 전체 수)"""
-    stmt = select(Product).where(_has_active_listing()).order_by(Product.id)
+    stmt = select(Product).where(has_active_listing()).order_by(Product.id)
     if q.strip():
         like = f"%{q.strip()}%"
         stmt = stmt.where(or_(Product.name.ilike(like), Product.brand.ilike(like), Product.category.ilike(like), Product.model_no.ilike(like)))

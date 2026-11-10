@@ -75,6 +75,24 @@ def test_retired_mall_hides_products_and_stops_collection(client, user_h):
     assert "RETIRE-1" in _search(client, user_h, "은퇴")
 
 
+def test_home_deals_skip_retired_demo_products_and_fill_with_collected_ones(client):
+    """홈(오늘, 눈여겨볼 가격): 비활성 시연 쇼핑몰 상품은 빼고, 점수 있는 상품이 모자라면 가격이 수집된 인기 상품(이미지 먼저)으로 채운다"""
+    seed = [{"name": n, "base_url": f"https://mall-{c}.example.com"} for n, c in (("쇼핑몰 A", "a"), ("쇼핑몰 B", "b"), ("쇼핑몰 C", "c"))]
+    new = {"model_no": "HOME-NEW-1", "name": "홈 신규 상품", "category": "디지털", "priority": 500, "image_url": "https://maker.example/n.png",
+           "listings": [{"mall": DANAWA["name"], "url": "https://prod.danawa.test/info/?pcode=777"}]}
+    client.put(f"{API}/rpa/catalog", headers=RPA, json={"malls": [DANAWA], "products": [new], "retire_mall_hosts": [m["base_url"][8:] for m in seed]})
+    try:
+        lid = next(i["listing_id"] for i in client.get(f"{API}/rpa/listings", headers=RPA).json()["items"] if i["model_no"] == "HOME-NEW-1")
+        client.post(f"{API}/rpa/prices/bulk", headers=RPA, json={"items": [{"listing_id": lid, "price": 150000}]})
+        deals = client.get(f"{API}/deals/today").json()
+        models = [d["model_no"] for d in deals["timing"]]
+        assert "HOME-NEW-1" in models and models.index("HOME-NEW-1") == 0  # 판단 보류지만 인기·이미지 있는 상품이 먼저
+        demo = {i["model_no"] for i in client.get(f"{API}/rpa/listings", headers=RPA).json()["items"]}
+        assert set(models) <= demo and all(d["model_no"] in demo for d in deals["drops"])  # 활성 판매처 상품만
+    finally:  # 다른 테스트가 쓰는 시연 쇼핑몰을 되살린다
+        client.put(f"{API}/rpa/catalog", headers=RPA, json={"malls": seed, "products": []})
+
+
 def test_catalog_never_retires_a_mall_it_also_registers(client):
     res = client.put(f"{API}/rpa/catalog", headers=RPA, json={**_catalog(), "retire_mall_hosts": ["prod.danawa.test"]}).json()
     assert res["malls_retired"] == 0

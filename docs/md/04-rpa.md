@@ -19,8 +19,13 @@
 | 다나와 | `https://prod.danawa.com/info/?pcode=<번호>` | 허용 (`/api/`, `/info/ajax/`, `/list/ajax/`는 금지 → 사용 안 함) | JSON-LD `AggregateOffer.lowPrice` |
 | 에누리 | `https://www.enuri.com/detail.jsp?modelno=<번호>` | 허용 | JSON-LD `AggregateOffer.lowPrice` |
 
-- 상품 목록: [`rpa/catalog.json`](../../rpa/catalog.json) — 실제 제품 13종(디지털 4 · 가전 4 · 생필품 3 · 유아 2).
+- 상품 목록: [`rpa/catalog.json`](../../rpa/catalog.json) — 실제 제품 43종(기본 13종 + 인기 상품 후보 30종 `DANAWA-<pcode>`). 모든 상품이 다나와·에누리 두 곳에 연결됩니다.
   두 사이트 상품 페이지의 상품명으로 같은 제품(정품·같은 용량·같은 구성)임을 확인한 코드만 넣었습니다.
+  인기 상품 30종의 에누리 코드는 2026-11-10 에누리 검색(`price.enuri.com/search`, robots 허용·3초 간격)으로 찾은 뒤
+  상세 페이지 JSON-LD의 상품명·사양(SSD 용량, 색상, 스탠드 구성 등 다나와 옵션)이 같은 것만 골랐습니다.
+  `DANAWA-` model_no는 가격 이력이 이어지도록 그대로 둡니다(바꾸면 새 상품이 생김).
+- `rpa/catalog.json` 자체 검증: `backend/tests/test_catalog.py::test_real_catalog_file_is_accepted_and_uses_only_maker_images`
+  (API 형식 통과, 모든 상품 다나와·에누리 연결, 이미지가 다나와·에누리 주소가 아님).
 - 두 사이트는 **같은 회사(커넥트웨이브)** 가 운영해 최저가가 같은 경우가 많습니다. 판매처별 최저가는 각 사이트가 집계한 값입니다.
 - 비교 사이트 최저가는 판매처마다 배송비 포함 여부가 달라 `shipping_fee=0`(사이트 표시 최저가)으로 저장합니다.
 - 제외한 사이트와 이유: 11번가·SSG·롯데ON(robots.txt가 일반 봇 금지), G마켓(봇 이름으로 접속 시 403 → 거부로 보고 우회하지 않음),

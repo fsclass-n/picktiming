@@ -7074,6 +7074,20 @@
    ]
   },
   {
+   "model_no": "DANAWA-35223212",
+   "name": "메종키츠네 폭스헤드 맨투맨 LM00301KM0001 (H120, 그레이)",
+   "brand": "메종키츠네",
+   "category": "패션",
+   "priority": 0,
+   "image_url": "https://img.danuri.io/catalog-image/212/223/035/a524ca65015e480f89f0612967575ad0.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=35223212"
+    }
+   ]
+  },
+  {
    "model_no": "DANAWA-123621640",
    "name": "삼성전자 갤럭시Z 플립8 512GB, 자급제 (크림)",
    "brand": "삼성전자",
@@ -7088,6 +7102,3050 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=148003660"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-77378039",
+   "name": "SAPPHIRE 라데온 RX 9070 XT PULSE D6 16GB",
+   "brand": "SAPPHIRE",
+   "category": "디지털",
+   "priority": 400,
+   "image_url": "https://img.danuri.io/catalog-image/039/378/077/bdee314b483b40879868bf000c2116fa.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=77378039"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=132576940"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-91770953",
+   "name": "ATK VXE R1 SE+ 유무선 브라보텍 (블랙)",
+   "brand": "ATK",
+   "category": "디지털",
+   "priority": 400,
+   "image_url": "https://img.danuri.io/catalog-image/953/770/091/a035c3edbcca414297ac293450540660.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=91770953"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=135332744"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-101629166",
+   "name": "SONY 알파 A7 V 바디 (정품)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 400,
+   "image_url": "https://img.danuri.io/catalog-image/166/629/101/f7f539388b7c4629a7afbf3171622697.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=101629166"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=140185466"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123670007",
+   "name": "쿠쿠전자 CRP-DHASNL0615FGW (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 400,
+   "image_url": "https://img.danuri.io/catalog-image/007/670/123/f864bbd4006043b6ba0058c9cf0a7447.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123670007"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148052168"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124021693",
+   "name": "쉬크 하이드로5 스마트 (면도기1개+날12개)",
+   "brand": "쉬크",
+   "category": "생필품",
+   "priority": 400,
+   "image_url": "https://img.danuri.io/catalog-image/693/021/124/51a4a3f6338e42bbbbaaebaee8a885ce.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124021693"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148371932"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-100384973",
+   "name": "필립스 에브니아 27M2N5500P QHD 260 FAST IPS 프리싱크 HDR 400 게이밍 무결점",
+   "brand": "필립스",
+   "category": "디지털",
+   "priority": 160,
+   "image_url": "https://img.danuri.io/catalog-image/973/384/100/8fdda05345ab406eac34aaf40a4efe2a.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=100384973"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139554676"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122634182",
+   "name": "Razer Hammerhead V3 HyperSpeed (정품)",
+   "brand": "Razer",
+   "category": "디지털",
+   "priority": 160,
+   "image_url": "https://img.danuri.io/catalog-image/182/634/122/b57f5144395245f38ff2dfaadc35dce8.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122634182"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147012035"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-55795958",
+   "name": "보만 글래스팝 AF41EG1I 전용용기",
+   "brand": "보만",
+   "category": "가전",
+   "priority": 150,
+   "image_url": "https://img.danuri.io/catalog-image/958/795/055/49b85fe093734fdeb9131a4b8a92d903.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=55795958"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=125035017"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122651501",
+   "name": "HP 옴니북 5 16-bm0011TU (SSD 1TB)",
+   "brand": "HP",
+   "category": "디지털",
+   "priority": 140,
+   "image_url": "https://img.danuri.io/catalog-image/501/651/122/8908712fc98949aeb1b9b4e0dbff5af3.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122651501"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147030617"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124567991",
+   "name": "LG전자 퓨리케어 AI 오브제컬렉션 하이드로타워 Max HY856RNAA (급수비커, 알레르겐 특화필터 포함)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 100,
+   "image_url": "https://img.danuri.io/catalog-image/991/567/124/e213173ea13941949a1465633216a3b7.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124567991"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148810866"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124154491",
+   "name": "APPLE 아이폰 듀오 256GB, 자급제 (스타 화이트)",
+   "brand": "APPLE",
+   "category": "디지털",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/491/154/124/9512caf67514427eb5cbe93b959eb2a5.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124154491"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148480269"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-14848211",
+   "name": "삼성전자 비스포크 슬림 VS15A680AEW",
+   "brand": "삼성전자",
+   "category": "가전",
+   "priority": 60,
+   "image_url": "https://img.danuri.io/catalog-image/211/848/014/f190425121a04edfb2dfd97356fec945.jpeg",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=14848211"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=78810067"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-71132207",
+   "name": "크리넥스 데코 앤 소프트 화이트 25m (30롤) (2팩)",
+   "brand": "크리넥스",
+   "category": "생필품",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/207/132/071/c233dad752624f0883e620a97bbd5ed6.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=71132207"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=129806098"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-21212762",
+   "name": "Hipp 힙 콤비오틱 유기농 3단계 800g (1개)",
+   "brand": "Hipp",
+   "category": "유아",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/762/212/021/afa75f0d643a4a9ba30a11d01337cce6.jpg",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=21212762"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=32190154"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-71968925",
+   "name": "해피블라썸 네추럴블라썸 슈퍼 소프트 팬티형 6단계-공용 (80매)",
+   "brand": "해피블라썸",
+   "category": "유아",
+   "priority": 40,
+   "image_url": "https://img.danuri.io/catalog-image/925/968/071/4b6cbff7ea2145d593044d3326ce35dd.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=71968925"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=130174867"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122635575",
+   "name": "삼성전자 네오QLED KQ75QNH80AFXKR (벽걸이+사운드바, HW-B650F)",
+   "brand": "삼성전자",
+   "category": "가전",
+   "priority": 20,
+   "image_url": "https://img.danuri.io/catalog-image/575/635/122/5c77dfd3c85f47e283e8a34c7241ff23.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122635575"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-11870713",
+   "name": "앱코 EH200 BT (정품)",
+   "brand": "앱코",
+   "category": "디지털",
+   "priority": 10,
+   "image_url": "https://img.danuri.io/catalog-image/713/870/011/de894e91c05b4c5e8133b5d4435ecd13.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=11870713"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=52857275"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122684820",
+   "name": "SAPPHIRE 라데온 RX 9070 GRE PULSE OC D6 12GB",
+   "brand": "SAPPHIRE",
+   "category": "디지털",
+   "priority": 390,
+   "image_url": "https://img.danuri.io/catalog-image/820/684/122/2e34a1ce465d497fb4a379e9558c64c3.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122684820"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-99480569",
+   "name": "ATK VXE R1 SE+ 유무선 브라보텍 (라이트 핑크)",
+   "brand": "ATK",
+   "category": "디지털",
+   "priority": 390,
+   "image_url": "https://img.danuri.io/catalog-image/569/480/099/4866cb7a37c346cb83819782e17ec77a.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=99480569"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139162125"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-27863867",
+   "name": "SONY 알파 A7C II 바디 (정품)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 370,
+   "image_url": "https://img.danuri.io/catalog-image/867/863/027/11275e2381f84c59916537bffd8f0eb6.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=27863867"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=110486487"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122708165",
+   "name": "쿠쿠전자 CRP-DHASNL0615FGW (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 390,
+   "image_url": "https://img.danuri.io/catalog-image/165/708/122/374d73c7bc5243cfb660aa4470d0ac97.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122708165"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147088517"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124215917",
+   "name": "쉬크 하이드로5 스마트 (면도기1개+날12개 + 거치대)",
+   "brand": "쉬크",
+   "category": "생필품",
+   "priority": 390,
+   "image_url": "https://img.danuri.io/catalog-image/917/215/124/1c7a622990bc470ea1e2fe6afbe5e222.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124215917"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-100384730",
+   "name": "필립스 에브니아 27M2N3500PF QHD 260 FAST IPS 프리싱크 AI HDR 게이밍 무결점",
+   "brand": "필립스",
+   "category": "디지털",
+   "priority": 120,
+   "image_url": "https://img.danuri.io/catalog-image/730/384/100/7f70d73987dd4846a8da826fe2e8a3fc.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=100384730"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139554559"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106689230",
+   "name": "SONY WF-1000XM6 (정품)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 20,
+   "image_url": "https://img.danuri.io/catalog-image/230/689/106/452e211c6d6544468983532c82946167.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106689230"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142928768"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-29952017",
+   "name": "보랄 BR-AFD161L",
+   "brand": "보랄",
+   "category": "가전",
+   "priority": 80,
+   "image_url": "https://img.danuri.io/catalog-image/017/952/029/4e2de66e96d24358a9f21a4cb35acfff.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=29952017"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=114633749"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122651506",
+   "name": "HP 옴니북 5 16-bm0011TU (SSD 2TB)",
+   "brand": "HP",
+   "category": "디지털",
+   "priority": 130,
+   "image_url": "https://img.danuri.io/catalog-image/506/651/122/4036805bf9ad4e98af5417a339121504.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122651506"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147030622"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106704350",
+   "name": "삼성전자 Infinite AI AP90H10198EDD",
+   "brand": "삼성전자",
+   "category": "가전",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/350/704/106/89b4beb775724c5e99ff4429c9200e1a.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106704350"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142933456"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124167777",
+   "name": "APPLE 아이폰 듀오 256GB, 자급제 (나이트 스카이)",
+   "brand": "APPLE",
+   "category": "디지털",
+   "priority": 80,
+   "image_url": "https://img.danuri.io/catalog-image/777/167/124/8fa678a0e6cf475fa6e1f61e955b3d26.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124167777"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148490632"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-61842860",
+   "name": "쿠쿠전자 파워클론 슬림 CVC-G820NWM",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/860/842/061/3b25904ac0cd4d40b22157c59d856a47.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=61842860"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=126940454"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-71906504",
+   "name": "하기스 2024 보송보송 밴드형 5단계-공용 (120매)",
+   "brand": "하기스",
+   "category": "유아",
+   "priority": 10,
+   "image_url": "https://img.danuri.io/catalog-image/504/906/071/2a681498594549d6b06c620eec512d81.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=71906504"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=130164934"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122655792",
+   "name": "LG전자 스탠바이미2 Max 32LX6BEGA (이동형 스탠드)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 10,
+   "image_url": "https://img.danuri.io/catalog-image/792/655/122/2a4da53a99ca40409bf4ba48e4ad2489.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122655792"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147034988"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-91909427",
+   "name": "SAPPHIRE 라데온 RX 9060 XT NITRO+ OC D6 16GB",
+   "brand": "SAPPHIRE",
+   "category": "디지털",
+   "priority": 380,
+   "image_url": "https://img.danuri.io/catalog-image/427/909/091/df418bfcc47e45a0b90f625703dbe84a.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=91909427"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=135398175"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-99480548",
+   "name": "ATK VXE R1 SE+ 유무선 브라보텍 (퍼플)",
+   "brand": "ATK",
+   "category": "디지털",
+   "priority": 380,
+   "image_url": "https://img.danuri.io/catalog-image/548/480/099/38df0f263ac24d4ab68cfb76e7150dfa.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=99480548"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139162090"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-28499225",
+   "name": "SONY 알파 A7C II 바디 (소니 무선슈팅그립)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 360,
+   "image_url": "https://img.danuri.io/catalog-image/225/499/028/c1692e8739064bcf85ca5327b4709d7f.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=28499225"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=111913796"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106221236",
+   "name": "쿠쿠전자 CRP-DHPNL0615FGW (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 380,
+   "image_url": "https://img.danuri.io/catalog-image/236/221/106/d4ff2b8d340944e9a296f504c601044f.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106221236"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142867241"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124215878",
+   "name": "쉬크 하이드로5 스마트 (면도기1개+날12개 + 휴대용 커버)",
+   "brand": "쉬크",
+   "category": "생필품",
+   "priority": 380,
+   "image_url": "https://img.danuri.io/catalog-image/878/215/124/a3077a831a3c4a459f9fea3aa07448e9.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124215878"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124720772",
+   "name": "래안텍 Arkcell FFB2740CE Fast-IPS 280 Speed UP 게이밍 블랙 무결점",
+   "brand": "래안텍",
+   "category": "디지털",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/772/720/124/b94a2ad706084185b072d88668cc847e.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124720772"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148912295"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-100385468",
+   "name": "쿠쿠전자 글라스 CAF-L0410EW",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/468/385/100/17fcb545146c4c24afbc4ae91e4da262.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=100385468"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139554888"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122651509",
+   "name": "HP 옴니북 5 16-bm0011TU (SSD 4TB)",
+   "brand": "HP",
+   "category": "디지털",
+   "priority": 120,
+   "image_url": "https://img.danuri.io/catalog-image/509/651/122/d6016c6aa40549c38f8c373c3f8049f5.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122651509"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147030625"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-78385046",
+   "name": "LG전자 오브제컬렉션 퓨리케어 에어로캣타워 AS065CWHA (일반구매)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/046/385/078/3335d15c03a84fcc98ace3da37d5a6c1.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=78385046"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=133054883"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106221251",
+   "name": "삼성전자 갤럭시S26 울트라 512GB, 자급제 (블랙)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/251/221/106/091d543119ae40e597c5ef032e9bbd40.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106221251"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142874136"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-14795894",
+   "name": "다이슨 마이크로",
+   "brand": "다이슨",
+   "category": "가전",
+   "priority": 40,
+   "image_url": "https://img.danuri.io/catalog-image/894/795/014/8a92c7ed995646b4bb22fc926b667d8c.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=14795894"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=71706355"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-97470848",
+   "name": "SAPPHIRE 라데온 RX 9060 PULSE OC D6 8GB",
+   "brand": "SAPPHIRE",
+   "category": "디지털",
+   "priority": 370,
+   "image_url": "https://img.danuri.io/catalog-image/848/470/097/fdc7edbfa61e4d8384d6f0d80f7da482.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=97470848"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=137997083"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-91770980",
+   "name": "ATK VXE R1 SE+ 유무선 브라보텍 (화이트)",
+   "brand": "ATK",
+   "category": "디지털",
+   "priority": 370,
+   "image_url": "https://img.danuri.io/catalog-image/980/770/091/4218d55b0b48429c981fc06178c0ed71.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=91770980"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=135332654"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-95423630",
+   "name": "SONY 알파 A7C II 바디 (아이리버 무선슈팅그립)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 350,
+   "image_url": "https://img.danuri.io/catalog-image/630/423/095/f71ea3b2ecc74024a2bb06b0e36e312b.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=95423630"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=136968870"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123669884",
+   "name": "쿠쿠전자 CRP-DHPNL0615FGW (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 370,
+   "image_url": "https://img.danuri.io/catalog-image/884/669/123/adc8242d00ac47e787bccd942fc8f157.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123669884"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148052040"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-70153637",
+   "name": "도루코 에코3 일회용 면도기 (1개)",
+   "brand": "도루코",
+   "category": "생필품",
+   "priority": 370,
+   "image_url": "https://img.danuri.io/catalog-image/637/153/070/b21422030c2b4999903bad84acbef7fc.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=70153637"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=129433541"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-78238583",
+   "name": "풀무원건강생활 스팀쿡 베이직 AV12E10CC",
+   "brand": "풀무원건강생활",
+   "category": "가전",
+   "priority": 40,
+   "image_url": "https://img.danuri.io/catalog-image/583/238/078/b20f9c56bb0e46e685e5899135cd174a.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=78238583"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=132984810"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-104624507",
+   "name": "삼성전자 갤럭시북6 프로 NT960XJG-K72A (SSD 256GB)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 110,
+   "image_url": "https://img.danuri.io/catalog-image/507/624/104/412f5b415c8b484f9ba9e6e742c3e44f.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=104624507"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142189133"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-19864358",
+   "name": "위닉스 타워 엣지 AT8E430-MWK",
+   "brand": "위닉스",
+   "category": "가전",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/358/864/019/3b6351a2f1b34677aed75c9498b0100a.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=19864358"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=103263916"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106721876",
+   "name": "삼성전자 갤럭시S26 울트라 512GB, 자급제 (화이트)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 60,
+   "image_url": "https://img.danuri.io/catalog-image/876/721/106/819f234c663c4d688e2d5f22fbc1d734.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106721876"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142939341"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124492493",
+   "name": "LG전자 오브제컬렉션 코드제로 A7 Core A720HC",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 30,
+   "image_url": "https://img.danuri.io/catalog-image/493/492/124/c20316a03aa34a1493580ec16b440b4a.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124492493"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148760395"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124480028",
+   "name": "PALIT 지포스 RTX 5060 INFINITY 2 OC D7 8GB 이엠텍",
+   "brand": "PALIT",
+   "category": "디지털",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/028/480/124/9ccc3ed8168b432fb175f3bf57b312ac.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124480028"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148751158"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123798667",
+   "name": "ATK VXE R1 SE+ 유무선 브라보텍 (블랙, 저소음)",
+   "brand": "ATK",
+   "category": "디지털",
+   "priority": 360,
+   "image_url": "https://img.danuri.io/catalog-image/667/798/123/793a498b0f6c49df960d213b60284e9a.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123798667"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-28535945",
+   "name": "SONY 알파 A7C II 바디 (소니 무선슈팅그립, 배터리)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 340,
+   "image_url": "https://img.danuri.io/catalog-image/945/535/028/d9b99e2e08524f70a7dfa782bd0555c3.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=28535945"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123730422",
+   "name": "쿠쿠전자 미식컬렉션 CRP-CHPNL1015FGW",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 360,
+   "image_url": "https://img.danuri.io/catalog-image/422/730/123/badc4aebb4cb4bb98a61bb06017c4533.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123730422"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148108751"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-18325958",
+   "name": "질레트 랩스 딥클렌징바 (1개)",
+   "brand": "질레트",
+   "category": "생필품",
+   "priority": 310,
+   "image_url": "https://img.danuri.io/catalog-image/958/325/018/499761ae1da24d2390d7bb14bae6c596.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=18325958"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-15550931",
+   "name": "아이닉 new 올스텐 에어프라이어 iSA7 (블랙)",
+   "brand": "아이닉",
+   "category": "가전",
+   "priority": 30,
+   "image_url": "https://img.danuri.io/catalog-image/931/550/015/02598450c9ca4badb5e07b33b86879e0.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=15550931"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=79548103"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-104988857",
+   "name": "삼성전자 갤럭시북6 프로 NT960XJG-K72A (SSD 512GB)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 100,
+   "image_url": "https://img.danuri.io/catalog-image/857/988/104/fb00cecc76724c56917240fc37ffcdb0.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=104988857"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142324432"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123436753",
+   "name": "LG전자 오브제컬렉션 퓨리케어 AI 360˚ M7 AS356NGMA (공식인증)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 30,
+   "image_url": "https://img.danuri.io/catalog-image/753/436/123/e652e038836f474d94ed6a3dc6c854f1.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123436753"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147818638"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106721879",
+   "name": "삼성전자 갤럭시S26 울트라 512GB, 자급제 (스카이블루)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/879/721/106/2b12b1f402864d3696887e44a7f7c171.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106721879"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142939343"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-74250329",
+   "name": "다이슨 V12 오리진 플러피 (단품+벽걸이거치대)",
+   "brand": "다이슨",
+   "category": "가전",
+   "priority": 20,
+   "image_url": "https://img.danuri.io/catalog-image/329/250/074/5f212d333066479e9ee8c59ec445a038.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=74250329"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=131237841"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-76074971",
+   "name": "이엠텍 지포스 RTX 5080 MIRACLE WHITE D7 16GB",
+   "brand": "이엠텍",
+   "category": "디지털",
+   "priority": 30,
+   "image_url": "https://img.danuri.io/catalog-image/971/074/076/a6589326d5414c63811ec96f872ed03d.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=76074971"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=132011606"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124433941",
+   "name": "ATK VXE R1 SE+ 유무선 브라보텍 (핑크, 저소음)",
+   "brand": "ATK",
+   "category": "디지털",
+   "priority": 350,
+   "image_url": "https://img.danuri.io/catalog-image/941/433/124/01d90e77d3564ec5aa9aa2c6ad33171c.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124433941"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148712601"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-100327724",
+   "name": "캐논 EOS R6 Mark III 바디 (정품)",
+   "brand": "캐논",
+   "category": "디지털",
+   "priority": 320,
+   "image_url": "https://img.danuri.io/catalog-image/724/327/100/69fc47c49bff4395898a1813471f6e32.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=100327724"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139520001"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123682936",
+   "name": "쿠쿠전자 CRP-DHPNL0615FGG (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 350,
+   "image_url": "https://img.danuri.io/catalog-image/936/682/123/18a3d595f3074ce88b2c422799d5f17f.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123682936"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148064779"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123776170",
+   "name": "도루코 슬릭 X 최강야구 콜라보 면도세트 (면도기 1개+날11개+하드케이스)",
+   "brand": "도루코",
+   "category": "생필품",
+   "priority": 290,
+   "image_url": "https://img.danuri.io/catalog-image/170/776/123/3a5c0a06db074f9a8704e46b7f32acbf.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123776170"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148148349"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-15550937",
+   "name": "아이닉 new 올스텐 에어프라이어 iSA7 (크림화이트)",
+   "brand": "아이닉",
+   "category": "가전",
+   "priority": 20,
+   "image_url": "https://img.danuri.io/catalog-image/937/550/015/183286a7a5544eecbfd2453c89e06de9.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=15550937"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=101873063"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-104988869",
+   "name": "삼성전자 갤럭시북6 프로 NT960XJG-K72A (SSD 1TB)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/869/988/104/cd79418ee4c54d03838fcb996dbe30aa.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=104988869"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142324646"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-105182225",
+   "name": "LG전자 오브제컬렉션 퓨리케어 AI 360˚ M7 AS356NGMA (일반구매)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 20,
+   "image_url": "https://img.danuri.io/catalog-image/225/182/105/6095a6034c334300a0eaf81a252f54ce.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=105182225"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142416209"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106721882",
+   "name": "삼성전자 갤럭시S26 울트라 512GB, 자급제 (코발트 바이올렛)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 40,
+   "image_url": "https://img.danuri.io/catalog-image/882/721/106/5172bc0d9a09460aa588ceeec8d4a563.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106721882"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142939342"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-97569809",
+   "name": "다이슨 V12 오리진 플러피 (단품+스탠드거치대)",
+   "brand": "다이슨",
+   "category": "가전",
+   "priority": 10,
+   "image_url": "https://img.danuri.io/catalog-image/809/569/097/cf0e329dff4e49079217c2ee2c632d94.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=97569809"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=138036409"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123798669",
+   "name": "ATK VXE R1 SE+ 유무선 브라보텍 (화이트, 저소음)",
+   "brand": "ATK",
+   "category": "디지털",
+   "priority": 340,
+   "image_url": "https://img.danuri.io/catalog-image/669/798/123/70d729d8145442969e13f8bd5b5805aa.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123798669"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-78782390",
+   "name": "캐논 EOS R50 V 바디 (정품)",
+   "brand": "캐논",
+   "category": "디지털",
+   "priority": 300,
+   "image_url": "https://img.danuri.io/catalog-image/390/782/078/628224fe363d40f6a3c9f64473d2a3f6.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=78782390"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=133261648"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122715340",
+   "name": "쿠쿠전자 CRP-DHPNL0615FGG (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 340,
+   "image_url": "https://img.danuri.io/catalog-image/340/715/122/f60da84ad0174edba12977ee6b645303.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122715340"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147097010"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-1855063",
+   "name": "도루코 프레쉬 TD706 (1개)",
+   "brand": "도루코",
+   "category": "생필품",
+   "priority": 280,
+   "image_url": "https://img.danuri.io/catalog-image/063/855/001/953aaef638cc406ab2aad144dad55da9.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=1855063"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-34811369",
+   "name": "짐머만 ZM-AF647VG",
+   "brand": "짐머만",
+   "category": "가전",
+   "priority": 10,
+   "image_url": "https://img.danuri.io/catalog-image/369/811/034/670889410a7a45c1aca87c88241709aa.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=34811369"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=119434917"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-104988872",
+   "name": "삼성전자 갤럭시북6 프로 NT960XJG-K72A (SSD 2TB)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 80,
+   "image_url": "https://img.danuri.io/catalog-image/872/988/104/f1fbd3c8107945c6b31701a41e4686cb.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=104988872"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142324862"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-105182264",
+   "name": "LG전자 오브제컬렉션 퓨리케어 AI 360˚ M7 AS356NGMA (무빙휠 포함)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 10,
+   "image_url": "https://img.danuri.io/catalog-image/264/182/105/e38e80963af24b7eba7c0d630fad5114.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=105182264"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142416131"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106756241",
+   "name": "삼성전자 갤럭시S26 울트라 512GB, 자급제 (핑크골드)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 30,
+   "image_url": "https://img.danuri.io/catalog-image/241/756/106/b4b8f4115e08473d8b88059ef18e2e6d.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106756241"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142947618"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-99916541",
+   "name": "ASUS ROG HARPE MINI CORE",
+   "brand": "ASUS",
+   "category": "디지털",
+   "priority": 320,
+   "image_url": "https://img.danuri.io/catalog-image/541/916/099/0f0e0424bf9345a08cd82507369b62a7.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=99916541"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139331210"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-56144411",
+   "name": "파나소닉 루믹스 DC-S9 바디 (정품)",
+   "brand": "파나소닉",
+   "category": "디지털",
+   "priority": 280,
+   "image_url": "https://img.danuri.io/catalog-image/411/144/056/75a2afbd1f434e949eed8e84c2e5fc9c.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=56144411"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=125243888"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-18698651",
+   "name": "쿠쿠전자 트윈프레셔 마스터셰프 CRP-LHTR0610FGWM (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 330,
+   "image_url": "https://img.danuri.io/catalog-image/651/698/018/b700ac4305bd440ba810d78abe60f6f4.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=18698651"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=101733527"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-1626011",
+   "name": "도루코 터치3 TP900 (1개)",
+   "brand": "도루코",
+   "category": "생필품",
+   "priority": 130,
+   "image_url": "https://img.danuri.io/catalog-image/011/626/001/53363894abd14e5eb8e916031a7d4cad.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=1626011"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-104988881",
+   "name": "삼성전자 갤럭시북6 프로 NT960XJG-K72A (SSD 4TB)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/881/988/104/ad608b7c02364dad82f30231d2649157.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=104988881"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142325176"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106756232",
+   "name": "삼성전자 갤럭시S26 울트라 512GB, 자급제 (실버쉐도우)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 20,
+   "image_url": "https://img.danuri.io/catalog-image/232/756/106/b9ffcac14dad49eaa90b3dac94ad6b03.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106756232"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142947604"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-108458390",
+   "name": "Razer Viper V4 Pro (정품) (블랙)",
+   "brand": "Razer",
+   "category": "디지털",
+   "priority": 310,
+   "image_url": "https://img.danuri.io/catalog-image/390/458/108/09ab734548ff480c9d7854da28375e7b.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=108458390"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=143667826"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124236894",
+   "name": "캐논 EOS R8 Mark II 바디 (정품)",
+   "brand": "캐논",
+   "category": "디지털",
+   "priority": 260,
+   "image_url": "https://img.danuri.io/catalog-image/894/236/124/49293764246242f1a25d5ace07eb89f8.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124236894"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148549837"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123032501",
+   "name": "쿠쿠전자 트윈프레셔 마스터셰프 CRP-LHTR0610FGWM (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 320,
+   "image_url": "https://img.danuri.io/catalog-image/501/032/123/4a56265477ed45dbb9aad9ec83c64d1e.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123032501"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147414613"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124117326",
+   "name": "APPLE 아이폰18 프로 맥스 256GB, 자급제 (버건디)",
+   "brand": "APPLE",
+   "category": "디지털",
+   "priority": 10,
+   "image_url": "https://img.danuri.io/catalog-image/326/117/124/ca823c38cce243afa530198ca7856a0e.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124117326"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148449490"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-108458396",
+   "name": "Razer Viper V4 Pro (정품) (화이트)",
+   "brand": "Razer",
+   "category": "디지털",
+   "priority": 300,
+   "image_url": "https://img.danuri.io/catalog-image/396/458/108/5d346451adf14e6099e92be8ce371571.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=108458396"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=143667930"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-58100687",
+   "name": "니콘 Z6III 바디 (정품)",
+   "brand": "니콘",
+   "category": "디지털",
+   "priority": 250,
+   "image_url": "https://img.danuri.io/catalog-image/687/100/058/c87d48fd7ef34b3db4e93ea75c183781.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=58100687"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=125848631"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122728347",
+   "name": "쿠쿠전자 CRP-RKE0615FBR",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 310,
+   "image_url": "https://img.danuri.io/catalog-image/347/728/122/b8dee9688c5042a4ae70b81d231aa97a.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122728347"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147110403"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-28481684",
+   "name": "로지텍 G PRO X SUPERLIGHT 2 (정품) (블랙)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 290,
+   "image_url": "https://img.danuri.io/catalog-image/684/481/028/bf80938f1e454f83823e37cf21211b64.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=28481684"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=112148073"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-19131308",
+   "name": "SONY 알파 A7 IV 렌즈세트 (20-70mm F4 G)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 230,
+   "image_url": "https://img.danuri.io/catalog-image/308/131/019/bd9c0162a8724377834db1cda3aca05f.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=19131308"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=103472726"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-9401703",
+   "name": "쿠쿠전자 트윈프레셔 마스터셰프 CRP-LHTR0610FW (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 300,
+   "image_url": "https://img.danuri.io/catalog-image/703/401/009/15c45f8bc7f14627a73773c6fed74942.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=9401703"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=41223235"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-28481693",
+   "name": "로지텍 G PRO X SUPERLIGHT 2 (정품) (핑크)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 280,
+   "image_url": "https://img.danuri.io/catalog-image/693/481/028/4cd1abd56c5c46c3931a4a66c727363d.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=28481693"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=112188348"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-15526691",
+   "name": "SONY 알파 A7 IV 렌즈세트 (28-70mm F3.5-5.6)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 220,
+   "image_url": "https://img.danuri.io/catalog-image/691/526/015/6e0509a6cb2b489b9742b174aa19338a.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=15526691"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=77409590"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123669906",
+   "name": "쿠쿠전자 트윈프레셔 마스터셰프 CRP-LHTR0610FW (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 290,
+   "image_url": "https://img.danuri.io/catalog-image/906/669/123/eae01fc842194b39b7a2a98f889ee470.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123669906"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148052067"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-28481687",
+   "name": "로지텍 G PRO X SUPERLIGHT 2 (정품) (화이트)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 270,
+   "image_url": "https://img.danuri.io/catalog-image/687/481/028/d8c15bddca374702a9b3913047a3cce0.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=28481687"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=112188343"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-61421603",
+   "name": "SONY 알파 A7 IV 렌즈세트 (24-70mm F2.8 GM II)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 210,
+   "image_url": "https://img.danuri.io/catalog-image/603/421/061/ec0198a6fdd94c62ba88857e74faa1f7.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=61421603"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=126808181"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-90157235",
+   "name": "쿠쿠전자 트윈프레셔 마스터셰프 CRP-LHTR0610FW (+ 내솥, 패킹추가)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 280,
+   "image_url": "https://img.danuri.io/catalog-image/235/157/090/f7c44c0a6ab444bfb848b5f804cc7717.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=90157235"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=134615602"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-11317038",
+   "name": "로지텍 G102 LIGHTSYNC (정품벌크)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 260,
+   "image_url": "https://img.danuri.io/catalog-image/038/317/011/0a4931addb144abb9ce94b6ce3956f18.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=11317038"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=50653840"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-46739276",
+   "name": "SONY 알파 A7 IV 렌즈세트 (24-70mm F4)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 200,
+   "image_url": "https://img.danuri.io/catalog-image/276/739/046/1b46e6dc85a046b78e1e3afeb8fb73a2.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=46739276"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=143982987"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124327325",
+   "name": "쿠쿠전자 CRP-CHASNL1015FGW",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 270,
+   "image_url": "https://img.danuri.io/catalog-image/325/327/124/d4d623543f914ad6a17cb21a62d39e6a.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124327325"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148628975"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-11778439",
+   "name": "로지텍 G102 LIGHTSYNC (병행수입)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 250,
+   "image_url": "https://img.danuri.io/catalog-image/439/778/011/7bda774045174d4da6c15128c16c5dcb.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=11778439"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=117941433"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-16227908",
+   "name": "SONY 알파 A7 IV 렌즈세트 (24-105mm F4 G)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 190,
+   "image_url": "https://img.danuri.io/catalog-image/908/227/016/da71d90199d84b598a080a13baf55b76.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=16227908"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=122837427"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-7280086",
+   "name": "쿠쿠전자 CRP-CHP1010FD (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 260,
+   "image_url": "https://img.danuri.io/catalog-image/086/280/007/f39b8b249a854986865abf425278b220.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=7280086"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=34941585"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-14723654",
+   "name": "로지텍 G102 LIGHTSYNC (비공식유통)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 240,
+   "image_url": "https://img.danuri.io/catalog-image/654/723/014/a7b9d7cc1b8743f78b36e530b9cc569b.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=14723654"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=143993081"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-54817052",
+   "name": "SONY 알파 A7 IV 렌즈세트 (70-200mm F2.8 GM II)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 180,
+   "image_url": "https://img.danuri.io/catalog-image/052/817/054/44351bbcd52e42ddb1a088f54dd448ac.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=54817052"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=124597889"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123669932",
+   "name": "쿠쿠전자 CRP-CHP1010FD (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 250,
+   "image_url": "https://img.danuri.io/catalog-image/932/669/123/9129093f3aaf4a5bb429f2471f2aab46.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123669932"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148052093"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-98766185",
+   "name": "로지텍 MX MASTER 4 (정품) (그래파이트)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 230,
+   "image_url": "https://img.danuri.io/catalog-image/185/766/098/16c7595cb9df4ee5a223d4569086467f.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=98766185"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=138769178"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-54817055",
+   "name": "SONY 알파 A7 IV 렌즈세트 (70-200mm F4 G)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 170,
+   "image_url": "https://img.danuri.io/catalog-image/055/817/054/dad17bfac23a4f138382b59396a5a8fc.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=54817055"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=143997264"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-14145179",
+   "name": "쿠쿠전자 CRP-HUF10BS (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 240,
+   "image_url": "https://img.danuri.io/catalog-image/179/145/014/ceb47d83634e4b3dbcc49e02ad6b7d4b.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=14145179"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=66894013"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-98766194",
+   "name": "로지텍 MX MASTER 4 (정품) (페일그레이)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 220,
+   "image_url": "https://img.danuri.io/catalog-image/194/766/098/11489353b19a4bb0a100a0dcb0de19f2.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=98766194"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=138769194"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-99887606",
+   "name": "SONY 알파 A7 IV 렌즈세트 (16-35mm F2.8 GM)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 160,
+   "image_url": "https://img.danuri.io/catalog-image/606/887/099/3b895d261078463b8d3406583eef4d18.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=99887606"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139300192"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123693584",
+   "name": "쿠쿠전자 CRP-HUF10BS (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 230,
+   "image_url": "https://img.danuri.io/catalog-image/584/693/123/9aaabd949fc54911912b11a2eb3f53cf.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123693584"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148074761"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123436017",
+   "name": "앱코 WEM60PRO 듀얼스크롤 무선 (그린)",
+   "brand": "앱코",
+   "category": "디지털",
+   "priority": 210,
+   "image_url": "https://img.danuri.io/catalog-image/017/436/123/fadc2229fefd431595c879784004c048.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123436017"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147817896"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-99887561",
+   "name": "SONY 알파 A7 IV 렌즈세트 (50mm F1.2 GM)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 150,
+   "image_url": "https://img.danuri.io/catalog-image/561/887/099/16ad29927dfe4bf0b312dbaac2e23943.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=99887561"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139300138"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123033305",
+   "name": "쿠첸 브레인 듀얼프레셔 CRH-TWS1010W (공식인증)",
+   "brand": "쿠첸",
+   "category": "가전",
+   "priority": 220,
+   "image_url": "https://img.danuri.io/catalog-image/305/033/123/414f97b1e0094b6a869f4b3e9428f6ba.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123033305"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147415418"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123436015",
+   "name": "앱코 WEM60PRO 듀얼스크롤 무선 (퍼플)",
+   "brand": "앱코",
+   "category": "디지털",
+   "priority": 200,
+   "image_url": "https://img.danuri.io/catalog-image/015/436/123/309d395ca9ef443c9e0b1b633b765b72.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123436015"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147817893"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-91561958",
+   "name": "SONY 알파 A7 IV 렌즈세트 (50mm F1.8)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 140,
+   "image_url": "https://img.danuri.io/catalog-image/958/561/091/dc3e3a9f11b5463ca3446d799db0b1ac.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=91561958"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=135233757"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-27473402",
+   "name": "쿠첸 브레인 듀얼프레셔 CRH-TWS1010W (일반구매)",
+   "brand": "쿠첸",
+   "category": "가전",
+   "priority": 210,
+   "image_url": "https://img.danuri.io/catalog-image/402/473/027/993920bec91b4b2f8025bf7855c72c8c.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=27473402"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=108513434"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123436020",
+   "name": "앱코 WEM60PRO 듀얼스크롤 무선 (핑크)",
+   "brand": "앱코",
+   "category": "디지털",
+   "priority": 190,
+   "image_url": "https://img.danuri.io/catalog-image/020/436/123/412c1a4d2269410e99bf6ef23bb258fc.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123436020"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147817898"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-78102326",
+   "name": "SONY 알파 A7 IV 렌즈세트 (85mm F1.8)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 130,
+   "image_url": "https://img.danuri.io/catalog-image/326/102/078/e24de7c98f3d4283a0c8afb4f4e4896c.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=78102326"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=132925574"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-20602937",
+   "name": "쿠쿠전자 트윈프레셔 마스터셰프 CRP-LHTAR0610FGI (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 200,
+   "image_url": "https://img.danuri.io/catalog-image/937/602/020/ffb811dbf5af4f25b52b784a5a59fbbf.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=20602937"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=106592281"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123436009",
+   "name": "앱코 WEM60PRO 듀얼스크롤 무선 (화이트)",
+   "brand": "앱코",
+   "category": "디지털",
+   "priority": 180,
+   "image_url": "https://img.danuri.io/catalog-image/009/436/123/95fa3c343b454d0594ff8160f848ed44.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123436009"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147817888"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-99887486",
+   "name": "SONY 알파 A7 IV 렌즈세트 (35mm F1.4 GM)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 120,
+   "image_url": "https://img.danuri.io/catalog-image/486/887/099/2c8d224b59a346b19c4b0c1fb3462746.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=99887486"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139300218"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123695732",
+   "name": "쿠쿠전자 트윈프레셔 마스터셰프 CRP-LHTAR0610FGI (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 190,
+   "image_url": "https://img.danuri.io/catalog-image/732/695/123/dfe01ee6fdff4fca982fe0ff0eaa84e8.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123695732"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148076949"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-16221932",
+   "name": "로지텍 시그니처 M650 (정품) (그라파이트)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 170,
+   "image_url": "https://img.danuri.io/catalog-image/932/221/016/efddcecee4834015a1affed295d8e781.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=16221932"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=80107318"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-99887723",
+   "name": "SONY 알파 A7 IV 렌즈세트 (35mm F1.8)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 110,
+   "image_url": "https://img.danuri.io/catalog-image/723/887/099/cfd7e262a2b64edf97e03dcec37eadbf.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=99887723"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=136729630"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-17257502",
+   "name": "쿠쿠전자 CRP-AHF1060FD (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 180,
+   "image_url": "https://img.danuri.io/catalog-image/502/257/017/142cab7b28744134b86b18b55f0429f8.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=17257502"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=92201259"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-16223063",
+   "name": "로지텍 시그니처 M650 (정품) (그라파이트L)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 160,
+   "image_url": "https://img.danuri.io/catalog-image/063/223/016/35c9cf8c6e2645468092b27ca22761b4.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=16223063"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-99288392",
+   "name": "SONY 알파 A7 IV 렌즈세트 (24mm F1.4 GM)",
+   "brand": "SONY",
+   "category": "디지털",
+   "priority": 100,
+   "image_url": "https://img.danuri.io/catalog-image/392/288/099/1ab4eba0c21641cbb3cc64829012d6ab.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=99288392"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=139040474"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-7286017",
+   "name": "쿠쿠전자 CRP-DHP0610FD (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 170,
+   "image_url": "https://img.danuri.io/catalog-image/017/286/007/7a8f881509bd4d199e427c37e1a0a8d6.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=7286017"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=34769260"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-16223090",
+   "name": "로지텍 시그니처 M650 (정품) (로즈핑크)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 150,
+   "image_url": "https://img.danuri.io/catalog-image/090/223/016/8ac86d99053a4fbe8e3d2b17ca6f72ca.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=16223090"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=80107401"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-78782396",
+   "name": "캐논 EOS R50 V 렌즈세트 (14-30mm F4-6.3)",
+   "brand": "캐논",
+   "category": "디지털",
+   "priority": 80,
+   "image_url": "https://img.danuri.io/catalog-image/396/782/078/b78b7bb624a34131b265b2f4d22e6c47.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=78782396"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=133261574"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123669979",
+   "name": "쿠쿠전자 CRP-DHP0610FD (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 160,
+   "image_url": "https://img.danuri.io/catalog-image/979/669/123/f57106c6db834a0a9a22ff03f1f750d8.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123669979"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148052140"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-16221941",
+   "name": "로지텍 시그니처 M650 (정품) (오프화이트)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 140,
+   "image_url": "https://img.danuri.io/catalog-image/941/221/016/21aaf1ced3ae4da3b5e80a79362ac41f.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=16221941"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=80107403"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-94638062",
+   "name": "캐논 EOS R50 V 렌즈세트 (14-30mm F4-6.3, 캐논 무선슈팅그립)",
+   "brand": "캐논",
+   "category": "디지털",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/062/638/094/29ad047aa46b42e4bc7990ecb86afa4f.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=94638062"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123033229",
+   "name": "쿠첸 브레인 듀얼프레셔 CRH-TWS0610W (공식인증)",
+   "brand": "쿠첸",
+   "category": "가전",
+   "priority": 150,
+   "image_url": "https://img.danuri.io/catalog-image/229/033/123/bc4c469cb1b64cb988ffb7247f8262f1.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123033229"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147415342"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-6143401",
+   "name": "로지텍 G304 LIGHTSPEED WIRELESS (정품) (블랙)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 130,
+   "image_url": "https://img.danuri.io/catalog-image/401/143/006/f4922e0e9ddd436a9cb95af0905dccdb.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=6143401"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=28073619"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106754654",
+   "name": "캐논 EOS R50 V 렌즈세트 (14-30mm F4-6.3, 아이리버 무선슈팅그립)",
+   "brand": "캐논",
+   "category": "디지털",
+   "priority": 60,
+   "image_url": "https://img.danuri.io/catalog-image/654/754/106/6a1e5af004ec430a9d8a93d029f2d29c.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106754654"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-27474590",
+   "name": "쿠첸 브레인 듀얼프레셔 CRH-TWS0610W (일반구매)",
+   "brand": "쿠첸",
+   "category": "가전",
+   "priority": 140,
+   "image_url": "https://img.danuri.io/catalog-image/590/474/027/a07360e1ca944d06b86fc9bcbe1fcbe1.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=27474590"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=108878786"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-13985180",
+   "name": "로지텍 G304 LIGHTSPEED WIRELESS (정품) (라일락)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 120,
+   "image_url": "https://img.danuri.io/catalog-image/180/985/013/25d3db987f4a418ebb98c17328080203.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=13985180"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=83210610"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-97704059",
+   "name": "캐논 EOS R50 V 렌즈세트 (시그마 C 18-50mm F2.8)",
+   "brand": "캐논",
+   "category": "디지털",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/059/704/097/c8f3c40083b74ad089477221bc636460.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=97704059"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=138101261"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-13933874",
+   "name": "쿠쿠전자 블랙스톤 CRP-R1055FB",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 130,
+   "image_url": "https://img.danuri.io/catalog-image/874/933/013/e7b97bf828184fd28aece4f28b6749b1.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=13933874"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=65826398"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-15113729",
+   "name": "로지텍 G304 LIGHTSPEED WIRELESS (정품) (민트)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 110,
+   "image_url": "https://img.danuri.io/catalog-image/729/113/015/72e862986d2b483980ca1b09a0445532.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=15113729"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=83210605"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-97704098",
+   "name": "캐논 EOS R50 V 렌즈세트 (시그마 C 16-300mm F3.5-6.7)",
+   "brand": "캐논",
+   "category": "디지털",
+   "priority": 40,
+   "image_url": "https://img.danuri.io/catalog-image/098/704/097/b4be00212c244e6ebe461cef0bd62081.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=97704098"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=138101423"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-29806556",
+   "name": "쿠쿠전자 트윈프레셔 마스터셰프 사일런스 프로 CRP-PHTR0610FSM",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 120,
+   "image_url": "https://img.danuri.io/catalog-image/556/806/029/2e70d29774c2483994831004fc1635cc.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=29806556"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=114028301"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-12548009",
+   "name": "로지텍 G304 LIGHTSPEED WIRELESS (정품) (블루)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 100,
+   "image_url": "https://img.danuri.io/catalog-image/009/548/012/c7648d2747f64971b3514ca76ed0b2a3.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=12548009"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=83210606"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-79117412",
+   "name": "니콘 Z5II 바디 (정품)",
+   "brand": "니콘",
+   "category": "디지털",
+   "priority": 20,
+   "image_url": "https://img.danuri.io/catalog-image/412/117/079/6f759af56bf146cb882cef662fe4ea0e.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=79117412"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=133447180"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-27569852",
+   "name": "쿠쿠전자 마스터셰프 사일런스 오브제 CRP-OHTR0610FGW",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 110,
+   "image_url": "https://img.danuri.io/catalog-image/852/569/027/c81c48548be4418fac1b588e28154848.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=27569852"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=118081952"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-6155058",
+   "name": "로지텍 G304 LIGHTSPEED WIRELESS (정품) (화이트)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/058/155/006/b8ffd28a7b414234bbc8bdc6f100f500.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=6155058"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=83210603"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-101721386",
+   "name": "후지필름 X-T30 III 렌즈세트 (XC 13-33mm F3.5-6.3)",
+   "brand": "후지필름",
+   "category": "디지털",
+   "priority": 10,
+   "image_url": "https://img.danuri.io/catalog-image/386/721/101/b4ec057193a9419788ac5fe821007cd9.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=101721386"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=140218835"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-20478398",
+   "name": "쿠쿠전자 트윈프레셔 CRP-FHTAS0610FW (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/398/478/020/255368c1e8e94d648c977a6c358a4b0c.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=20478398"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=105961865"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122714761",
+   "name": "Razer Orochi V2 Plus (정품) (블랙)",
+   "brand": "Razer",
+   "category": "디지털",
+   "priority": 80,
+   "image_url": "https://img.danuri.io/catalog-image/761/714/122/02a6959b99794eb9b0f3d77cabbf75e9.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122714761"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147096424"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123695091",
+   "name": "쿠쿠전자 트윈프레셔 CRP-FHTAS0610FW (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 80,
+   "image_url": "https://img.danuri.io/catalog-image/091/695/123/d5ada7c174d441dc81023019202f8a3d.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123695091"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148076301"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122714763",
+   "name": "Razer Orochi V2 Plus (정품) (쿼츠)",
+   "brand": "Razer",
+   "category": "디지털",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/763/714/122/1439cd901091494db7d22ffd58b3c420.jpeg",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122714763"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147096426"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-9574920",
+   "name": "쿠쿠전자 CRP-P1055FD (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/920/574/009/ca323069545c46a9a7778982583f1c36.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=9574920"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=41978713"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122714762",
+   "name": "Razer Orochi V2 Plus (정품) (화이트)",
+   "brand": "Razer",
+   "category": "디지털",
+   "priority": 60,
+   "image_url": "https://img.danuri.io/catalog-image/762/714/122/e1f56f5d55cc4e248821b0b649f55149.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122714762"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147096425"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123670032",
+   "name": "쿠쿠전자 CRP-P1055FD (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 60,
+   "image_url": "https://img.danuri.io/catalog-image/032/670/123/c0822fb178f442feb8d9b79d1d9dfb94.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123670032"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148052193"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124363812",
+   "name": "로지텍 PRO X3 SUPERSTRIKE (정품) (블랙)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/812/363/124/62c52d2f28e64a83bb56e47ed396b987.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124363812"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148660154"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-55468742",
+   "name": "쿠쿠전자 CRP-CHAS109FWM (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/742/468/055/fe118418ba404b01bd2460ea23aa4f0a.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=55468742"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=124937820"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124480076",
+   "name": "로지텍 PRO X3 SUPERSTRIKE (정품) (핑크)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 40,
+   "image_url": "https://img.danuri.io/catalog-image/076/480/124/134da2dd132b45daa5319d5a4dc2cb7f.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124480076"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148751207"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123670065",
+   "name": "쿠쿠전자 CRP-CHAS109FWM (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 40,
+   "image_url": "https://img.danuri.io/catalog-image/065/670/123/9ee273b955b34874b1537e834e6f51eb.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123670065"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148052226"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-104940059",
+   "name": "로지텍 PRO X2 SUPERSTRIKE (정품)",
+   "brand": "로지텍",
+   "category": "디지털",
+   "priority": 30,
+   "image_url": "https://img.danuri.io/catalog-image/059/940/104/c060f45d019d4d72be75e718ce02d4c5.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=104940059"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142200776"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-58011668",
+   "name": "쿠첸 더 핏 슬림 CRS-FSWK0670CY (일반구매)",
+   "brand": "쿠첸",
+   "category": "가전",
+   "priority": 30,
+   "image_url": "https://img.danuri.io/catalog-image/668/011/058/1bb0ca78298f486c8a35967ed0fb90aa.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=58011668"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=125766383"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-103517387",
+   "name": "CORSAIR 세이버 v2 PRO CF 무선 게이밍",
+   "brand": "CORSAIR",
+   "category": "디지털",
+   "priority": 20,
+   "image_url": "https://img.danuri.io/catalog-image/387/517/103/98f00c4e64d34f6fb3cb7ae471c0f81d.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=103517387"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=141456321"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123693733",
+   "name": "쿠쿠전자 CRP-JHR0660FD (공식인증)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 20,
+   "image_url": "https://img.danuri.io/catalog-image/733/693/123/a6a906e09b05493ab079c1af908f5f81.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123693733"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148074917"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-102550046",
+   "name": "COX CEM30 서포트오피스 FREE 무선 (그레이)",
+   "brand": "COX",
+   "category": "디지털",
+   "priority": 10,
+   "image_url": "https://img.danuri.io/catalog-image/046/550/102/4a74502e0ffe495590db6b48da481873.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=102550046"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=140734350"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-8105740",
+   "name": "쿠쿠전자 CRP-JHR0660FD (일반구매)",
+   "brand": "쿠쿠전자",
+   "category": "가전",
+   "priority": 10,
+   "image_url": "https://img.danuri.io/catalog-image/740/105/008/627e468b1ea64591b02b6549fc435e2f.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=8105740"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=37876117"
     }
    ]
   }

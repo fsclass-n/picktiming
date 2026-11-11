@@ -7,6 +7,8 @@ name: Collect (Render)
 #   collect: KST 6시간 구간(00~05·06~11·12~17·18~23시)마다 1회 — 예약 실행 중 그 구간의 첫 실행이 수집, 나머지는 건너뜀
 #            (적기 점수는 하루 최저가로 계산하므로 하루 4회면 충분하고 상대 사이트 부담을 줄인다)
 #   KST 03시 train / 06시 public / 월요일 07시 report(엑셀은 Actions 아티팩트로 30일 보관)
+#   GitHub 예약 실행은 자주 늦거나 빠진다 → 외부 cron이 KST 00·03·04·06·07·12·18시 5분에 workflow_dispatch(job=auto)를 호출한다.
+#   예약 실행(매시 07분)은 백업으로 남겨 두며, 이번 구간에 이미 수집했으면 건너뛰므로 둘이 겹쳐도 한 번만 수집한다(docs/md/04-rpa.md).
 #
 # 필요한 값(없으면 건너뜀): Variable RENDER_URL(예: https://timepick-ai.onrender.com), Secret RENDER_RPA_API_KEY(Render의 RPA_API_KEY)
 # 선택: Variable KCA_API_URL, Secret DATA_GO_KR_KEY (참가격 공공데이터)
@@ -19,7 +21,8 @@ on:
       job:
         description: 실행할 작업
         type: choice
-        options: [collect, train, public, report, discover]
+        # auto: 외부 cron이 정각마다 부르는 값. 예약 실행처럼 KST 시각으로 작업을 고른다(수집은 0·6·12·18시만, 구간당 1회)
+        options: [collect, train, public, report, discover, auto]
         default: collect
 
 permissions:
@@ -50,7 +53,16 @@ jobs:
             echo "RENDER_URL variable 또는 RENDER_RPA_API_KEY secret이 없어 건너뜁니다."
             echo "jobs=" >> "$GITHUB_OUTPUT"; exit 0
           fi
-          if [ "$EVENT" = "workflow_dispatch" ]; then
+          if [ "$EVENT" = "workflow_dispatch" ] && [ "$INPUT_JOB" = "auto" ]; then
+            # 외부 cron(정각 호출): 시각이 정확하므로 그 시각의 작업만 실행한다. GitHub 예약 실행은 아래 그대로 백업으로 남긴다
+            h=$(date +%H); d=$(date +%u); jobs=""
+            case "$h" in 00|06|12|18) jobs="collect" ;; esac
+            [ "$h" = "03" ] && jobs="$jobs train"
+            [ "$h" = "06" ] && jobs="$jobs public"
+            [ "$d" = "1" ] && [ "$h" = "07" ] && jobs="$jobs report"
+            [ "$d" = "1" ] && [ "$h" = "04" ] && jobs="$jobs discover"
+            jobs="$(echo $jobs)"
+          elif [ "$EVENT" = "workflow_dispatch" ]; then
             jobs="$INPUT_JOB"
           else
             # GitHub 예약 실행은 매시 정확히 돌지 않고 하루 몇 번만 늦게 실행되기도 한다.
@@ -70,7 +82,7 @@ jobs:
     needs: plan
     if: needs.plan.outputs.jobs != ''
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 35   # 상품 600개 기준 수집 1회 약 225개(판매처 약 430곳) ≈ 17~18분 + 여유
     env:
       RPA_TARGET_API: ${{ vars.RENDER_URL }}
       RPA_API_KEY: ${{ secrets.RENDER_RPA_API_KEY }}
@@ -78,7 +90,8 @@ jobs:
       DATA_GO_KR_KEY: ${{ secrets.DATA_GO_KR_KEY }}
       SIMULATE_MALLS: "false"     # 시연용 쇼핑몰 모의 가격을 만들지 않는다(실제 수집만)
       COLLECT_ENABLED: "true"
-      COLLECT_IF_DUE: ${{ github.event_name == 'schedule' && 'true' || 'false' }}   # 수동 실행은 항상 수집
+      # 예약 실행·외부 cron(auto)은 이번 6시간 구간에 이미 수집했으면 건너뛴다(둘이 겹쳐도 한 번만). 수동 실행은 항상 수집
+      COLLECT_IF_DUE: ${{ (github.event_name == 'schedule' || inputs.job == 'auto') && 'true' || 'false' }}
       JOBS: ${{ needs.plan.outputs.jobs }}
     steps:
       - uses: actions/checkout@v4

@@ -5,7 +5,7 @@ from datetime import timedelta
 from urllib.parse import quote, urlparse
 from zoneinfo import ZoneInfo
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Response
+from fastapi import APIRouter, BackgroundTasks, Depends, Query, Response
 from sqlalchemy import func, select, update
 from sqlalchemy.orm import Session
 
@@ -171,7 +171,7 @@ def ensure_listings(body: EnsureListingsIn, db: Session = Depends(get_db)):
 
 
 @router.put("/catalog")
-def sync_catalog(body: CatalogIn, db: Session = Depends(get_db)):
+def sync_catalog(body: CatalogIn, db: Session = Depends(get_db), hash: str = Query("", max_length=64, pattern=r"^[0-9a-f]*$")):
     """실제 수집 대상(rpa/catalog.json)을 DB에 맞춘다. 여러 번 호출해도 결과가 같다(수집 작업이 매번 먼저 호출).
 
     - 쇼핑몰: 이름으로 찾아 만들거나 주소·활성 상태를 갱신
@@ -233,6 +233,9 @@ def sync_catalog(body: CatalogIn, db: Session = Depends(get_db)):
         if urlparse(mall.base_url).netloc.lower() in retire:
             mall.is_active = False
             retired += 1
+    if hash:  # 수집기가 보낸 catalog.json 해시를 남긴다 → 다음 수집에서 내용이 같으면 동기화를 건너뛴다(GET /rpa/status)
+        db.add(RpaJobLog(job_name="sync_catalog", status="SUCCESS", collected=len(body.products), message=f"hash={hash}",
+                         started_at=now_local(), ended_at=now_local()))
     db.commit()
     return {"malls": len(malls), **stats, "malls_retired": retired}
 
@@ -242,4 +245,7 @@ def collect_status(db: Session = Depends(get_db)):
     """마지막으로 성공(또는 일부 성공)한 가격 수집 시각. 수집기가 이번 6시간 구간에 이미 수집했는지 판단할 때 쓴다"""
     last = db.execute(select(func.max(RpaJobLog.started_at)).where(
         RpaJobLog.job_name == "collect_prices", RpaJobLog.status.in_(("SUCCESS", "PARTIAL")))).scalar_one_or_none()
-    return {"last_collect_at": last.isoformat() if last else None}
+    sync = db.execute(select(RpaJobLog).where(RpaJobLog.job_name == "sync_catalog").order_by(RpaJobLog.id.desc()).limit(1)).scalar_one_or_none()
+    return {"last_collect_at": last.isoformat() if last else None,
+            "catalog_hash": (sync.message or "").removeprefix("hash=") if sync else None,
+            "catalog_synced_at": sync.started_at.isoformat() if sync else None}

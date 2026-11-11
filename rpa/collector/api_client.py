@@ -20,9 +20,12 @@ class ApiClient:
         """쇼핑몰(예: 네이버쇼핑)과 모든 상품의 판매처를 없으면 만든다"""
         return self._req("POST", "/ensure-listings", json={"name": name, "base_url": base_url, "url_template": url_template}).json()
 
-    def sync_catalog(self, catalog: dict) -> dict:
-        """실제 수집 상품·판매처(rpa/catalog.json)를 DB에 맞춘다. 시연용 쇼핑몰은 retire_mall_hosts로 비활성화"""
-        return self._req("PUT", "/catalog", json=catalog).json()
+    def sync_catalog(self, catalog: dict, digest: str = "") -> dict:
+        """실제 수집 상품·판매처(rpa/catalog.json)를 DB에 맞춘다. 시연용 쇼핑몰은 retire_mall_hosts로 비활성화.
+        상품 수백 개를 처음 만들 때는 Render 무료 플랜에서 1분이 넘을 수 있어 이 요청만 3분까지 기다린다"""
+        r = self.s.put(f"{self.base}/catalog", params={"hash": digest} if digest else None, json=catalog, timeout=max(self.timeout, 180))
+        r.raise_for_status()
+        return r.json()
 
     def status(self) -> dict:
         """마지막 가격 수집 시각(KST naive ISO)"""

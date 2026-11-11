@@ -286,8 +286,8 @@ class CatalogApi(FakeApi):
         super().__init__(listings)
         self.catalog = None
 
-    def sync_catalog(self, body):
-        self.catalog = body
+    def sync_catalog(self, body, digest=""):
+        self.catalog, self.digest = body, digest
         return {"products_created": 0}
 
 
@@ -312,6 +312,25 @@ def test_collect_syncs_catalog_and_parses_jsonld(monkeypatch, tmp_path):
     assert "_comment" not in api.catalog and api.catalog["retire_mall_hosts"] == ["mall-a.example.com"]
     assert api.posted == [{"listing_id": 7, "price": 315000, "shipping_fee": 0, "in_stock": True, "offer_count": 116}]
     assert res["skipped"] == 1  # 모의 가격 꺼짐 → 시연 쇼핑몰 건너뜀
+
+
+def test_collect_skips_catalog_sync_when_unchanged(monkeypatch, tmp_path):
+    """catalog.json이 서버에 남긴 마지막 해시와 같고 24시간 안에 맞췄으면 동기화(PUT /rpa/catalog)를 건너뛴다"""
+    import json
+
+    catalog = tmp_path / "catalog.json"
+    catalog.write_text(json.dumps({"malls": [{"name": "다나와", "base_url": "https://prod.danawa.com"}], "products": []}, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setenv("CATALOG", str(catalog))
+    monkeypatch.setattr(jobs, "now", lambda cfg: datetime(2026, 12, 1, 12, 10))
+    digest = jobs.catalog_digest(Config().catalog())
+    for status, synced in (({"catalog_hash": digest, "catalog_synced_at": "2026-12-01T06:10:00"}, False),
+                           ({"catalog_hash": digest, "catalog_synced_at": "2026-11-30T06:10:00"}, True),  # 하루가 지나면 다시 맞춤
+                           ({"catalog_hash": "다른값", "catalog_synced_at": "2026-12-01T06:10:00"}, True), ({}, True)):
+        api = CatalogApi([])
+        api.status = lambda s=status: s
+        jobs.collect(Config(), api)
+        assert (api.catalog is not None) == synced, status
+        assert not synced or api.digest == digest
 
 
 def test_collect_disabled_environment_does_nothing(monkeypatch):

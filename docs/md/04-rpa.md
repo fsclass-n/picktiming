@@ -19,8 +19,8 @@
 | 다나와 | `https://prod.danawa.com/info/?pcode=<번호>` | 허용 (`/api/`, `/info/ajax/`, `/list/ajax/`는 금지 → 사용 안 함) | JSON-LD `AggregateOffer.lowPrice` |
 | 에누리 | `https://www.enuri.com/detail.jsp?modelno=<번호>` | 허용 | JSON-LD `AggregateOffer.lowPrice` |
 
-- 상품 목록: [`rpa/catalog.json`](../../rpa/catalog.json) — 실제 제품 400종(상한, 테스트로 검사). 기본 13종 + 인기 상품 `DANAWA-<pcode>`
-  (세부 카테고리 15개: 노트북·모니터·무선이어폰·무선헤드폰·스마트폰·태블릿·그래픽카드·TV·공기청정기·무선청소기·에어프라이어·생수·롤화장지·기저귀·분유,
+- 상품 목록: [`rpa/catalog.json`](../../rpa/catalog.json) — 실제 제품 573종(상한 600, 테스트로 검사). 기본 13종 + 인기 상품 `DANAWA-<pcode>`
+  (세부 카테고리 19개: 노트북·모니터·무선이어폰·무선헤드폰·스마트폰·태블릿·그래픽카드·마우스·미러리스·TV·공기청정기·무선청소기·에어프라이어·압력밥솥·생수·롤화장지·날면도기·기저귀·분유,
   각 다나와 목록 첫 페이지 인기순). 화면 대분류는 디지털·가전·생필품·패션·유아 5개를 그대로 씁니다.
 - 쿠팡은 수집하지 않습니다: 봇 이름으로 접속하면 robots.txt부터 403(2026-11-10 재확인)이고 우회하지 않습니다.
   공식 경로인 쿠팡 파트너스 Open API는 파트너스 최종 승인(누적 판매 실적)이 있어야 키가 발급되고, 검색 API가 시간당 10회로 제한돼 가격 이력 수집에 맞지 않습니다.
@@ -32,8 +32,8 @@
 - `image_url`: 제조사 공식 사이트 상품 페이지에 모델명과 그 이미지가 함께 있는 것만 넣습니다(2026-11-10 확인, 43종 중 22종: 삼성·LG·로지텍·필립스·쿠쿠·알파스캔·크로스오버존·사운드코어·PALIT).
   인기 상품 중 LG전자 제품은 공식 상품 페이지(`lge.co.kr/product/<분류>/<모델명>`, 제목에 모델명이 있을 때만)의 대표 이미지를 씁니다.
   공식 이미지를 찾지 못한 상품(단종·robots 금지·접근 거부: 애플·소니·MSI·ZOTAC 등, 공식 페이지 없음)은 **다나와 상품 페이지의 대표 이미지**
-  (`og:image`, `img.danuri.io`, 500px; 없으면 에누리 JSON-LD 이미지)를 씁니다. 2026-11-10 기준 400종 모두 이미지가 있고
-  제조사 공식 74종(기존 22 + LG전자 52) · 다나와·에누리 326종입니다. 화면 사진 아래 출처를 "제조사 이미지" / "이미지: 다나와·에누리"로 구분해 표시합니다.
+  (`og:image`, `img.danuri.io`, 500px; 없으면 에누리 JSON-LD 이미지)를 씁니다. 2026-11-11 기준 573종 모두 이미지가 있고
+  제조사 공식 74종(기존 22 + LG전자 52) · 다나와·에누리 499종입니다. 화면 사진 아래 출처를 "제조사 이미지" / "이미지: 다나와·에누리"로 구분해 표시합니다.
 - `rpa/catalog.json` 자체 검증: `backend/tests/test_catalog.py::test_real_catalog_file_is_accepted`
   (API 형식 통과, 모든 상품 다나와 포함, 상품 400개 이하, 이미지 https).
 - 부가 정보: 수집 때 JSON-LD의 판매처 수(`offerCount`)·최고가(`highPrice`)·평점·리뷰 수를 판매처별로, 다나와 사양 요약(`description`,
@@ -83,6 +83,29 @@ Netlify 데모 모드(브라우저 목업)는 영향이 없습니다.
   화장지·하기스 5종은 참가격과 같은 제품을 다나와 검색(`search.danawa.com`, Crawl-delay 10초)으로 찾아 카탈로그에 추가했습니다.
 - 상품 상세 화면에 가장 최근 조사일의 최저가를 "오프라인 최저가 (참가격)"로 판매점 업태·조사일과 함께 보여 줍니다(`GET /products/{id}`의 `offline_price`).
 - 오류 문구의 요청 주소에 들어 있는 인증키는 `***`로 지운 뒤 수집 로그에 남깁니다. 공공데이터포털은 연결 시간 초과가 잦아 연결 오류만 3회 재시도합니다.
+
+### 정각 실행(외부 cron → workflow_dispatch `job=auto`)
+
+GitHub 예약 실행은 부하에 따라 늦거나 빠집니다(2026-11-10 실측: 하루 3~5회, 18~23시 구간 누락). 그래서 외부 cron 서비스(예: cron-job.org)가
+**KST 00·03·04·06·07·12·18시 5분**에 아래 요청을 보냅니다. `auto`는 그 시각의 작업만 실행하고(수집은 0·6·12·18시, 03시 train, 06시 public,
+월요일 04시 discover·07시 report), 이번 구간에 이미 수집했으면 건너뛰므로 매시 07분 예약 실행(백업)과 겹쳐도 한 번만 수집합니다.
+
+```
+POST https://api.github.com/repos/fsclass-n/timepick/actions/workflows/collect-render.yml/dispatches
+Authorization: Bearer <GitHub fine-grained token: 저장소 fsclass-n/timepick, 권한 Actions: Read and write>
+Accept: application/vnd.github+json
+Content-Type: application/json
+
+{"ref": "main", "inputs": {"job": "auto"}}
+```
+
+토큰은 cron 서비스에만 저장합니다(저장소·`.env`에 넣지 않음). 응답 204면 정상이고, Actions의 **Collect (Render)** 실행 기록에서 확인합니다.
+
+### 카탈로그 동기화 생략
+
+수집기는 `catalog.json` 해시를 `PUT /rpa/catalog?hash=…`로 보내고 서버가 수집 로그(`sync_catalog`)에 남깁니다.
+다음 수집에서 `GET /rpa/status`의 `catalog_hash`가 같고 24시간 안에 맞췄으면 동기화를 건너뜁니다(상품 수백 개 동기화가 Render 무료 플랜에서 1분을 넘을 수 있음).
+동기화 요청만 대기 시간이 3분입니다.
 
 수동 실행: GitHub → Actions → **Collect (Render)** → Run workflow → 작업 선택. 로컬은 `cd rpa && python -m collector.jobs collect`
 (`RPA_TARGET_API`를 로컬 API로 지정. 로컬 `.env`가 운영 TiDB를 가리키면 운영 데이터가 바뀝니다).
@@ -143,12 +166,12 @@ API는 `hmac.compare_digest`로 비교합니다. 값이 다르면 401(`INVALID_R
 
 ## 8. 인기 상품 후보 찾기와 TiDB 무료 한도
 
-- `python -m collector.discover`(Actions: 월요일 04시, 수동 `discover`): robots.txt가 허용하는 다나와 세부 카테고리 15개 목록 첫 페이지에서
+- `python -m collector.discover`(Actions: 월요일 04시, 수동 `discover`): robots.txt가 허용하는 다나와 세부 카테고리 19개 목록 첫 페이지에서
   상위 40개씩(다음 페이지는 금지 경로 `/list/ajax/`라 쓰지 않음) 카탈로그에 없는 후보를 찾고 에누리를 자동 대조해 `reports/discovered.json`에 저장합니다.
   카탈로그 반영은 사람이 결과를 보고 합니다. 처음 전체 탐색은 약 1시간 30분(로컬 실행), 매주 실행은 새로 순위에 든 상품만 확인합니다.
 - 단계별 수집: 매 구간(하루 4회) `priority` 상위 `COLLECT_MAX_PRODUCTS`(기본 100)개 + 나머지 상품 중 `product_id % 4 == 구간 번호`인 것
-  (`COLLECT_ROTATE_REST`, 기본 true) → 모든 상품이 하루 한 번 이상 수집됩니다. 상품 400개 기준 1회 약 175개(판매처 약 340곳, 10~11분),
-  하루 요청은 사이트당 약 700건입니다(전체를 하루 4회 수집하면 약 1,600건). 적기 점수는 하루 최저가로 계산하므로 하위 상품의 하루 1회 수집으로 판정이 달라지지 않습니다.
+  (`COLLECT_ROTATE_REST`, 기본 true) → 모든 상품이 하루 한 번 이상 수집됩니다. 상품 573개 기준 1회 약 220개(판매처 약 420곳, 16~17분, Actions 제한 35분),
+  하루 요청은 사이트당 약 870건입니다(전체를 하루 4회 수집하면 약 2,300건). 상한 600개는 카탈로그 API(`CatalogIn`)와 Render 무료 플랜(동기화 3분 이내) 기준입니다. 적기 점수는 하루 최저가로 계산하므로 하위 상품의 하루 1회 수집으로 판정이 달라지지 않습니다.
 - 가격은 50곳씩 나눠 `POST /rpa/prices/bulk`로 보냅니다(서버가 상품마다 판정을 다시 계산하므로 요청 1회를 짧게 유지).
 - `priority`: 인기 순위 기준 `(40 - 순위 + 1) × 10`. 기본 13종은 0이라 하루 1회 수집됩니다.
 - TiDB Starter 무료: 인스턴스당 행 저장 5 GiB, 월 5,000만 RU. 프로젝트마다 인스턴스 1개를 쓰고, 연결은 `DB_POOL_SIZE`=3, `DB_MAX_OVERFLOW`=2.

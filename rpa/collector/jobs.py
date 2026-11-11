@@ -8,6 +8,7 @@
 
 실행: python -m collector.jobs collect|public|train|report
 """
+import hashlib
 import json
 import logging
 import random
@@ -66,6 +67,12 @@ def slot_start(at: datetime) -> datetime:
 
 
 SLOTS_PER_DAY = 24 // SLOT_HOURS
+CATALOG_RESYNC = timedelta(hours=24)
+
+
+def catalog_digest(catalog: dict) -> str:
+    """catalog.json 내용 해시(키 순서·공백과 무관). 서버에 남겨 두고 같으면 동기화를 건너뛴다(Render 무료 플랜 응답 시간 절약)"""
+    return hashlib.sha256(json.dumps(catalog, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode()).hexdigest()[:32]
 POST_CHUNK = 50  # 가격 일괄 등록 1회 판매처 수(서버가 상품마다 판정을 다시 계산하므로 Render 무료 플랜 요청 시간을 짧게 유지)
 
 
@@ -96,13 +103,19 @@ def collect(cfg: Config, api: ApiClient) -> dict:
     if not cfg.collect_enabled:
         return {"status": "SKIPPED", "reason": "COLLECT_ENABLED=false"}
     started = now(cfg)
-    if cfg.collect_if_due and hasattr(api, "status"):
-        last = api.status().get("last_collect_at")
+    status = api.status() if hasattr(api, "status") else {}
+    if cfg.collect_if_due:
+        last = status.get("last_collect_at")
         if last and datetime.fromisoformat(last) >= slot_start(started):
             return {"status": "SKIPPED", "reason": f"이번 구간({slot_start(started):%H}시~) 수집 완료: {last}"}
     catalog = cfg.catalog()
     if catalog and hasattr(api, "sync_catalog"):
-        log.info("카탈로그 동기화: %s", api.sync_catalog(catalog))  # 수집 대상 상품·판매처를 DB에 맞춤(여러 번 호출해도 같음)
+        digest = catalog_digest(catalog)
+        synced = status.get("catalog_synced_at")
+        if status.get("catalog_hash") == digest and synced and datetime.fromisoformat(synced) >= started - CATALOG_RESYNC:
+            log.info("카탈로그 동기화 건너뜀: catalog.json이 마지막 동기화(%s)와 같음", synced)
+        else:  # 수집 대상 상품·판매처를 DB에 맞춤(여러 번 호출해도 같음). 내용이 같아도 하루 한 번은 다시 맞춘다
+            log.info("카탈로그 동기화: %s", api.sync_catalog(catalog, digest))
     slot = slot_start(started).hour // SLOT_HOURS if cfg.rotate_rest else None
     listings = {l["listing_id"]: l for l in limit_products(api.listings(), cfg.max_products, slot)}
     rules = cfg.mall_rules()

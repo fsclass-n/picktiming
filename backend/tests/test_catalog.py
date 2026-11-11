@@ -93,6 +93,14 @@ def test_home_deals_skip_retired_demo_products_and_fill_with_collected_ones(clie
         client.put(f"{API}/rpa/catalog", headers=RPA, json={"malls": seed, "products": []})
 
 
+def test_catalog_hash_is_reported_for_skipping_unchanged_syncs(client):
+    """수집기가 보낸 catalog.json 해시를 기록하고 GET /rpa/status로 돌려준다(같으면 다음 수집에서 동기화 생략)"""
+    assert client.put(f"{API}/rpa/catalog?hash=abc123", headers=RPA, json=_catalog()).status_code == 200
+    s = client.get(f"{API}/rpa/status", headers=RPA).json()
+    assert s["catalog_hash"] == "abc123" and s["catalog_synced_at"]
+    assert client.put(f"{API}/rpa/catalog?hash=not-hex!", headers=RPA, json=_catalog()).status_code == 422
+
+
 def test_catalog_never_retires_a_mall_it_also_registers(client):
     res = client.put(f"{API}/rpa/catalog", headers=RPA, json={**_catalog(), "retire_mall_hosts": ["prod.danawa.test"]}).json()
     assert res["malls_retired"] == 0
@@ -116,7 +124,7 @@ def test_real_catalog_file_is_accepted(client):
     assert r.status_code == 200, r.text
     models = [p["model_no"] for p in body["products"]]
     assert len(models) == len(set(models))
-    assert len(models) <= 400  # 수집 1일 1회 이상 + 상대 사이트 부담 상한(docs/md/04-rpa.md)
+    assert len(models) <= 600  # 카탈로그 API 상한(schemas.CatalogIn) · Render 무료 플랜·수집 1회 시간 기준(docs/md/04-rpa.md)
     for p in body["products"]:
         malls = sorted(l["mall"] for l in p["listings"])
         assert malls in (["다나와"], ["다나와", "에누리"]), p["model_no"]

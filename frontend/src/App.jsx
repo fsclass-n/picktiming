@@ -19,6 +19,7 @@ const CATEGORIES = [
   { name: '유아', icon: 'baby', caption: t("가족을 위한 쇼핑"), photo: 'photo-1515488042361-ee00e0ddd4e4' },
 ];
 const PAGE_SIZE = 24; // 상품 탐색 한 페이지 상품 수(4열 × 6줄)
+const MIN_LOW_DAYS = 30; // '역대 최저가' 배지를 붙이려면 필요한 가격 이력 일수(적기 판단 최소 이력과 같음)
 const SIGNALS = {
   BUY_NOW: { text: t("지금 사세요"), icon: 'fire-flame-curved', color: 'text-emerald-700 bg-emerald-50', stroke: '#059669', note: t("과거 가격 흐름상 구매하기 좋은 구간입니다.") },
   WAIT_A_BIT: { text: t("조금 더 지켜보세요"), icon: 'hourglass-half', color: 'text-rose-700 bg-rose-50', stroke: '#e11d48', note: t("급하지 않다면 목표가를 정하고 기다려 보세요.") },
@@ -126,7 +127,7 @@ function SearchBar({ name, large = false, initial = '' }) {
     onSubmit={(e) => { e.preventDefault(); const params = new URLSearchParams({ q: q.trim() }); if (category) params.set('category', category); nav(`/search?${params}`); }}>
     <Icon name="magnifying-glass" className="ml-3 shrink-0 text-slate-400" />
     <input type="search" aria-label={name} className="min-w-0 flex-1 bg-transparent py-2.5 text-sm outline-none" placeholder={t("어떤 상품의 가격이 궁금하세요?")} maxLength={100} value={q} onChange={(e) => setQ(e.target.value)} />
-    {!large && <select aria-label={t("{x} 카테고리", { x: name })} className="hidden min-h-10 max-w-24 rounded-lg bg-slate-50 px-2 text-xs text-slate-500 xl:block" value={category} onChange={(e) => setCategory(e.target.value)}><option value="">{t("전체")}</option>{CATEGORIES.map((c) => <option key={c.name}>{t(c.name)}</option>)}</select>}
+    {!large && <select aria-label={t("{x} 카테고리", { x: name })} className="select-x hidden max-w-28 border-transparent bg-slate-50 text-xs text-slate-600 xl:block" value={category} onChange={(e) => setCategory(e.target.value)}><option value="">{t("전체")}</option>{CATEGORIES.map((c) => <option key={c.name}>{t(c.name)}</option>)}</select>}
     {large ? <button className="btn-primary">{t("가격 검색")}<Icon name="arrow-right" /></button> : <button className="icon-btn text-brand-600" aria-label={t("검색")}><Icon name="arrow-right" /></button>}</form>;
 }
 function Header() {
@@ -184,7 +185,7 @@ function PriceChart({ data, mini = false }) {
   const active = Math.min(point ?? values.length - 1, values.length - 1); const color = valid.at(-1) <= valid[0] ? '#059669' : '#e11d48';
   return <div className="min-w-0">
     {!mini && <div className="mb-1 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500"><span>{data.dates[active]} <span className="numeric ml-2 text-sm text-slate-900">{won(values[active])}</span></span>
-      <select className="min-h-11 max-w-48 rounded-lg border border-slate-200 bg-white px-2" value={mall} onChange={(e) => { setMall(e.target.value); setPoint(null); }} aria-label={t("차트 판매처")}><option value="">{t("최저 실구매가")}</option>{data.malls?.map((m) => <option key={m.mall}>{m.mall}</option>)}</select></div>}
+      <select className="select-x min-h-11 max-w-48" value={mall} onChange={(e) => { setMall(e.target.value); setPoint(null); }} aria-label={t("차트 판매처")}><option value="">{t("최저 실구매가")}</option>{data.malls?.map((m) => <option key={m.mall}>{m.mall}</option>)}</select></div>}
     <svg viewBox={`0 0 ${w} ${h}`} className="w-full overflow-visible" role="img" aria-label={mini ? t("최근 90일 최저가 추이") : t("가격 변동 차트")}>
       <title>{t("최저 {min}, 최고 {max}, 마지막 관측 {last}", { min: won(min), max: won(max), last: won(valid.at(-1)) })}</title>
       <defs><linearGradient id={gradient} x1="0" y1="0" x2="0" y2="1"><stop stopColor={color} stopOpacity=".13" /><stop offset="1" stopColor={color} stopOpacity="0" /></linearGradient></defs>
@@ -215,14 +216,15 @@ function ProductCard({ product: p }) {
   }, []);
   const history = useApi(user && visible ? `/products/${p.id}/prices?days=90` : null);
   const current = priceOf(p); const allTime = history.data?.all_time_min?.price;
-  const atLow = Number.isFinite(current) && current > 0 && Number.isFinite(allTime) && current <= allTime;
+  // 수집한 지 얼마 안 된 상품은 현재가가 곧 최저가라 '역대 최저가'가 무의미하다 → 30일 이상 이력이 있을 때만 표시
+  const atLow = Number.isFinite(current) && current > 0 && Number.isFinite(allTime) && current <= allTime && (history.data?.dates?.length || 0) >= MIN_LOW_DAYS;
   return <article ref={card} className="group min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white transition-shadow duration-200 hover:shadow-lg hover:shadow-slate-200/50">
     <div className="relative"><Link to={`/product/${p.id}`} tabIndex={-1} aria-hidden="true"><Photo product={p} /></Link>
     <div className="absolute left-3 right-14 top-3 flex flex-wrap gap-2">{atLow && <span className="badge bg-emerald-600 text-white"><Icon name="arrow-trend-down" />{t("역대 최저가")}</span>}
         {p.score != null && <span className="badge bg-white/95 text-brand-700"><Icon name="wand-magic-sparkles" />{t("적기")}{" "}{p.score}{t("점")}</span>}</div>
       <button className="icon-btn absolute right-2 top-2 bg-white/95 shadow-sm" onClick={() => openWatch(p)} aria-label={t("{x} 목표가 알림", { x: p.name })}><Icon name="bell" /></button></div>
     <div className="p-5"><p className="mb-1 text-xs text-slate-500">{p.brand || p.category} <span className="mx-1 text-slate-300">/</span> {t(p.category)}</p>
-      <Link to={`/product/${p.id}`} className="hover:text-brand-700"><h3 className="min-h-12 text-base leading-6">{p.name}</h3></Link>
+      <Link to={`/product/${p.id}`} className="hover:text-brand-700"><h3 className="line-clamp-2 min-h-12 text-base leading-6" title={p.name}>{p.name}</h3></Link>
       <div className="mt-2 flex flex-wrap items-baseline justify-between gap-2"><span className="numeric text-[23px]">{won(current)}</span><PriceChange value={p.change_7d} /></div>
       <div className="mt-4 border-t border-slate-100 pt-3">{p.label ? <Signal product={p} /> : <span className="text-xs text-slate-500">{t("7일 전 가격 대비")}</span>}
         {history.data && <div className="mt-2"><PriceChart data={history.data} mini /></div>}
@@ -277,7 +279,7 @@ function Home() {
       <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-xl text-slate-500 group-hover:bg-brand-50 group-hover:text-brand-600"><Icon name={c.icon} /></span><span><span className="text-sm font-medium">{t(c.name)}</span><span className="mt-1 block text-[11px] text-slate-500">{c.caption}</span></span></Link>)}</div></section>
     <section className="container-x pt-14" id="discover"><div className="flex flex-wrap items-end justify-between gap-4"><div><h2 className="section-title">{t("오늘, 눈여겨볼 가격")}</h2><p className="section-note">{t("지금 구매하기 좋은 상품과 최근 가격이 내려간 상품을 모았어요.")}</p></div><Link to="/search" className="btn-ghost">{t("모든 상품 보기")}<Icon name="arrow-right" /></Link></div>
       <div className="mt-7 flex flex-wrap justify-between gap-4 border-b border-slate-200"><div className="flex gap-6" aria-label={t("추천 기준")}>{[['timing', t("구매 타이밍 추천")], ['drops', t("7일 가격 하락")]].map(([key, text]) => <button key={key} aria-pressed={view === key} onClick={() => setView(key)} className={`min-h-12 border-b-2 pb-3 text-sm ${view === key ? 'border-brand-600 text-brand-700' : 'border-transparent text-slate-500'}`}>{text}</button>)}</div>
-        <label className="flex items-center gap-2 pb-2 text-xs text-slate-500">{t("카테고리")}<select className="min-h-10 rounded-lg bg-slate-50 px-3 text-sm text-slate-700" value={category} onChange={(e) => setCategory(e.target.value)}><option>{t("전체")}</option>{CATEGORIES.map((c) => <option key={c.name}>{t(c.name)}</option>)}</select></label></div>
+        <label className="flex items-center gap-2 pb-2 text-xs text-slate-500"><Icon name="filter" className="text-slate-400" />{t("카테고리")}<select className="select-x" value={category} onChange={(e) => setCategory(e.target.value)}><option>{t("전체")}</option>{CATEGORIES.map((c) => <option key={c.name}>{t(c.name)}</option>)}</select></label></div>
       <div className="mt-6">{deals.loading ? <Loading /> : deals.error ? <Notice error={deals.error} retry={() => setVersion((v) => v + 1)} /> : items.length ? <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">{items.map((p) => <ProductCard key={p.id} product={p} />)}</div>
       : <Empty title="이 조건의 추천 상품이 아직 없어요"><button onClick={() => setCategory('전체')} className="btn-ghost text-brand-700">{t("전체 카테고리 보기")}</button><p>{t("새 가격이 수집되면 추천에 반영됩니다.")}</p></Empty>}</div>
       <div className="mt-5 flex justify-end"><button className="btn-ghost text-xs" onClick={() => setVersion((v) => v + 1)} disabled={deals.loading}><Icon name="rotate" />{t("추천 새로고침")}</button></div></section>
@@ -319,7 +321,7 @@ function Explore() {
       <p className="text-sm text-slate-600">{q && <span className="text-slate-900">‘{q}’ </span>}{t("검색 결과")}{" "}<span className="numeric text-brand-700">{total}</span>{t("개")}</p>
       <div className="flex flex-wrap items-center gap-4 text-sm"><label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={onlyBuy} onChange={resetPage((e) => setOnlyBuy(e.target.checked))} />{t("지금 구매 추천만")}</label>
         {!!interests.length && <label className="flex min-h-11 items-center gap-2"><input type="checkbox" checked={personalOnly} onChange={resetPage((e) => setPersonalOnly(e.target.checked))} />{t("내 관심 카테고리")}</label>}
-        <select aria-label={t("상품 정렬")} className="min-h-11 rounded-lg bg-slate-50 px-3" value={sort} onChange={resetPage((e) => setSort(e.target.value))}><option value="score">{t("적기 점수순")}</option><option value="price">{t("낮은 가격순")}</option></select></div></div>
+        <select aria-label={t("상품 정렬")} className="select-x min-h-11" value={sort} onChange={resetPage((e) => setSort(e.target.value))}><option value="score">{t("적기 점수순")}</option><option value="price">{t("낮은 가격순")}</option></select></div></div>
     {result.loading ? <Loading /> : result.error ? <Notice error={result.error} retry={() => setVersion((v) => v + 1)} /> : items.length
       ? <><div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{items.map((p) => <ProductCard key={p.id} product={p} />)}</div>
         {pages > 1 && <nav className="mt-8 flex items-center justify-center gap-2" aria-label={t("검색 결과 페이지")}>
@@ -389,7 +391,7 @@ function ProductDetail() {
   if (product.loading) return <Loading />;
   if (product.error) return <div className="container-x py-8"><Notice error={product.error} retry={() => setVersion((v) => v + 1)} /></div>;
   const p = { ...product.data, ...timing.data, id: Number(id) };
-  const atLow = p.current_price > 0 && history.data?.all_time_min?.price > 0 && p.current_price <= history.data.all_time_min.price;
+  const atLow = p.current_price > 0 && history.data?.all_time_min?.price > 0 && p.current_price <= history.data.all_time_min.price && (p.history_days || 0) >= MIN_LOW_DAYS;
   return <div className="container-x py-8">
     <nav aria-label={t("현재 위치")} className="mb-6 flex gap-2 text-xs text-slate-500"><Link to="/search">{t("상품 탐색")}</Link><span>/</span><span>{t(p.category)}</span></nav>
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.3fr]">

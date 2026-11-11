@@ -39,6 +39,13 @@
   .btn-ghost { @apply btn text-slate-600 hover:bg-slate-100; }
   .icon-btn { @apply inline-flex size-11 shrink-0 items-center justify-center rounded-full text-slate-600 hover:bg-slate-100; }
   .input { @apply min-h-12 w-full min-w-0 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none focus:border-brand-500 focus:ring-4 focus:ring-brand-100; }
+  /* 선택 상자: 기본 화살표 대신 둥근 버튼 모양 + 얇은 화살표(필터 칩·버튼과 같은 높이·테두리) */
+  .select-x {
+    @apply min-h-10 cursor-pointer appearance-none rounded-full border border-slate-200 bg-white py-2 pl-4 pr-9 text-sm font-medium text-slate-700 outline-none hover:border-brand-500 focus:border-brand-500 focus:ring-4 focus:ring-brand-100;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%2364748b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 0.9rem center; background-size: 0.7rem;
+    transition: border-color 160ms, box-shadow 160ms;
+  }
   .field-icon { @apply pointer-events-none absolute inset-y-0 left-4 flex items-center text-slate-400; }
   .field-with-icon { @apply pl-11; }
   .badge { @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-2.5 py-1 text-xs font-medium; }
@@ -104,7 +111,7 @@ html[data-theme="dark"] .keep-dark {
   --color-slate-500: #526278; --color-slate-600: #475569; --color-slate-700: #334155; --color-slate-800: #1e293b; --color-slate-900: #0f172a;
 }
 html[data-theme="dark"] body { background-color: var(--page); }
-html[data-theme="dark"] :is(.bg-white, .card, .input, .btn-outline, .step-chip > span:first-child) { background-color: var(--surface); }
+html[data-theme="dark"] :is(.bg-white, .card, .input, .btn-outline, .select-x, .step-chip > span:first-child) { background-color: var(--surface); }
 html[data-theme="dark"] .bg-white\/85 { background-color: rgb(15 23 38 / 85%); }
 html[data-theme="dark"] .bg-white\/95 { background-color: rgb(15 23 38 / 95%); }
 html[data-theme="dark"] .text-brand-600 { color: #b39cf7; }

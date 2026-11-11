@@ -8,6 +8,16 @@
   {
    "name": "에누리",
    "base_url": "https://www.enuri.com"
+  },
+  {
+   "name": "LG전자 공식몰",
+   "base_url": "https://www.lge.co.kr",
+   "kind": "official"
+  },
+  {
+   "name": "삼성닷컴",
+   "base_url": "https://www.samsung.com",
+   "kind": "official"
   }
  ],
  "retire_mall_hosts": [
@@ -47,6 +57,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=126190050"
+    },
+    {
+     "mall": "삼성닷컴",
+     "url": "https://www.samsung.com/sec/buds/galaxy-buds3-pro-r630/SM-R630NZAAKOO/"
     }
    ]
   },
@@ -342,6 +356,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147002231"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16u55u-gsowk"
     }
    ]
   },
@@ -468,6 +486,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147060521"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/monitors/24u411b"
     }
    ]
   },
@@ -648,6 +670,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147010579"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/stan-by-me/32lx6bpga"
     }
    ]
   },
@@ -666,6 +692,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=144001678"
+    },
+    {
+     "mall": "삼성닷컴",
+     "url": "https://www.samsung.com/sec/tvs/mini-led-mh75-d2c/KU85MH75AFXKR/"
     }
    ]
   },
@@ -684,6 +714,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147987219"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/tvs/50nu850bxna-stand"
     }
    ]
   },
@@ -882,6 +916,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147020302"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/stan-by-me/32lx6bpga"
     }
    ]
   },
@@ -954,6 +992,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818394"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as305dwwa"
     }
    ]
   },
@@ -1026,6 +1068,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147091285"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/stan-by-me/32lx6bpga"
     }
    ]
   },
@@ -1098,6 +1144,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=132053889"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as305dwwa"
     }
    ]
   },
@@ -1152,6 +1202,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147091305"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/stan-by-me/32lx6bpga"
     }
    ]
   },
@@ -1224,6 +1278,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=132057260"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as305dwwa"
     }
    ]
   },
@@ -1296,6 +1354,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147008286"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16u55u-gsowk"
     }
    ]
   },
@@ -1350,6 +1412,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818430"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as156hwwc"
     }
    ]
   },
@@ -1418,6 +1484,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147008287"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16u55u-gsowk"
     }
    ]
   },
@@ -1472,6 +1542,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142397848"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as156hwwc"
     }
    ]
   },
@@ -1540,6 +1614,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147008288"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16u55u-gsowk"
     }
    ]
   },
@@ -1594,6 +1672,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=143535181"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as156hwwc"
     }
    ]
   },
@@ -1698,6 +1780,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818410"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as356nsma"
     }
    ]
   },
@@ -1802,6 +1888,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142416144"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as356nsma"
     }
    ]
   },
@@ -1838,6 +1928,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147987221"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/tvs/50nu850bxna-stand"
     }
    ]
   },
@@ -1910,6 +2004,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142416202"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as356nsma"
     }
    ]
   },
@@ -1982,6 +2080,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147083636"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/monitors/32g620b"
     }
    ]
   },
@@ -2018,6 +2120,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147000326"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as186lsaa"
     }
    ]
   },
@@ -2072,6 +2178,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=137884613"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/monitors/27g610a"
     }
    ]
   },
@@ -2108,6 +2218,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147000337"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as186lsaa"
     }
    ]
   },
@@ -2194,6 +2308,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147000349"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as186lsaa"
     }
    ]
   },
@@ -2248,6 +2366,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=148696455"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/monitors/32g650b"
     }
    ]
   },
@@ -2284,6 +2406,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818622"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as155gwdl"
     }
    ]
   },
@@ -2316,6 +2442,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=141367749"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16z95u-gs5wk"
     }
    ]
   },
@@ -2370,6 +2500,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=131098869"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as155gwdl"
     }
    ]
   },
@@ -2402,6 +2536,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142188992"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16z95u-gs5wk"
     }
    ]
   },
@@ -2456,6 +2594,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=136957988"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as155gwdl"
     }
    ]
   },
@@ -2488,6 +2630,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142188995"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16z95u-gs5wk"
     }
    ]
   },
@@ -2574,6 +2720,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142189003"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16z95u-gs5wk"
     }
    ]
   },
@@ -2642,6 +2792,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=141368574"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16z90u-ku7wk"
     }
    ]
   },
@@ -2706,6 +2860,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=141408808"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16z90u-ku7wk"
     }
    ]
   },
@@ -2724,6 +2882,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147070039"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/monitors/32gx870b"
     }
    ]
   },
@@ -2774,6 +2936,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=141408819"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/notebook/16z90u-ku7wk"
     }
    ]
   },
@@ -2810,6 +2976,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=148172674"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as076mwhc"
     }
    ]
   },
@@ -2878,6 +3048,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=148447643"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as076mwhc"
     }
    ]
   },
@@ -2950,6 +3124,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818772"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as186hwwl"
     }
    ]
   },
@@ -3022,6 +3200,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142397282"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as186hwwl"
     }
    ]
   },
@@ -3040,6 +3222,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147069563"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/tvs/65qned86bka-stand"
     }
    ]
   },
@@ -3112,6 +3298,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147069604"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/tvs/65qned86bka-stand"
     }
    ]
   },
@@ -3166,6 +3356,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818502"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/fs065pska"
     }
    ]
   },
@@ -3220,6 +3414,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=131737231"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/fs065pska"
     }
    ]
   },
@@ -3274,6 +3472,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=132174966"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/fs065pska"
     }
    ]
   },
@@ -3324,6 +3526,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818457"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as235dwsa"
     }
    ]
   },
@@ -3374,6 +3580,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=136160690"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as235dwsa"
     }
    ]
   },
@@ -3392,6 +3602,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=134374971"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/tvs/50ua7500kna-stand"
     }
    ]
   },
@@ -3428,6 +3642,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=136181001"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as235dwsa"
     }
    ]
   },
@@ -3446,6 +3664,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=134375369"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/tvs/50ua7500kna-stand"
     }
    ]
   },
@@ -3730,6 +3952,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818420"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as186hwwa"
     }
    ]
   },
@@ -3748,6 +3974,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142397839"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as186hwwa"
     }
    ]
   },
@@ -3766,6 +3996,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818437"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as065cwha"
     }
    ]
   },
@@ -4608,6 +4842,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=148147125"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/a720wa"
     }
    ]
   },
@@ -4716,6 +4954,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=133550773"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/a720wa"
     }
    ]
   },
@@ -5352,6 +5594,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818460"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/as720wa"
     }
    ]
   },
@@ -5456,6 +5702,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=135398351"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/as720wa"
     }
    ]
   },
@@ -6170,6 +6420,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=148604367"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/a520hc"
     }
    ]
   },
@@ -6260,6 +6514,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142198825"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/ai958wb"
     }
    ]
   },
@@ -6404,6 +6662,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=148171428"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/as520ha"
     }
    ]
   },
@@ -6476,6 +6738,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=133653448"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/as520ha"
     }
    ]
   },
@@ -6836,6 +7102,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818446"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/as520wa"
     }
    ]
   },
@@ -6908,6 +7178,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=133265988"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/as520wa"
     }
    ]
   },
@@ -7648,6 +7922,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147034988"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/stan-by-me/32lx6bega"
     }
    ]
   },
@@ -7806,6 +8084,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=133054883"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as065cwha"
     }
    ]
   },
@@ -8022,6 +8304,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=148760395"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/vacuum-cleaners/a720hc"
     }
    ]
   },
@@ -8154,6 +8440,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=147818638"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as356ngma"
     }
    ]
   },
@@ -8334,6 +8624,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142416209"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as356ngma"
     }
    ]
   },
@@ -8488,6 +8782,10 @@
     {
      "mall": "에누리",
      "url": "https://www.enuri.com/detail.jsp?modelno=142416131"
+    },
+    {
+     "mall": "LG전자 공식몰",
+     "url": "https://www.lge.co.kr/product/air-purifier/as356ngma"
     }
    ]
   },

@@ -93,6 +93,21 @@ def test_home_deals_skip_retired_demo_products_and_fill_with_collected_ones(clie
         client.put(f"{API}/rpa/catalog", headers=RPA, json={"malls": seed, "products": []})
 
 
+def test_official_mall_is_marked_in_compare(client, user_h):
+    """제조사 공식몰(kind=official)은 비교 표에 mall_kind=official로 나와 화면이 '공식몰 정가'로 표시한다"""
+    lg = {"name": "LG전자 공식몰(테스트)", "base_url": "https://www.lge.test", "kind": "official"}
+    prod = {"model_no": "OFFICIAL-1", "name": "공식몰 테스트 TV", "category": "가전",
+            "listings": [{"mall": DANAWA["name"], "url": "https://prod.danawa.test/info/?pcode=4401"},
+                         {"mall": lg["name"], "url": "https://www.lge.test/product/tvs/official-1"}]}
+    assert client.put(f"{API}/rpa/catalog", headers=RPA, json={"malls": [DANAWA, lg], "products": [prod]}).status_code == 200
+    items = [i for i in client.get(f"{API}/rpa/listings", headers=RPA).json()["items"] if i["model_no"] == "OFFICIAL-1"]
+    client.post(f"{API}/rpa/prices/bulk", headers=RPA, json={"items": [{"listing_id": i["listing_id"], "price": 900000 if "lge" in i["url"] else 800000}
+                                                                       for i in items]})
+    rows = client.get(f"{API}/products/{items[0]['product_id']}/compare", headers=user_h).json()["items"]
+    assert {r["mall"]: r["mall_kind"] for r in rows} == {DANAWA["name"]: "compare", lg["name"]: "official"}
+    assert client.put(f"{API}/rpa/catalog", headers=RPA, json={"malls": [{**lg, "kind": "shop"}], "products": []}).status_code == 422
+
+
 def test_catalog_hash_is_reported_for_skipping_unchanged_syncs(client):
     """수집기가 보낸 catalog.json 해시를 기록하고 GET /rpa/status로 돌려준다(같으면 다음 수집에서 동기화 생략)"""
     assert client.put(f"{API}/rpa/catalog?hash=abc123", headers=RPA, json=_catalog()).status_code == 200
@@ -126,6 +141,6 @@ def test_real_catalog_file_is_accepted(client):
     assert len(models) == len(set(models))
     assert len(models) <= 600  # 카탈로그 API 상한(schemas.CatalogIn) · Render 무료 플랜·수집 1회 시간 기준(docs/md/04-rpa.md)
     for p in body["products"]:
-        malls = sorted(l["mall"] for l in p["listings"])
-        assert malls in (["다나와"], ["다나와", "에누리"]), p["model_no"]
+        malls = [l["mall"] for l in p["listings"]]
+        assert "다나와" in malls and len(malls) == len(set(malls)) and set(malls) <= {"다나와", "에누리", "LG전자 공식몰", "삼성닷컴"}, p["model_no"]
         assert urlparse(p.get("image_url") or "https://x").scheme == "https", p["model_no"]

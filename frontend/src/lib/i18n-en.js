@@ -194,7 +194,8 @@ export default {
     'Test accounts · Look around before signing up. The test admin is read-only; real admins log in with email and password above.',
   '제조사 이미지': 'Manufacturer image', '{c} 카테고리': '{c} category',
   '검색 결과 페이지': 'Result pages', '판매처 {n}곳': '{n} sellers', '최고 {x}': 'High {x}', '리뷰 {n}': '{n} reviews', '주요 사양': 'Key specs',
-  '이미지: 다나와·에누리': 'Image: Danawa/Enuri', '참고 이미지 · Unsplash': 'Reference image · Unsplash',
+  '이미지: 다나와·에누리': 'Image: Danawa/Enuri', '공식몰 정가': 'Official list price',
+  '제조사 공식몰의 할인 전 판매가입니다. 카드·쿠폰 혜택가는 공식몰에서 확인하세요.': 'List price on the manufacturer\'s store before discounts. Check card or coupon offers on the store.', '참고 이미지 · Unsplash': 'Reference image · Unsplash',
   '오프라인 최저가 (참가격)': 'Lowest in-store price (KCA survey)', '{d} 조사': 'surveyed {d}',
   // 테마·언어 전환
   '테마': 'Theme', '다크 모드로 전환': 'Switch to dark mode', '라이트 모드로 전환': 'Switch to light mode', '언어': 'Language', 'English로 보기': '한국어로 보기',

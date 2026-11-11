@@ -179,7 +179,7 @@ function compare(p) {
   return {
     product_id: p.id, collected_at: now.toISOString(), lowest_total: lowest,
     items: last.malls.map((m) => ({
-      mall_id: m.mall_id, mall: MALLS[m.mall_id - 1].name, price: m.price, shipping_fee: m.shipping_fee, total_price: m.total_price,
+      mall_id: m.mall_id, mall: MALLS[m.mall_id - 1].name, mall_kind: 'compare', price: m.price, shipping_fee: m.shipping_fee, total_price: m.total_price,
       in_stock: m.in_stock, is_lowest: m.in_stock && m.total_price === lowest, url: `https://example.com/mall-${m.mall_id}/products/${p.model_no}`,
       // 가격 비교 사이트(다나와·에누리)만 주는 값. 시연 쇼핑몰은 직접 판매처라 비어 있다(API와 같은 형식)
       offer_count: null, high_price: null, rating: null, review_count: null,

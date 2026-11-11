@@ -193,7 +193,7 @@ def sync_catalog(body: CatalogIn, db: Session = Depends(get_db), hash: str = Que
         if mall is None:
             mall = Mall(name=m.name, base_url=m.base_url)
             db.add(mall)
-        mall.base_url, mall.is_active, mall.robots_checked_at = m.base_url, True, today
+        mall.base_url, mall.is_active, mall.robots_checked_at, mall.kind = m.base_url, True, today, m.kind
         malls[m.name] = mall
     db.flush()
 

@@ -45,6 +45,8 @@ class Mall(Base):
     base_url: Mapped[str] = mapped_column(String(200))
     robots_checked_at: Mapped[date | None] = mapped_column(Date, nullable=True)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    # compare = 가격 비교 사이트(다나와·에누리 최저가), official = 제조사 공식몰(할인 전 판매가 → 화면에 '공식몰 정가'로 표시)
+    kind: Mapped[str] = mapped_column(String(20), default="compare", server_default="compare")
 
 
 class ProductListing(Base):

@@ -164,6 +164,7 @@ class EnsureListingsIn(BaseModel):
 class CatalogMallIn(BaseModel):
     name: str = Field(min_length=1, max_length=50)
     base_url: str = Field(pattern=r"^https://[^/]+$", max_length=200)
+    kind: str = Field(default="compare", pattern=r"^(compare|official)$")
 
 
 class CatalogListingIn(BaseModel):

@@ -56,7 +56,7 @@ def compare(db: Session, product_id: int) -> dict:
     in_stock = [ph.total_price for ph, _, _ in rows if ph.in_stock]
     lowest = min(in_stock) if in_stock else None
     items = [{
-        "mall_id": mall.id, "mall": mall.name, "price": ph.price, "shipping_fee": ph.shipping_fee,
+        "mall_id": mall.id, "mall": mall.name, "mall_kind": mall.kind or "compare", "price": ph.price, "shipping_fee": ph.shipping_fee,
         "total_price": ph.total_price, "in_stock": ph.in_stock, "is_lowest": ph.in_stock and ph.total_price == lowest,
         "url": listing.url, "offer_count": listing.offer_count, "high_price": listing.high_price,
         "rating": listing.rating, "review_count": listing.review_count,

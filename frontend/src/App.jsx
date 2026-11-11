@@ -235,7 +235,7 @@ function CompareTable({ data, compact = false }) {
   return <div className="relative overflow-x-auto" tabIndex={0} role="region" aria-label={t("판매처 가격 비교 표")}><table className="table-x"><caption className="sr-only">{t("쇼핑몰별 판매가, 배송비, 실구매가 비교")}</caption>
     <thead><tr><th scope="col">{t("판매처")}</th>{!compact && <><th scope="col" className="text-right">{t("판매가")}</th><th scope="col" className="text-right">{t("배송비")}</th></>}<th scope="col" className="text-right">{t("실구매가")}</th>{!compact && <th scope="col"><span className="sr-only">{t("구매 링크")}</span></th>}</tr></thead>
     <tbody>{data.items.slice(0, compact ? 3 : undefined).map((i) => <tr key={i.mall_id ?? i.mall} className={i.is_lowest ? 'bg-emerald-50/50' : ''}>
-      <td><span className="font-medium">{i.mall}</span>{i.is_lowest && <span className="ml-2 text-[11px] text-emerald-700">{t("최저")}</span>}{!i.in_stock && <span className="ml-2 text-xs text-slate-500">{t("품절")}</span>}
+      <td><span className="font-medium">{i.mall}</span>{i.mall_kind === 'official' && <span className="ml-2 rounded bg-slate-100 px-1.5 py-0.5 text-[11px] text-slate-600" title={t("제조사 공식몰의 할인 전 판매가입니다. 카드·쿠폰 혜택가는 공식몰에서 확인하세요.")}>{t("공식몰 정가")}</span>}{i.is_lowest && <span className="ml-2 text-[11px] text-emerald-700">{t("최저")}</span>}{!i.in_stock && <span className="ml-2 text-xs text-slate-500">{t("품절")}</span>}
         {!compact && <MallStats item={i} />}</td>
       {!compact && <><td className="numeric whitespace-nowrap text-right">{won(i.price)}</td><td className="whitespace-nowrap text-right">{i.shipping_fee ? won(i.shipping_fee) : t("무료")}</td></>}
       <td className={`numeric whitespace-nowrap text-right ${i.is_lowest ? 'text-emerald-700' : ''}`}>{won(i.total_price)}</td>

@@ -66,6 +66,7 @@ def init_db() -> None:
 # create_all은 이미 있는 테이블에 새 칸을 만들지 않는다. 데이터를 지우지 않고 칸만 추가한다(TiDB·MySQL·SQLite 공통 문법)
 NEW_COLUMNS = {
     "products": {"priority": "INTEGER NOT NULL DEFAULT 0", "image_url": "VARCHAR(500) NULL", "spec_summary": "VARCHAR(500) NULL"},
+    "malls": {"kind": "VARCHAR(20) NOT NULL DEFAULT 'compare'"},
     "product_listings": {"offer_count": "INTEGER NULL", "high_price": "INTEGER NULL", "rating": "FLOAT NULL", "review_count": "INTEGER NULL"},
 }
 

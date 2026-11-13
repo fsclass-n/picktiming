@@ -144,7 +144,7 @@ def trigger_collect(db: Session = Depends(get_db), user: User = Depends(admin_us
         raise ApiError(403, "DEMO_READ_ONLY", state["reason"])
     s = get_settings()
     if not state["configured"]:
-        raise ApiError(503, "COLLECT_NOT_CONFIGURED", "수동 수집이 설정되지 않았습니다. Render에 GITHUB_DISPATCH_TOKEN을 등록해 주세요.")
+        raise ApiError(503, "COLLECT_NOT_CONFIGURED", "수동 수집이 설정되지 않았습니다. 서버에 GITHUB_DISPATCH_TOKEN을 등록해 주세요(Render·EC2 .env).")
     if state["last_requested_at"] and now_local() - datetime.fromisoformat(state["last_requested_at"]) < COLLECT_COOLDOWN:
         raise ApiError(429, "COLLECT_TOO_SOON", "수동 수집은 10분에 한 번만 요청할 수 있습니다. 잠시 후 다시 시도해 주세요.")
     r = httpx.post(f"https://api.github.com/repos/{s.github_repo}/actions/workflows/collect-render.yml/dispatches",

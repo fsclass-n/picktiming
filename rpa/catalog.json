@@ -10446,6 +10446,492 @@
      "url": "https://www.enuri.com/detail.jsp?modelno=37876117"
     }
    ]
+  },
+  {
+   "model_no": "DANAWA-122699242",
+   "name": "LG전자 디오스 AI 오브제컬렉션 Fit & Max G646GBB021 (전국무료)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 100,
+   "image_url": "https://img.danuri.io/catalog-image/242/699/122/841305b3af844d9eb1d75f6b37ef708b.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122699242"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147079498"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106716974",
+   "name": "LG전자 트롬 F21WDSPR (일반구매)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 100,
+   "image_url": "https://img.danuri.io/catalog-image/974/716/106/4354eadff8e94d35b605039fb10c5540.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106716974"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142936782"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-91909862",
+   "name": "LG전자 휘센 PW0830R2L (기본설치비 포함)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 100,
+   "image_url": "https://img.danuri.io/catalog-image/862/909/091/c63791a607d9492e991b27f72e620ec4.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=91909862"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=135398336"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122666857",
+   "name": "대림바스 DDS-S550R (설치비 별도, 1개)",
+   "brand": "대림바스",
+   "category": "가전",
+   "priority": 100,
+   "image_url": "https://img.danuri.io/catalog-image/857/666/122/7ed224c934d44dcf89aa0c04bc580605.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122666857"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147046387"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123236237",
+   "name": "삼성전자 갤럭시워치9 40mm LTE (그라파이트, 정품)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 100,
+   "image_url": "https://img.danuri.io/catalog-image/237/236/123/eedd5156df7e4203857391c85d9c30e7.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123236237"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147618324"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123605047",
+   "name": "LG전자 디오스 AI 오브제컬렉션 Fit & Max G646GBB021 (공식인증)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/047/605/123/07bc31e2c2284d01b3c6a7de2294fce8.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123605047"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147987005"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123683349",
+   "name": "LG전자 트롬 F9WTBQ (공식인증)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/349/683/123/a208f4549537481bbbe1e4970d5944c3.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123683349"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148065198"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-91909967",
+   "name": "LG전자 휘센 PW0830R2L (기본설치비 별도)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/967/909/091/09af0e39f48d440f9b46294aab82e6fe.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=91909967"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=135398359"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122666876",
+   "name": "대림바스 DDS-S550R (설치비 별도, 2개)",
+   "brand": "대림바스",
+   "category": "가전",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/876/666/122/df7d4a9471264dcf9e9d5b11afdccf76.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122666876"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147046420"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123668072",
+   "name": "삼성전자 갤럭시워치9 40mm LTE (크림, 정품)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 90,
+   "image_url": "https://img.danuri.io/catalog-image/072/668/123/fe6cb6323c7a4607a755993ffb1118e7.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123668072"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148050172"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-93497858",
+   "name": "LG전자 디오스 AI 오브제컬렉션 S836MEE022 (전국무료)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 80,
+   "image_url": "https://img.danuri.io/catalog-image/858/497/093/176c8a9ab31841c999316932ba136705.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=93497858"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=136071427"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-63467948",
+   "name": "LG전자 트롬 F9WTBQ (일반구매)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 80,
+   "image_url": "https://img.danuri.io/catalog-image/948/467/063/c5266722e8c546f4bc185a48e324d201.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=63467948"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=127688951"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-78235382",
+   "name": "삼성전자 AI Q9000 AF60F17D11GRS (공식인증 설치)",
+   "brand": "삼성전자",
+   "category": "가전",
+   "priority": 80,
+   "image_url": "https://img.danuri.io/catalog-image/382/235/078/7d50a59b8136429e8460256851c85959.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=78235382"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=132983377"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124237565",
+   "name": "대림바스 DDS-S550 (설치비 별도, 1개)",
+   "brand": "대림바스",
+   "category": "가전",
+   "priority": 80,
+   "image_url": "https://img.danuri.io/catalog-image/565/237/124/cf07daf10d5f440d96da68fa91682396.png?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124237565"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148550511"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123798447",
+   "name": "삼성전자 갤럭시워치9 40mm LTE (가개통)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/447/798/123/36f3755dea18457dac349fd3c4f38bcd.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123798447"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148167659"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123436475",
+   "name": "LG전자 디오스 AI 오브제컬렉션 S836MEE022 (공식인증)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/475/436/123/87088bd171b940cfb2bd91c0a4b74bd7.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123436475"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147818356"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123683347",
+   "name": "LG전자 트롬 F12WVAR (공식인증)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/347/683/123/94de8e532dc241719e84deeca6bcea39.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123683347"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148065196"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122620172",
+   "name": "삼성전자 AI Q9000 AF60F17D11GRS ((전국)기본설치비 포함)",
+   "brand": "삼성전자",
+   "category": "가전",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/172/620/122/661b74337c0040a0b98f69da55d846b8.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122620172"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=146997936"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-124237573",
+   "name": "대림바스 DDS-S550 (설치비 별도, 2개)",
+   "brand": "대림바스",
+   "category": "가전",
+   "priority": 70,
+   "image_url": "https://img.danuri.io/catalog-image/573/237/124/b621008050cb4188a7ecf28ce34e9b5a.webp?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=124237573"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148550520"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-93383717",
+   "name": "삼성전자 갤럭시워치8 클래식 46mm 블루투스 (정품)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 60,
+   "image_url": "https://img.danuri.io/catalog-image/717/383/093/8fc15ab2cdbf43548d36b6f3f219e769.png?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=93383717"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=136020302"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-93497846",
+   "name": "LG전자 디오스 AI 오브제컬렉션 S836MEE022 (수도권 무료)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 60,
+   "image_url": "https://img.danuri.io/catalog-image/846/497/093/9ecb88fe30e94581b0990d640fa1dc6d.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=93497846"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=136071417"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-106748600",
+   "name": "LG전자 트롬 F12WVAR (일반구매)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 60,
+   "image_url": "https://img.danuri.io/catalog-image/600/748/106/34593972e8ab44c4b0c937d113967af9.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=106748600"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=142945383"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-77961728",
+   "name": "삼성전자 AI Q9000 AF60F17D11GRS ((수도권)기본설치비 포함)",
+   "brand": "삼성전자",
+   "category": "가전",
+   "priority": 60,
+   "image_url": "https://img.danuri.io/catalog-image/728/961/077/1297d3aa7c3b4dbe8cbc70675973fcb0.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=77961728"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=132854279"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-2210535",
+   "name": "노비타 BD-N330T (설치비 별도)",
+   "brand": "노비타",
+   "category": "가전",
+   "priority": 60,
+   "image_url": "https://img.danuri.io/catalog-image/535/210/002/f10d9e6c3890438a8cac05d5c72429a3.jpg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=2210535"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=10539915"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123235009",
+   "name": "삼성전자 갤럭시워치9 44mm 블루투스 (그라파이트, 정품)",
+   "brand": "삼성전자",
+   "category": "디지털",
+   "priority": 40,
+   "image_url": "https://img.danuri.io/catalog-image/009/235/123/6878fd202df248f89120e96000888a20.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123235009"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147617067"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-122666101",
+   "name": "LG전자 디오스 AI 오브제컬렉션 T876MEE1H1 (전국무료)",
+   "brand": "LG전자",
+   "category": "가전",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/101/666/122/4465e2f9f2ac4c1ea41c50423c7f157d.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=122666101"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=147045614"
+    }
+   ]
+  },
+  {
+   "model_no": "DANAWA-123694306",
+   "name": "삼성전자 그랑데AI WF25DG8650BV (공식인증)",
+   "brand": "삼성전자",
+   "category": "가전",
+   "priority": 50,
+   "image_url": "https://img.danuri.io/catalog-image/306/694/123/d80e9579e4834183855c075ffcde4dda.jpeg?shrink=500:500",
+   "listings": [
+    {
+     "mall": "다나와",
+     "url": "https://prod.danawa.com/info/?pcode=123694306"
+    },
+    {
+     "mall": "에누리",
+     "url": "https://www.enuri.com/detail.jsp?modelno=148075504"
+    }
+   ]
   }
  ]
 }

@@ -35,6 +35,8 @@ services:
       # 외부 사이트(다나와·에누리) 가격 수집은 GitHub Actions(collect-render.yml) 한 곳에서만 한다 → 같은 사이트 이중 접속 방지.
       # 결과는 공용 TiDB에 저장되어 EC2 화면에도 보인다. EC2에서 직접 수집하려면 .env에 COLLECT_ENABLED=true(Actions 수집은 끄기)
       COLLECT_ENABLED: ${COLLECT_ENABLED:-false}
+      # 재학습(03시)·참가격(06시)은 GitHub Actions가 실행 → EC2는 주간 리포트(~/timepick/reports)만. 직접 돌리려면 .env에 SCHEDULED_JOBS 지정
+      SCHEDULED_JOBS: ${SCHEDULED_JOBS:-report}
     volumes:
       - ./reports:/app/reports
     depends_on:

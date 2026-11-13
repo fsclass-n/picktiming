@@ -36,7 +36,7 @@ def main() -> None:
     log.info("scheduler started (tz=%s, api=%s)", cfg.tz, cfg.api_base_url)
     while True:
         t = datetime.now(ZoneInfo(cfg.tz))
-        for job in due_jobs(t, collect=cfg.collect_enabled):
+        for job in [j for j in due_jobs(t, collect=cfg.collect_enabled) if j in cfg.scheduled_jobs]:
             key = f"{job}-{t:%Y%m%d%H}"
             if key in done:
                 continue

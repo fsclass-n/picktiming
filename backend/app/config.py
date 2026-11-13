@@ -43,7 +43,8 @@ class Settings(BaseSettings):
     # 관리자 화면 '지금 수집' 버튼: GitHub Actions 수집 워크플로를 실행할 토큰(Actions: Read and write 권한만 있는 fine-grained 토큰). Render에만 등록
     github_dispatch_token: str = ""
     github_repo: str = "fsclass-n/timepick"
-    allowed_origins: str = "*"  # 쉼표 구분 (예: https://picktiming.netlify.app)
+    # 쉼표 구분. Render Static Site·로컬 Vite처럼 다른 주소의 화면만 필요(EC2·로컬 풀스택은 같은 도메인, Netlify 데모는 API를 부르지 않음)
+    allowed_origins: str = "*"
     tz: str = "Asia/Seoul"
     # 프런트엔드 정적 파일 폴더. 비우면 저장소의 frontend/를 찾아 있으면(로컬) 서빙, 없으면(EC2 api 컨테이너) API만 제공
     frontend_dir: str | None = None

@@ -30,6 +30,10 @@ class Config:
     max_products: int = field(default_factory=lambda: int(os.getenv("COLLECT_MAX_PRODUCTS", "100")))
     # 나머지 상품은 product_id % 4로 나눠 구간마다 1/4씩(상품마다 하루 1회) 수집. 상품 300개 기준 1회 약 150개 ≈ 8~9분
     rotate_rest: bool = field(default_factory=lambda: _flag("COLLECT_ROTATE_REST", "true"))
+    # 컨테이너 스케줄러(scheduler.py)가 실행할 작업. 재학습·참가격은 GitHub Actions(외부 cron)가 맡으므로
+    # EC2는 docker-compose.yml에서 report만 실행한다(같은 작업을 두 곳에서 중복 실행하지 않게)
+    scheduled_jobs: frozenset = field(default_factory=lambda: frozenset(
+        j.strip() for j in os.getenv("SCHEDULED_JOBS", "collect,train,public,report").split(",") if j.strip()))
     mall_config_path: pathlib.Path = field(default_factory=lambda: pathlib.Path(os.getenv("MALL_CONFIG", ROOT / "malls.json")))
     # 실제 수집 상품 목록(다나와 pcode·에누리 modelno). 수집 전에 API(PUT /rpa/catalog)로 DB와 맞춘다
     catalog_path: pathlib.Path = field(default_factory=lambda: pathlib.Path(os.getenv("CATALOG", ROOT / "catalog.json")))

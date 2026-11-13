@@ -43,6 +43,16 @@ def test_simulated_price_is_deterministic():
     assert a == b and 98000 <= a["price"] <= 102000 and a["shipping_fee"] == 3000
 
 
+def test_scheduled_jobs_filter(monkeypatch):
+    """EC2(docker-compose: SCHEDULED_JOBS=report)는 Actions가 맡은 train·public을 중복 실행하지 않는다"""
+    assert Config().scheduled_jobs == {"collect", "train", "public", "report"}
+    monkeypatch.setenv("SCHEDULED_JOBS", " report ,")
+    cfg = Config()
+    assert cfg.scheduled_jobs == {"report"}
+    assert [j for j in due_jobs(datetime(2026, 12, 7, 7, 0), collect=False) if j in cfg.scheduled_jobs] == ["report"]
+    assert [j for j in due_jobs(datetime(2026, 12, 8, 3, 0), collect=False) if j in cfg.scheduled_jobs] == []
+
+
 def test_due_jobs():
     assert due_jobs(datetime(2026, 12, 7, 7, 0)) == ["collect", "report"]  # 월요일 07:00
     assert due_jobs(datetime(2026, 12, 8, 3, 0)) == ["collect", "train"]

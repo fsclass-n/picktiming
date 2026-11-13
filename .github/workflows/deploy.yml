@@ -174,13 +174,27 @@ jobs:
           if [ -z "$port" ] && sudo ss -ltnp 'sport = :80' | grep -q '"nginx"' && [ -z "$(docker ps -q --filter publish=80 --filter name=timepick-web)" ]; then
             port=8080
             conf=/etc/nginx/conf.d/timepick.conf
-            printf '%s\n' "server {" "    listen 80;" "    listen [::]:80;" "    server_name $DOMAIN;" \
-              "    client_max_body_size 10m;" "    location / {" "        proxy_pass http://127.0.0.1:$port;" \
-              "        proxy_set_header Host \$host;" "        proxy_set_header X-Real-IP \$remote_addr;" \
-              "        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;" "        proxy_set_header X-Forwarded-Proto \$scheme;" \
-              "        proxy_read_timeout 60s;" "    }" "}" | sudo tee "$conf.new" >/dev/null
-            # 처음 한 번만 만든다. 이후 certbot(Let's Encrypt)이 이 파일에 443·리다이렉트를 추가하므로 덮어쓰지 않는다
-            if [ ! -f "$conf" ]; then
+            cert="/etc/letsencrypt/live/$DOMAIN"
+            proxy="    client_max_body_size 10m;
+              location / {
+                  proxy_pass http://127.0.0.1:$port;
+                  proxy_set_header Host \$host;
+                  proxy_set_header X-Real-IP \$remote_addr;
+                  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                  proxy_set_header X-Forwarded-Proto \$scheme;
+                  proxy_read_timeout 60s;
+              }"
+            if sudo test -f "$cert/fullchain.pem"; then
+              # Let's Encrypt 인증서가 있으면 http는 https로 보내고 443에서 타임픽으로 넘긴다
+              printf '%s\n' "server { listen 80; listen [::]:80; server_name $DOMAIN; return 301 https://\$host\$request_uri; }" \
+                "server {" "    listen 443 ssl; listen [::]:443 ssl; server_name $DOMAIN;" \
+                "    ssl_certificate $cert/fullchain.pem; ssl_certificate_key $cert/privkey.pem;" \
+                "    ssl_protocols TLSv1.2 TLSv1.3;" "$proxy" "}" | sudo tee "$conf.new" >/dev/null
+            else
+              printf '%s\n' "server {" "    listen 80; listen [::]:80; server_name $DOMAIN;" "$proxy" "}" | sudo tee "$conf.new" >/dev/null
+            fi
+            # 처음 만들 때, 그리고 인증서가 생겼는데 아직 443이 없을 때만 바꾼다
+            if [ ! -f "$conf" ] || { sudo test -f "$cert/fullchain.pem" && ! grep -q 'listen 443' "$conf"; }; then
               sudo mv "$conf.new" "$conf"
               sudo nginx -t && sudo systemctl reload nginx && echo "서버 nginx에 $DOMAIN → 127.0.0.1:$port 설정을 추가했습니다."
             else

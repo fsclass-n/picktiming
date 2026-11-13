@@ -168,6 +168,15 @@ jobs:
           # 방금 docker 그룹에 추가된 경우 이 접속에는 아직 권한이 없다 → sudo로 실행
           docker() { if command docker info >/dev/null 2>&1; then command docker "$@"; else sudo docker "$@"; fi; }
           git pull --ff-only origin main
+          port="$(grep -E '^WEB_PORT=' .env | tail -1 | cut -d= -f2 | tr -d '[:space:]')"; port="${port:-80}"
+          # 웹 포트를 timepick 아닌 다른 프로그램이 쓰고 있으면 멈추고 무엇인지 알려 준다(다른 서비스를 대신 끄지 않음)
+          others="$(docker ps --filter "publish=$port" --format '{{.Names}}' | grep -v '^timepick-' || true)"
+          if [ -n "$others" ] || { [ -z "$(docker ps -q --filter "publish=$port")" ] && sudo ss -ltn "sport = :$port" | grep -q LISTEN; }; then
+            echo "::error::$port번 포트를 다른 프로그램이 쓰고 있습니다. 컨테이너: ${others:-없음}"
+            sudo ss -ltnp "sport = :$port" | tail -n +2
+            echo "해결: 그 프로그램을 멈추거나(.env는 그대로), .env에 WEB_PORT=8080처럼 다른 포트를 지정하고 보안 그룹에서 그 포트를 여세요."
+            exit 1
+          fi
           if [ "$MODE" = "rpa-only" ]; then
             docker compose up -d --build --no-deps rpa
           elif [ "$ALL" = "true" ]; then
@@ -184,7 +193,7 @@ jobs:
             sleep 5; docker compose ps rpa --status running | grep -q rpa && exit 0
             docker compose logs --tail 50 rpa; exit 1
           fi
-          for i in $(seq 1 30); do curl -fsS http://localhost/health && exit 0; sleep 3; done
+          for i in $(seq 1 30); do curl -fsS "http://localhost:$port/health" && exit 0; sleep 3; done
           docker compose logs --tail 50 api; exit 1
           REMOTE
       - name: 건너뜀 안내

@@ -50,7 +50,7 @@ services:
       dockerfile: deploy/web.Dockerfile   # React 빌드 + nginx
     image: timepick-web:latest
     ports:
-      - "80:80"
+      - "${WEB_PORT:-80}:80"   # 같은 EC2에서 80번을 다른 서비스가 쓰면 .env에 WEB_PORT=8080 등으로 바꾼다
     depends_on:
       - api
     restart: unless-stopped

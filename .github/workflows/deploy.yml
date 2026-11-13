@@ -130,6 +130,33 @@ jobs:
           printf '%s\n' "$KEY" | tr -d '\r' > ~/.ssh/ec2.pem && chmod 600 ~/.ssh/ec2.pem
           ssh-keygen -y -f ~/.ssh/ec2.pem > /dev/null || { echo "::error::EC2_SSH_KEY가 올바른 개인 키(.pem 전체 내용)가 아닙니다"; exit 1; }
           ssh-keyscan -T 15 -H "$host" >> ~/.ssh/known_hosts || { echo "::error::$host:22에 연결할 수 없습니다(보안 그룹 22번·도메인 IP 확인)"; exit 1; }
+      - name: 서버 준비 (처음 1회 자동 — Docker 설치·저장소 클론, EC2_ENV_FILE이 있으면 .env 갱신)
+        if: env.HOST != ''
+        env:
+          ENV_FILE: ${{ secrets.EC2_ENV_FILE }}   # 선택: 로컬 .env 전체 내용. 없으면 서버의 기존 .env를 그대로 쓴다
+          REPO: https://github.com/${{ github.repository }}.git
+        run: |
+          ssh -i ~/.ssh/ec2.pem -o ConnectTimeout=20 "$TARGET" "APP_DIR='$APP_DIR' REPO='$REPO' bash -s" <<'BOOT'
+          set -e
+          dir="${APP_DIR/#\~/$HOME}"
+          if ! command -v docker >/dev/null 2>&1 || ! docker compose version >/dev/null 2>&1; then
+            sudo apt-get update -qq && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq docker.io docker-compose-v2 git curl
+            sudo usermod -aG docker "$USER"
+          fi
+          # 메모리 3GB 미만이면 이미지 빌드용 스왑 2GB(한 번만)
+          if [ "$(awk '/MemTotal/ {print $2}' /proc/meminfo)" -lt 3000000 ] && ! swapon --show | grep -q /swapfile; then
+            sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile >/dev/null && sudo swapon /swapfile
+            echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab >/dev/null
+          fi
+          [ -d "$dir/.git" ] || git clone -q "$REPO" "$dir"
+          BOOT
+          if [ -n "$ENV_FILE" ]; then
+            printf '%s\n' "$ENV_FILE" | tr -d '\r' | ssh -i ~/.ssh/ec2.pem "$TARGET" \
+              "APP_DIR='$APP_DIR' bash -c 'd=\${APP_DIR/#\~/\$HOME}; umask 077; cat > \"\$d/.env\"'"
+            echo ".env를 EC2_ENV_FILE secret으로 갱신했습니다."
+          fi
+          ssh -i ~/.ssh/ec2.pem "$TARGET" "APP_DIR='$APP_DIR' bash -c 'test -s \${APP_DIR/#\~/\$HOME}/.env'" \
+            || { echo "::error::서버에 .env가 없습니다. EC2_ENV_FILE secret(로컬 .env 전체)을 등록하거나 scp로 복사하세요."; exit 1; }
       - name: 원격 배포 (git pull → 바뀐 서비스만 docker compose up)
         if: env.HOST != ''
         run: |
@@ -138,6 +165,8 @@ jobs:
             "APP_DIR='$APP_DIR' MODE='$EC2_MODE' ALL='$ALL' SERVICES='$SERVICES' WEB='$WEB' bash -s" <<'REMOTE'
           set -e
           cd "${APP_DIR/#\~/$HOME}"
+          # 방금 docker 그룹에 추가된 경우 이 접속에는 아직 권한이 없다 → sudo로 실행
+          docker() { if command docker info >/dev/null 2>&1; then command docker "$@"; else sudo docker "$@"; fi; }
           git pull --ff-only origin main
           if [ "$MODE" = "rpa-only" ]; then
             docker compose up -d --build --no-deps rpa

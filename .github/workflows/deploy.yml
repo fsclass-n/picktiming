@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-24.04
     env:
       HOST: ${{ secrets.EC2_HOST }}
-      USER: ${{ secrets.EC2_USER }}
+      EC2_LOGIN: ${{ secrets.EC2_USER }}   # 비어 있으면 ubuntu(Ubuntu AMI 기본). 쉘 변수 USER와 섞이지 않게 이름을 따로 둔다
       KEY: ${{ secrets.EC2_SSH_KEY }}
       APP_DIR: ${{ vars.EC2_APP_DIR || '~/timepick' }}
       EC2_MODE: ${{ vars.EC2_MODE || 'full' }}
@@ -120,14 +120,21 @@ jobs:
       - name: SSH 키 준비
         if: env.HOST != ''
         run: |
+          # Secret 값에 섞인 공백·줄바꿈·http(s):// 를 정리한다(값 자체는 로그에 남기지 않음)
+          host="$(printf '%s' "$HOST" | tr -d '[:space:]' | sed -E 's#^[a-z]+://##; s#/.*$##; s#^.*@##')"
+          login="$(printf '%s' "${EC2_LOGIN:-ubuntu}" | tr -d '[:space:]')"; login="${login:-ubuntu}"
+          case "$login$host" in -*) echo "::error::EC2_USER/EC2_HOST가 '-'로 시작할 수 없습니다"; exit 1 ;; esac
+          [ -n "$host" ] || { echo "::error::EC2_HOST가 비어 있습니다"; exit 1; }
+          echo "TARGET=$login@$host" >> "$GITHUB_ENV"
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
-          printf '%s\n' "$KEY" > ~/.ssh/ec2.pem && chmod 600 ~/.ssh/ec2.pem
-          ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts
+          printf '%s\n' "$KEY" | tr -d '\r' > ~/.ssh/ec2.pem && chmod 600 ~/.ssh/ec2.pem
+          ssh-keygen -y -f ~/.ssh/ec2.pem > /dev/null || { echo "::error::EC2_SSH_KEY가 올바른 개인 키(.pem 전체 내용)가 아닙니다"; exit 1; }
+          ssh-keyscan -T 15 -H "$host" >> ~/.ssh/known_hosts || { echo "::error::$host:22에 연결할 수 없습니다(보안 그룹 22번·도메인 IP 확인)"; exit 1; }
       - name: 원격 배포 (git pull → 바뀐 서비스만 docker compose up)
         if: env.HOST != ''
         run: |
           echo "mode=$EC2_MODE all=$ALL services='$SERVICES' web=$WEB"
-          ssh -i ~/.ssh/ec2.pem "$USER@$HOST" \
+          ssh -i ~/.ssh/ec2.pem -o ConnectTimeout=20 -o ServerAliveInterval=30 "$TARGET" \
             "APP_DIR='$APP_DIR' MODE='$EC2_MODE' ALL='$ALL' SERVICES='$SERVICES' WEB='$WEB' bash -s" <<'REMOTE'
           set -e
           cd "${APP_DIR/#\~/$HOME}"
@@ -163,15 +170,22 @@ jobs:
     env:
       TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       SITE: ${{ secrets.NETLIFY_SITE_ID }}
-      API_BASE_URL: ${{ vars.API_BASE_URL }}
     steps:
       - uses: actions/checkout@v4
-      - name: config.js 생성 후 zip 배포 (Netlify API)
+      - uses: actions/setup-node@v4
+        if: env.TOKEN != '' && env.SITE != ''
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: 데모 모드로 빌드 후 zip 배포 (Netlify API)
         if: env.TOKEN != '' && env.SITE != ''
         working-directory: frontend
         run: |
-          sh build.sh
-          zip -qr /tmp/site.zip . -x build.sh
+          # Netlify는 데모 모드: VITE_API_URL을 넣지 않고 public/js/config.js(API_BASE_URL "")를 그대로 쓴다
+          npm ci --no-audit --no-fund && npm run build
+          grep -q 'API_BASE_URL: ""' dist/js/config.js || { echo "::error::config.js가 데모 모드가 아닙니다"; exit 1; }
+          cd dist && zip -qr /tmp/site.zip .
           curl -fsS -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/zip" \
             --data-binary @/tmp/site.zip "https://api.netlify.com/api/v1/sites/$SITE/deploys" > /dev/null
           echo "Netlify 배포 완료"
